@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 /**
  * All the coordinate information for given coordinates
- * @property coordinateName The name of that coordinate
+ * @property coordinateName The name of that coordinate in english
  * @property countryName The name of country that coordinate is on
  * @property latitude The x coordinate of given coordinate
  * @property longitude The y coordinate of given coordinate

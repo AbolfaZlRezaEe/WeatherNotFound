@@ -10,7 +10,7 @@ import com.google.gson.annotations.SerializedName
  */
 data class SnowInformationResponseModel(
     @SerializedName("1h")
-    val oneHour: Double,
+    val oneHour: Double?,
     @SerializedName("3h")
-    val threeHour: Double,
+    val threeHour: Double?,
 )

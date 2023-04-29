@@ -1,5 +1,8 @@
 package me.learning.weathernotfound.domain.reverseGeocoding.presentationModels
 
+/**
+ * Representing local names of given coordinates
+ */
 data class LocationNamesModel(
     val af: String,
     val am: String,

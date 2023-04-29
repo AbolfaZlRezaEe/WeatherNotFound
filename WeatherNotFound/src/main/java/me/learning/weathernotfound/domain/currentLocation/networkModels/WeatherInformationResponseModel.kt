@@ -10,10 +10,10 @@ import com.google.gson.annotations.SerializedName
  * @property pressure
  * @property seaLevelPressure Atmospheric pressure on the sea level
  * @property temperature
- * @property maxTemp The maximum temperature of given coordinates
- * @property minTemp The minimum temperature of given coordinates
+ * @property maximumTemperature The maximum temperature of given coordinates
+ * @property minimumTemperature The minimum temperature of given coordinates
  */
-data class WeatherInformation(
+data class WeatherInformationResponseModel(
     @SerializedName("feels_like")
     val feelsLike: Double,
     @SerializedName("grnd_level")
@@ -27,7 +27,7 @@ data class WeatherInformation(
     @SerializedName("temp")
     val temperature: Double,
     @SerializedName("temp_max")
-    val maxTemp: Double,
+    val maximumTemperature: Double,
     @SerializedName("temp_min")
-    val minTemp: Double
+    val minimumTemperature: Double
 )

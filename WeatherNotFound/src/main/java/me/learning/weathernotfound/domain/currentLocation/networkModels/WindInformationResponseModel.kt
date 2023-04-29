@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName
  * @property gust Wind gust
  * @property speed Wind speed
  */
-data class WindInformation(
+data class WindInformationResponseModel(
     @SerializedName("deg")
     val degree: Int,
     @SerializedName("gust")

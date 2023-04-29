@@ -10,7 +10,7 @@ import com.google.gson.annotations.SerializedName
  * @property sunset The sunset time, unix, UTC
  * @property type Internal parameter represented by OpenWeatherMap
  */
-data class CityInformation(
+data class CityInformationResponseModel(
     @SerializedName("id")
     val id: Int,
     @SerializedName("country")

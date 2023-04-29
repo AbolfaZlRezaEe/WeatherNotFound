@@ -23,29 +23,29 @@ import com.google.gson.annotations.SerializedName
  * @property cod Internal parameter represented by OpenWeatherMap
  * @see <a href="https://openweathermap.org/current#current_JSON">OpenWeatherMap api documentation</a>
  */
-data class CurrentWeatherResponse(
+data class CurrentWeatherResponseModel(
     @SerializedName("id")
     val cityId: Int,
     @SerializedName("name")
     val cityName: String,
     @SerializedName("coord")
-    val cityCoordinates: CityCoordinates,
+    val cityCoordinates: CityCoordinatesResponseModel,
     @SerializedName("weather")
-    val weatherStatus: List<WeatherStatus>,
+    val weatherStatus: List<WeatherStatusResponseModel>,
     @SerializedName("base")
     val base: String,
     @SerializedName("clouds")
-    val cloudInformationInformation: CloudInformation,
+    val cloudInformationInformation: CloudInformationResponseModel,
     @SerializedName("main")
-    val weatherInformation: WeatherInformation,
+    val weatherInformation: WeatherInformationResponseModel,
     @SerializedName("wind")
-    val windInformation: WindInformation,
+    val windInformation: WindInformationResponseModel,
     @SerializedName("rain")
-    val rainInformation: RainInformation,
+    val rainInformation: RainInformationResponseModel,
     @SerializedName("snow")
-    val snowInformation: SnowInformation,
+    val snowInformation: SnowInformationResponseModel,
     @SerializedName("sys")
-    val cityInformation: CityInformation,
+    val cityInformation: CityInformationResponseModel,
     @SerializedName("visibility")
     val visibility: Int,
     @SerializedName("dt")

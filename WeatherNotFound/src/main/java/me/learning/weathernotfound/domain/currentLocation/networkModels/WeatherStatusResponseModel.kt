@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName
  * @property description Weather condition within the group
  * @property icon The code that represent the icon of that status
  */
-data class WeatherStatus(
+data class WeatherStatusResponseModel(
     @SerializedName("id")
     val id: Int,
     @SerializedName("main")

@@ -14,7 +14,7 @@ import com.google.gson.annotations.SerializedName
  * @property humidity
  * @property tempKf Internal parameter represented by OpenWeatherMap
  */
-data class WeatherConditionInformationResponseModel(
+internal data class WeatherConditionInformationResponseModel(
     @SerializedName("temp")
     val temperature: Double,
     @SerializedName("feels_like")

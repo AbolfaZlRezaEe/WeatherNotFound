@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 /**
  * Representing local names of given coordinates
  */
-data class LocalNames(
+internal data class LocalNames(
     @SerializedName("af")
     val af: String,
     @SerializedName("am")

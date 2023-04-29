@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "tbl_reverse_geocoding")
-data class ReverseGeocodingEntity(
+internal data class ReverseGeocodingEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "entity_id")
     val entityId: Long? = null,

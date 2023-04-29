@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName
  * @property oneHour The 1 hour rain information of given coordinates
  * @property threeHour The 3 hour rain information of given coordinates
  */
-data class RainInformationResponseModel(
+internal data class RainInformationResponseModel(
     @SerializedName("1h")
     val oneHour: Double,
     @SerializedName("3h")

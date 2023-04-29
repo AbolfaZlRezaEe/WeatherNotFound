@@ -13,7 +13,7 @@ import com.google.gson.annotations.SerializedName
  * @property maximumTemperature The maximum temperature of given coordinates
  * @property minimumTemperature The minimum temperature of given coordinates
  */
-data class WeatherInformationResponseModel(
+internal data class WeatherInformationResponseModel(
     @SerializedName("feels_like")
     val feelsLike: Double,
     @SerializedName("grnd_level")

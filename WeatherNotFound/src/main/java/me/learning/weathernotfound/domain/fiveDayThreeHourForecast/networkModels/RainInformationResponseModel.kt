@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName
  * NOTE: This information might be empty and depends on the city!
  * @property threeHour The 3 hour rain information of given coordinates
  */
-data class RainInformationResponseModel(
+internal data class RainInformationResponseModel(
     @SerializedName("3h")
     val threeHour: Double?
 )

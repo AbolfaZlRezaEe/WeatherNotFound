@@ -11,7 +11,7 @@ import com.google.gson.annotations.SerializedName
  * @property coordinateNameInLanguages The list of names of this coordinate in different languages
  * @see <a href="https://openweathermap.org/api/geocoding-api#reverse">OpenWeatherMap api documentation</a>
  */
-data class ReversGeocodingResponse(
+internal data class ReversGeocodingResponse(
     @SerializedName("name")
     val coordinateName: String,
     @SerializedName("country")

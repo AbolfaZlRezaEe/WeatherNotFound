@@ -14,7 +14,7 @@ import androidx.room.PrimaryKey
         onDelete = ForeignKey.CASCADE,
     )]
 )
-data class ForecastEntity(
+internal data class ForecastEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     val id: Long? = null,

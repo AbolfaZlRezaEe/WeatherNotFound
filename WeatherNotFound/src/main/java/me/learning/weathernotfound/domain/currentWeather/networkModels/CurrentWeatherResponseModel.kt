@@ -23,7 +23,7 @@ import com.google.gson.annotations.SerializedName
  * @property httpResponseCode Internal parameter represented by OpenWeatherMap
  * @see <a href="https://openweathermap.org/current#current_JSON">OpenWeatherMap api documentation</a>
  */
-data class CurrentWeatherResponseModel(
+internal data class CurrentWeatherResponseModel(
     @SerializedName("id")
     val cityId: Int,
     @SerializedName("name")

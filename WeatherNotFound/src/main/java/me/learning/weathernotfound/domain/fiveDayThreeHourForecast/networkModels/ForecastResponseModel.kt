@@ -16,7 +16,7 @@ import com.google.gson.annotations.SerializedName
  * @property probabilityOfPrecipitation
  * @property timeOfDataInReadableFormat Time of data forecasted, ISO, UTC. for example: (2023-04-30 09:00:00)
  */
-data class ForecastResponseModel(
+internal data class ForecastResponseModel(
     @SerializedName("dt")
     val timeOfData: Int,
     @SerializedName("main")

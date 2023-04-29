@@ -11,7 +11,7 @@ import com.google.gson.annotations.SerializedName
  * @property forecastResponseModels Represents the list of forecasts for given coordinates
  * @see <a href="https://openweathermap.org/forecast5">OpenWeatherMap api documentation</a>
  */
-data class FiveDayThreeHourForecastResponseModel(
+internal data class FiveDayThreeHourForecastResponseModel(
     @SerializedName("cod")
     val httpResponseCode: String,
     @SerializedName("message")

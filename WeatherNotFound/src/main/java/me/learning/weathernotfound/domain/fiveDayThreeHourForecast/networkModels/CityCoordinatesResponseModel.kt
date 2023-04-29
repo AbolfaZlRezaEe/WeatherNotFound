@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName
 * @property latitude The x value
 * @property longitude The y value
 */
-data class CityCoordinatesResponseModel(
+internal data class CityCoordinatesResponseModel(
     @SerializedName("lat")
     val latitude: Double,
     @SerializedName("lon")

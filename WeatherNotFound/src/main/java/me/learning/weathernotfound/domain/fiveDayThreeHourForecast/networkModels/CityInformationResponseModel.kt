@@ -13,7 +13,7 @@ import com.google.gson.annotations.SerializedName
  * @property sunset The sunset time, unix, UTC
  * @property timezone Shift in seconds from UTC
  */
-data class CityInformationResponseModel(
+internal data class CityInformationResponseModel(
     @SerializedName("id")
     val id: Int,
     @SerializedName("name")

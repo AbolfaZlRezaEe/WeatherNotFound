@@ -31,4 +31,9 @@ android {
     }
 }
 
-dependencies {}
+dependencies {
+    // Network Dependencies
+    val gsonConverterVersion = "2.10.1"
+
+    implementation("com.google.code.gson:gson:$gsonConverterVersion")
+}

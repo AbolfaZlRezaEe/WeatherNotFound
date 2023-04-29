@@ -20,7 +20,7 @@ import com.google.gson.annotations.SerializedName
  * @property visibility The value of the visibility of given coordinates. Max: 10km
  * @property dateTime Time of data calculation, unix, UTC
  * @property timezone Shift in seconds from UTC
- * @property cod Internal parameter represented by OpenWeatherMap
+ * @property httpResponseCode Internal parameter represented by OpenWeatherMap
  * @see <a href="https://openweathermap.org/current#current_JSON">OpenWeatherMap api documentation</a>
  */
 data class CurrentWeatherResponseModel(
@@ -53,5 +53,5 @@ data class CurrentWeatherResponseModel(
     @SerializedName("timezone")
     val timezone: Int,
     @SerializedName("cod")
-    val cod: Int,
+    val httpResponseCode: Int,
 )

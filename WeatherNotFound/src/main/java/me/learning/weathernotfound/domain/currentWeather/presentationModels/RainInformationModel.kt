@@ -7,6 +7,6 @@ package me.learning.weathernotfound.domain.currentWeather.presentationModels
  * @property threeHour The 3 hour rain information of given coordinates
  */
 data class RainInformationModel(
-    val oneHour: Double,
-    val threeHour: Double,
+    val oneHour: Double?,
+    val threeHour: Double?,
 )

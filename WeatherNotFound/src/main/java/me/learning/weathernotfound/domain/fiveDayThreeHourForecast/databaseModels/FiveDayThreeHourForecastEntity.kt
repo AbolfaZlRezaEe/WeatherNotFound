@@ -9,6 +9,8 @@ internal data class FiveDayThreeHourForecastEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     val id: Long? = null,
+    @ColumnInfo(name = "cnt")
+    val cnt: Int,
     @ColumnInfo(name = "city_id")
     val cityId: Int,
     @ColumnInfo(name = "city_name")

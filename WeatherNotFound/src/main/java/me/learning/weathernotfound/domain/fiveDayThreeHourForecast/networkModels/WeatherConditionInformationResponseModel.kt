@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName
  * @property maximumTemperature The maximum temperature of given coordinates
  * @property minimumTemperature The minimum temperature of given coordinates
  * @property pressure
- * @property seaLevel Atmospheric pressure on the sea level
+ * @property seaLevelPressure Atmospheric pressure on the sea level
  * @property groundLevelPressure Atmospheric pressure on the ground level
  * @property humidity
  * @property tempKf Internal parameter represented by OpenWeatherMap
@@ -26,7 +26,7 @@ internal data class WeatherConditionInformationResponseModel(
     @SerializedName("pressure")
     val pressure: Int,
     @SerializedName("sea_level")
-    val seaLevel: Int,
+    val seaLevelPressure: Int,
     @SerializedName("grnd_level")
     val groundLevelPressure: Int,
     @SerializedName("humidity")

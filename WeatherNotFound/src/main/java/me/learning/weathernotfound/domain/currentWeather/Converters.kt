@@ -17,7 +17,9 @@ import me.learning.weathernotfound.domain.currentWeather.presentationModels.Wind
 internal object Converters {
 
     // Network to Database entity converters
-    fun networkToDatabaseEntity(response: CurrentWeatherResponseModel): CurrentWeatherEntity {
+    fun currentWeatherResponseToCurrentWeatherEntity(
+        response: CurrentWeatherResponseModel
+    ): CurrentWeatherEntity {
         return CurrentWeatherEntity(
             id = null,
             cityId = response.cityId,

@@ -41,12 +41,12 @@ internal object Converters {
 
     fun forecastResponseToForecastEntity(
         responses: List<ForecastResponseModel>,
-        responseId: Long,
+        forecastId: Long,
     ): List<ForecastEntity> {
         return responses.map {
             ForecastEntity(
                 id = null,
-                forecastId = responseId,
+                forecastId = forecastId,
                 timeOfData = it.timeOfData,
                 temperature = it.weatherConditionInformation.temperature,
                 feelsLike = it.weatherConditionInformation.feelsLike,
@@ -71,14 +71,14 @@ internal object Converters {
         }
     }
 
-    fun weatherInformationResponseToWeatherStatusModel(
+    fun weatherInformationResponseToWeatherStatusEntity(
         responses: List<WeatherInformationResponseModel>,
-        forecastId: Long
+        currentWeatherId: Long
     ): List<WeatherStatusEntity> {
         return responses.map {
             WeatherStatusEntity(
                 id = null,
-                currentWeatherId = forecastId,
+                currentWeatherId = currentWeatherId,
                 weatherStatusId = it.id,
                 status = it.status,
                 description = it.description,

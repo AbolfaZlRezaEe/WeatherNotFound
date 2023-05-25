@@ -21,11 +21,12 @@ android {
 
         buildConfigField(
             type = "String",
-            name = "openWeatherApi",
+            name = propertiesApiKeyName,
             value = "\"${getPropertyFromPropertiesFile<String>(propertiesApiKeyName)}\""
         )
 
         printInfoLog("Reading was finished and everything is ready to go!")
+
     }
 
     buildTypes {
@@ -53,14 +54,13 @@ android {
 dependencies {
     // Network Dependencies
     val gsonConverterVersion = "2.10.1"
+    val okhttpClientVersion = "4.11.0"
 
     implementation("com.google.code.gson:gson:$gsonConverterVersion")
+    implementation("com.squareup.okhttp3:okhttp:$okhttpClientVersion")
+    implementation("com.squareup.okhttp3:logging-interceptor:$okhttpClientVersion")
 
     // Database Dependencies
-    val roomVersion = "2.5.1"
-
-    implementation("androidx.room:room-runtime:$roomVersion")
-    ksp("androidx.room:room-compiler:$roomVersion")
 }
 
 fun <T> getPropertyFromPropertiesFile(key: String): T {

@@ -67,4 +67,8 @@ internal data class CurrentWeatherEntity(
     val dateTime: Int,
     @ColumnInfo(name = "timezone")
     val timezone: Int,
+    @ColumnInfo(name = "created_at")
+    val createdAt: String,
+    @ColumnInfo(name = "updated_at")
+    val updatedAt: String
 )

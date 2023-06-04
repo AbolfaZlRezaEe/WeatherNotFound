@@ -2,6 +2,8 @@ import java.util.Properties
 
 val propertiesConfigurationFileName = "weatherNotFound.properties"
 val propertiesApiKeyName = "OpenWeatherApiKey"
+val propertiesResponseLanguage = "OpenWeatherResponseLanguage"
+val propertiesResponseUnit = "OpenWeatherResponseUnit"
 
 plugins {
     id("com.android.library")
@@ -23,6 +25,18 @@ android {
             type = "String",
             name = propertiesApiKeyName,
             value = "\"${getPropertyFromPropertiesFile<String>(propertiesApiKeyName)}\""
+        )
+
+        buildConfigField(
+            type = "String",
+            name = propertiesResponseLanguage,
+            value = "\"${getPropertyFromPropertiesFile<String>(propertiesResponseLanguage)}\""
+        )
+
+        buildConfigField(
+            type = "String",
+            name = propertiesResponseUnit,
+            value = "\"${getPropertyFromPropertiesFile<String>(propertiesResponseUnit)}\""
         )
 
         printInfoLog("Reading was finished and everything is ready to go!")
@@ -61,6 +75,11 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:$okhttpClientVersion")
 
     // Database Dependencies
+    val roomVersion = "2.5.1"
+
+    implementation("androidx.room:room-runtime:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
+    ksp("androidx.room:room-compiler:$roomVersion")
 }
 
 fun <T> getPropertyFromPropertiesFile(key: String): T {

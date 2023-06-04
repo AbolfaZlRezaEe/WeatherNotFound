@@ -1,5 +1,6 @@
-package me.learning.weathernotfound.data.network
+package me.learning.weathernotfound.data.network.providers
 
+import me.learning.weathernotfound.data.network.WeatherNotFoundInterceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.TimeUnit

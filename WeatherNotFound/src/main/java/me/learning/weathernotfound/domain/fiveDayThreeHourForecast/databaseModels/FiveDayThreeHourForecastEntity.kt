@@ -3,6 +3,7 @@ package me.learning.weathernotfound.domain.fiveDayThreeHourForecast.databaseMode
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.util.Date
 
 @Entity(tableName = "tbl_five_three_forecast")
 internal data class FiveDayThreeHourForecastEntity(
@@ -28,5 +29,9 @@ internal data class FiveDayThreeHourForecastEntity(
     @ColumnInfo(name = "sunset")
     val sunset: Int,
     @ColumnInfo(name = "timezone")
-    val timezone: Int
+    val timezone: Int,
+    @ColumnInfo(name = "created_at")
+    val createdAt: Date,
+    @ColumnInfo(name = "updated_at")
+    val updatedAt: Date,
 )

@@ -6,22 +6,22 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "tbl_fivethree_weather_status",
+    tableName = "tbl_weather_information",
     foreignKeys = [ForeignKey(
         entity = ForecastEntity::class,
         parentColumns = arrayOf("id"),
-        childColumns = arrayOf("current_weather_id"),
+        childColumns = arrayOf("forecast_id"),
         onDelete = ForeignKey.CASCADE,
     )]
 )
-data class WeatherStatusEntity(
+data class WeatherInformationEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     val id: Long? = null,
-    @ColumnInfo(name = "current_weather_id")
-    val currentWeatherId: Long,
+    @ColumnInfo(name = "forecast_id", index = true)
+    val forecastId: Long,
     @ColumnInfo(name = "weather_status_id")
-    val weatherStatusId: Int,
+    val weatherInformationStatusId: Int,
     @ColumnInfo(name = "status")
     val status: String,
     @ColumnInfo(name = "description")

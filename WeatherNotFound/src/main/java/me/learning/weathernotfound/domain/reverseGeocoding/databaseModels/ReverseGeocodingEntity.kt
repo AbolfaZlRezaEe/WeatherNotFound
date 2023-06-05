@@ -3,6 +3,7 @@ package me.learning.weathernotfound.domain.reverseGeocoding.databaseModels
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.util.Date
 
 @Entity(tableName = "tbl_reverse_geocoding")
 internal data class ReverseGeocodingEntity(
@@ -17,6 +18,10 @@ internal data class ReverseGeocodingEntity(
     val coordinateName:String,
     @ColumnInfo(name = "country_name")
     val countryName:String,
+    @ColumnInfo(name = "created_at")
+    val createdAt: Date,
+    @ColumnInfo(name = "updated_at")
+    val updatedAt: Date,
     /* Coordinate name in different languages: */
     @ColumnInfo(name ="af")
     val af: String?,

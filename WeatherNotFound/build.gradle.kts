@@ -41,6 +41,12 @@ android {
 
         printInfoLog("Reading was finished and everything is ready to go!")
 
+        // Export current version database schema
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments["room.schemaLocation"] = "$projectDir/schemas"
+            }
+        }
     }
 
     buildTypes {
@@ -80,6 +86,10 @@ dependencies {
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
+
+    // Kotlin Coroutines Dependencies
+    val coroutinesVersion = "1.6.4"
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
 }
 
 fun <T> getPropertyFromPropertiesFile(key: String): T {

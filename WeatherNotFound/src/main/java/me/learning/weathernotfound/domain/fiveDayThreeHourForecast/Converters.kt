@@ -49,7 +49,7 @@ internal object Converters {
         return responses.map {
             ForecastEntity(
                 id = null,
-                forecastId = forecastId,
+                fiveDayForecastId = forecastId,
                 timeOfData = it.timeOfData,
                 temperature = it.weatherConditionInformation.temperature,
                 feelsLike = it.weatherConditionInformation.feelsLike,

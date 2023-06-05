@@ -31,4 +31,7 @@ internal interface CurrentWeatherDao {
 
     @Query("DELETE FROM tbl_weather_status WHERE current_weather_id =:currentWeatherId")
     suspend fun deleteWeatherStatuesByCurrentWeatherId(currentWeatherId: Long)
+
+    @Query("DELETE FROM tbl_current_weather WHERE updated_at<=:selectedTimeStamp")
+    suspend fun deleteCurrentWeatherEntitiesOlderThan(selectedTimeStamp: Long)
 }

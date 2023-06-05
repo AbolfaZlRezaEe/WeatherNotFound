@@ -3,6 +3,7 @@ package me.learning.weathernotfound.domain.currentWeather.databaseModels
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.util.Date
 
 @Entity(tableName = "tbl_current_weather")
 internal data class CurrentWeatherEntity(
@@ -68,7 +69,7 @@ internal data class CurrentWeatherEntity(
     @ColumnInfo(name = "timezone")
     val timezone: Int,
     @ColumnInfo(name = "created_at")
-    val createdAt: String,
+    val createdAt: Date,
     @ColumnInfo(name = "updated_at")
-    val updatedAt: String
+    val updatedAt: Date
 )

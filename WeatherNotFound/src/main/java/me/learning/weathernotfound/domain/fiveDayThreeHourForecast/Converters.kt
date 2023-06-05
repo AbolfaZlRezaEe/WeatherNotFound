@@ -37,8 +37,8 @@ internal object Converters {
             sunrise = response.cityInformation.sunrise,
             sunset = response.cityInformation.sunset,
             timezone = response.cityInformation.timezone,
-            createdAt = Utilities.getCurrentTime(),
-            updatedAt = Utilities.getCurrentTime(),
+            createdAt = Utilities.getCurrentDateTime(),
+            updatedAt = Utilities.getCurrentDateTime(),
         )
     }
 

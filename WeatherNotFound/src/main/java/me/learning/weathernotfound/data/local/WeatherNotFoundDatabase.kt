@@ -2,6 +2,7 @@ package me.learning.weathernotfound.data.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import me.learning.weathernotfound.data.local.dao.CurrentWeatherDao
 import me.learning.weathernotfound.data.local.dao.FiveDayThreeHourDao
 import me.learning.weathernotfound.data.local.dao.ReverseGeocodingDao
@@ -24,6 +25,7 @@ import me.learning.weathernotfound.domain.reverseGeocoding.databaseModels.Revers
     version = DatabaseInterfaceProvider.DATABASE_VERSION,
     exportSchema = true,
 )
+@TypeConverters(DatabaseTypeConverter::class)
 internal abstract class WeatherNotFoundDatabase : RoomDatabase() {
 
     abstract fun currentWeatherDao(): CurrentWeatherDao

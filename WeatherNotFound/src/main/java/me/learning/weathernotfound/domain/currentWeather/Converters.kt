@@ -52,8 +52,8 @@ internal object Converters {
             visibility = response.visibility,
             dateTime = response.dateTime,
             timezone = response.timezone,
-            createdAt = Utilities.getCurrentTime(),
-            updatedAt = Utilities.getCurrentTime(),
+            createdAt = Utilities.getCurrentDateTime(),
+            updatedAt = Utilities.getCurrentDateTime(),
         )
     }
 

@@ -18,7 +18,7 @@ data class WeatherInformationEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     val id: Long? = null,
-    @ColumnInfo(name = "forecast_id")
+    @ColumnInfo(name = "forecast_id", index = true)
     val forecastId: Long,
     @ColumnInfo(name = "weather_status_id")
     val weatherInformationStatusId: Int,

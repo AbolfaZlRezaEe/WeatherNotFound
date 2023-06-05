@@ -18,7 +18,7 @@ internal data class WeatherStatusEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     val id: Long? = null,
-    @ColumnInfo(name = "current_weather_id")
+    @ColumnInfo(name = "current_weather_id", index = true)
     val currentWeatherId: Long,
     @ColumnInfo(name = "weather_status_id")
     val weatherStatusId: Int,

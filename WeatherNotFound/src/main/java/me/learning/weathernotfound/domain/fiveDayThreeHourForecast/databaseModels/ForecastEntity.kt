@@ -18,7 +18,7 @@ internal data class ForecastEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     val id: Long? = null,
-    @ColumnInfo(name = "five_day_forecast_id")
+    @ColumnInfo(name = "five_day_forecast_id", index = true)
     val fiveDayForecastId: Long,
     @ColumnInfo(name = "time_of_data")
     val timeOfData: Int,

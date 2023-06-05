@@ -9,6 +9,7 @@ import me.learning.weathernotfound.domain.currentWeather.databaseModels.CurrentW
 import me.learning.weathernotfound.domain.currentWeather.databaseModels.WeatherStatusEntity
 import me.learning.weathernotfound.domain.fiveDayThreeHourForecast.databaseModels.FiveDayThreeHourForecastEntity
 import me.learning.weathernotfound.domain.fiveDayThreeHourForecast.databaseModels.ForecastEntity
+import me.learning.weathernotfound.domain.fiveDayThreeHourForecast.databaseModels.WeatherInformationEntity
 import me.learning.weathernotfound.domain.reverseGeocoding.databaseModels.ReverseGeocodingEntity
 
 @Database(
@@ -17,7 +18,7 @@ import me.learning.weathernotfound.domain.reverseGeocoding.databaseModels.Revers
         WeatherStatusEntity::class,
         FiveDayThreeHourForecastEntity::class,
         ForecastEntity::class,
-        me.learning.weathernotfound.domain.fiveDayThreeHourForecast.databaseModels.WeatherStatusEntity::class,
+        WeatherInformationEntity::class,
         ReverseGeocodingEntity::class
     ],
     version = DatabaseInterfaceProvider.DATABASE_VERSION,

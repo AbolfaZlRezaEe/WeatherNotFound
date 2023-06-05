@@ -5,6 +5,7 @@ import me.learning.weathernotfound.domain.reverseGeocoding.networkModels.ReversG
 import me.learning.weathernotfound.domain.reverseGeocoding.presentationModels.LocationCoordinatesModel
 import me.learning.weathernotfound.domain.reverseGeocoding.presentationModels.LocationInfoModel
 import me.learning.weathernotfound.domain.reverseGeocoding.presentationModels.LocationNamesModel
+import me.learning.weathernotfound.domain.utils.Utilities
 
 internal object Converters {
 
@@ -18,6 +19,8 @@ internal object Converters {
             longitude = response.longitude,
             coordinateName = response.coordinateName,
             countryName = response.countryName,
+            createdAt = Utilities.getCurrentTime(),
+            updatedAt = Utilities.getCurrentTime(),
             af = response.coordinateNameInLanguages.af,
             am = response.coordinateNameInLanguages.am,
             an = response.coordinateNameInLanguages.an,

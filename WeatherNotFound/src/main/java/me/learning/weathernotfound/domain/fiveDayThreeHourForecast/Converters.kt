@@ -2,7 +2,7 @@ package me.learning.weathernotfound.domain.fiveDayThreeHourForecast
 
 import me.learning.weathernotfound.domain.fiveDayThreeHourForecast.databaseModels.FiveDayThreeHourForecastEntity
 import me.learning.weathernotfound.domain.fiveDayThreeHourForecast.databaseModels.ForecastEntity
-import me.learning.weathernotfound.domain.fiveDayThreeHourForecast.databaseModels.WeatherStatusEntity
+import me.learning.weathernotfound.domain.fiveDayThreeHourForecast.databaseModels.WeatherInformationEntity
 import me.learning.weathernotfound.domain.fiveDayThreeHourForecast.networkModels.FiveDayThreeHourForecastResponseModel
 import me.learning.weathernotfound.domain.fiveDayThreeHourForecast.networkModels.ForecastResponseModel
 import me.learning.weathernotfound.domain.fiveDayThreeHourForecast.networkModels.WeatherInformationResponseModel
@@ -17,6 +17,7 @@ import me.learning.weathernotfound.domain.fiveDayThreeHourForecast.presentationM
 import me.learning.weathernotfound.domain.fiveDayThreeHourForecast.presentationModels.WeatherConditionInformationModel
 import me.learning.weathernotfound.domain.fiveDayThreeHourForecast.presentationModels.WeatherInformationModel
 import me.learning.weathernotfound.domain.fiveDayThreeHourForecast.presentationModels.WindInformationModel
+import me.learning.weathernotfound.domain.utils.Utilities
 
 internal object Converters {
 
@@ -36,6 +37,8 @@ internal object Converters {
             sunrise = response.cityInformation.sunrise,
             sunset = response.cityInformation.sunset,
             timezone = response.cityInformation.timezone,
+            createdAt = Utilities.getCurrentTime(),
+            updatedAt = Utilities.getCurrentTime(),
         )
     }
 
@@ -71,15 +74,15 @@ internal object Converters {
         }
     }
 
-    fun weatherInformationResponseToWeatherStatusEntity(
+    fun weatherInformationResponseToWeatherInformationEntity(
         responses: List<WeatherInformationResponseModel>,
-        currentWeatherId: Long
-    ): List<WeatherStatusEntity> {
+        forecastId: Long
+    ): List<WeatherInformationEntity> {
         return responses.map {
-            WeatherStatusEntity(
+            WeatherInformationEntity(
                 id = null,
-                currentWeatherId = currentWeatherId,
-                weatherStatusId = it.id,
+                forecastId = forecastId,
+                weatherInformationStatusId = it.id,
                 status = it.status,
                 description = it.description,
                 icon = it.icon
@@ -91,7 +94,7 @@ internal object Converters {
     fun fiveDayThreeOurForecastEntityToFiveDayThreeHourForecastModel(
         fiveDayEntity: FiveDayThreeHourForecastEntity,
         forecastEntities: List<ForecastEntity>,
-        weatherStatusEntity: List<WeatherStatusEntity>
+        weatherInformationEntity: List<WeatherInformationEntity>
     ): FiveDayThreeHourForecastModel {
         return FiveDayThreeHourForecastModel(
             cnt = fiveDayEntity.cnt,
@@ -111,7 +114,7 @@ internal object Converters {
             forecastModels = forecastEntities.map {
                 forecastEntityToForecastModel(
                     entity = it,
-                    weatherInformation = weatherStatusEntity
+                    weatherInformation = weatherInformationEntity
                 )
             }
         )
@@ -119,7 +122,7 @@ internal object Converters {
 
     private fun forecastEntityToForecastModel(
         entity: ForecastEntity,
-        weatherInformation: List<WeatherStatusEntity>
+        weatherInformation: List<WeatherInformationEntity>
     ): ForecastModel {
         return ForecastModel(
             timeOfData = entity.timeOfData,
@@ -161,10 +164,10 @@ internal object Converters {
     }
 
     private fun weatherStatusEntityToWeatherInformationModel(
-        entity: WeatherStatusEntity
+        entity: WeatherInformationEntity
     ): WeatherInformationModel {
         return WeatherInformationModel(
-            id = entity.weatherStatusId,
+            id = entity.weatherInformationStatusId,
             status = entity.status,
             description = entity.description,
             icon = entity.icon

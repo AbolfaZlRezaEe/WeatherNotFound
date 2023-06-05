@@ -17,6 +17,10 @@ internal data class ReverseGeocodingEntity(
     val coordinateName:String,
     @ColumnInfo(name = "country_name")
     val countryName:String,
+    @ColumnInfo(name = "created_at")
+    val createdAt: String,
+    @ColumnInfo(name = "updated_at")
+    val updatedAt: String,
     /* Coordinate name in different languages: */
     @ColumnInfo(name ="af")
     val af: String?,

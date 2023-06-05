@@ -13,6 +13,7 @@ import me.learning.weathernotfound.domain.currentWeather.presentationModels.Snow
 import me.learning.weathernotfound.domain.currentWeather.presentationModels.WeatherInformationModel
 import me.learning.weathernotfound.domain.currentWeather.presentationModels.WeatherStatusModel
 import me.learning.weathernotfound.domain.currentWeather.presentationModels.WindInformationModel
+import me.learning.weathernotfound.domain.utils.Utilities
 
 internal object Converters {
 
@@ -50,7 +51,9 @@ internal object Converters {
             type = response.cityInformation.type,
             visibility = response.visibility,
             dateTime = response.dateTime,
-            timezone = response.timezone
+            timezone = response.timezone,
+            createdAt = Utilities.getCurrentTime(),
+            updatedAt = Utilities.getCurrentTime(),
         )
     }
 
@@ -64,7 +67,7 @@ internal object Converters {
             weatherStatusId = response.id,
             status = response.status,
             description = response.description,
-            icon = response.icon
+            icon = response.icon,
         )
     }
 

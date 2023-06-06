@@ -11,10 +11,11 @@ internal object Converters {
 
     // Network to Database entity converters
     fun reverseGeocodingResponseToReverseGeocodingEntity(
-        response: ReversGeocodingResponse
+        response: ReversGeocodingResponse,
+        entityId: Long? = null,
     ): ReverseGeocodingEntity {
         return ReverseGeocodingEntity(
-            entityId = null,
+            entityId = entityId,
             latitude = response.latitude,
             longitude = response.longitude,
             coordinateName = response.coordinateName,

@@ -34,4 +34,7 @@ internal interface CurrentWeatherDao {
 
     @Query("DELETE FROM tbl_current_weather WHERE updated_at<=:selectedTimeStamp")
     suspend fun deleteCurrentWeatherEntitiesOlderThan(selectedTimeStamp: Long)
+
+    @Query("DELETE FROM tbl_current_weather")
+    suspend fun invalidateCache()
 }

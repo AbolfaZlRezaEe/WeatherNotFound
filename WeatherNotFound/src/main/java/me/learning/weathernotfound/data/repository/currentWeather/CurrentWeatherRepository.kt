@@ -15,5 +15,7 @@ internal interface CurrentWeatherRepository {
 
     fun removeCacheInformationOlderThan(timeStamp: Long)
 
+    fun invalidateCache()
+
     fun dispose()
 }

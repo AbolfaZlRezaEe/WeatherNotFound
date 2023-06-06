@@ -1,5 +1,5 @@
 package me.learning.weathernotfound.data.repository
 
-enum class ResponseType {
+internal enum class ResponseType {
     NETWORK, CACHE
 }

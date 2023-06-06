@@ -10,6 +10,10 @@ object Utilities {
         return (System.currentTimeMillis() - this.time) >= TimeUnit.DAYS.toMillis(1) / 2
     }
 
+    fun Date.threeDayPassed(): Boolean {
+        return (System.currentTimeMillis() - this.time) >= TimeUnit.DAYS.toMillis(3)
+    }
+
     fun getCurrentDateTime(): Date {
         return Calendar.getInstance().time
     }

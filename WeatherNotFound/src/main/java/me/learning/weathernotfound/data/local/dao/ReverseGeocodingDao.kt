@@ -28,4 +28,7 @@ internal interface ReverseGeocodingDao {
 
     @Query("DELETE FROM tbl_reverse_geocoding WHERE updated_at<=:selectedTimeStamp")
     suspend fun deleteReverseGeocodingEntitiesOlderThan(selectedTimeStamp: Long)
+
+    @Query("DELETE FROM tbl_reverse_geocoding")
+    suspend fun invalidateCache()
 }

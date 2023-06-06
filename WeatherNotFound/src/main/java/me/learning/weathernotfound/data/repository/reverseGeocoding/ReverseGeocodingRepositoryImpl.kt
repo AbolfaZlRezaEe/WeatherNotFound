@@ -1,4 +1,4 @@
-package me.learning.weathernotfound.data.repository.currentWeather
+package me.learning.weathernotfound.data.repository.reverseGeocoding
 
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
@@ -6,7 +6,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import me.learning.weathernotfound.data.local.dao.CurrentWeatherDao
+import me.learning.weathernotfound.data.local.dao.ReverseGeocodingDao
 import me.learning.weathernotfound.data.network.providers.RequestProvider
 import me.learning.weathernotfound.data.network.providers.UrlProvider
 import me.learning.weathernotfound.data.repository.Failure
@@ -15,75 +15,72 @@ import me.learning.weathernotfound.data.repository.ResponseType
 import me.learning.weathernotfound.data.repository.Success
 import me.learning.weathernotfound.data.repository.WeatherNotFoundError
 import me.learning.weathernotfound.data.repository.WeatherNotFoundResponse
-import me.learning.weathernotfound.domain.currentWeather.Converters
-import me.learning.weathernotfound.domain.currentWeather.databaseModels.CurrentWeatherEntity
-import me.learning.weathernotfound.domain.currentWeather.networkModels.CurrentWeatherResponseModel
-import me.learning.weathernotfound.domain.currentWeather.presentationModels.CurrentWeatherModel
-import me.learning.weathernotfound.utils.Utilities.halfDayPassed
+import me.learning.weathernotfound.domain.reverseGeocoding.Converters
+import me.learning.weathernotfound.domain.reverseGeocoding.databaseModels.ReverseGeocodingEntity
+import me.learning.weathernotfound.domain.reverseGeocoding.networkModels.ReversGeocodingResponse
+import me.learning.weathernotfound.domain.reverseGeocoding.presentationModels.LocationInfoModel
+import me.learning.weathernotfound.utils.Utilities.threeDayPassed
 import okhttp3.OkHttpClient
 
-internal class CurrentWeatherRepositoryImpl(
-    private val currentWeatherDao: CurrentWeatherDao,
+internal class ReverseGeocodingRepositoryImpl(
+    private val reverseGeocodingDao: ReverseGeocodingDao,
     private val okHttpClient: OkHttpClient,
-    private val gsonConverter: Gson,
-) : CurrentWeatherRepository {
+    private val gsonConverter: Gson
+) : ReverseGeocodingRepository {
 
-    private lateinit var fetchCurrentWeatherInformationJob: Job
-    private lateinit var invalidateCurrentWeatherInformationCache: Job
+    private lateinit var fetchCoordinatesInformationJob: Job
+    private lateinit var invalidateCoordinateInformationCache: Job
     private lateinit var removeCacheInformationJob: Job
 
-    override fun getCurrentWeatherInformation(
+    override fun getCoordinateInformation(
         latitude: Double,
         longitude: Double,
-        resultInvoker: (Response<WeatherNotFoundResponse<CurrentWeatherModel>, WeatherNotFoundError>) -> Unit
+        limit: Int,
+        resultInvoker: (Response<WeatherNotFoundResponse<LocationInfoModel>, WeatherNotFoundError>) -> Unit
     ) {
-        fetchCurrentWeatherInformationJob = CoroutineScope(Dispatchers.IO).launch {
-            val cacheResponse = currentWeatherDao.getCurrentWeatherEntityByCoordinates(
+        fetchCoordinatesInformationJob = CoroutineScope(Dispatchers.IO).launch {
+            val cacheResponse = reverseGeocodingDao.getReverseGeocodingByCoordinates(
                 latitude = latitude,
                 longitude = longitude
             )
 
             if (cacheResponse != null) {
-                if (cacheResponse.updatedAt.halfDayPassed()) {
-                    // Cache information is no longer valid, should be updated with network request!
+                resultInvoker.invoke(
+                    Success(
+                        WeatherNotFoundResponse(
+                            responseType = ResponseType.CACHE,
+                            responseModel = Converters.reverseGeocodingEntityToLocationInfoModel(
+                                entity = cacheResponse
+                            )
+                        )
+                    )
+                )
+
+                if (cacheResponse.updatedAt.threeDayPassed()) {
+                    // Update cached Information
                     startNetworkRequest(
                         latitude = latitude,
                         longitude = longitude,
-                        responseCallback = resultInvoker,
+                        limit = limit,
+                        responseCallback = { /* Do nothing */ },
                         responseReceivedCallback = { responseModel ->
                             cacheResponseModelIntoDatabase(
-                                lastCurrentWeather = cacheResponse,
-                                currentWeatherResponseModel = responseModel
+                                lastReversInformationEntity = cacheResponse,
+                                reverseGeocodingResponse = responseModel
                             )
                         }
                     )
-                } else {
-                    val weatherStatusList =
-                        currentWeatherDao.getWeatherStatusesByCurrentWeatherId(
-                            currentWeatherId = cacheResponse.id!!
-                        )
-                    resultInvoker.invoke(
-                        Success(
-                            WeatherNotFoundResponse(
-                                responseType = ResponseType.CACHE,
-                                responseModel = Converters.currentWeatherEntityToCurrentWeatherModel(
-                                    currentWeather = cacheResponse,
-                                    weatherStatuses = weatherStatusList
-                                )
-                            )
-                        )
-                    )
-
                 }
             } else {
                 startNetworkRequest(
                     latitude = latitude,
                     longitude = longitude,
+                    limit = limit,
                     responseCallback = resultInvoker,
                     responseReceivedCallback = { responseModel ->
                         cacheResponseModelIntoDatabase(
-                            lastCurrentWeather = null,
-                            currentWeatherResponseModel = responseModel
+                            lastReversInformationEntity = null,
+                            reverseGeocodingResponse = responseModel
                         )
                     }
                 )
@@ -93,29 +90,29 @@ internal class CurrentWeatherRepositoryImpl(
 
     override fun removeCacheInformationOlderThan(timeStamp: Long) {
         removeCacheInformationJob = CoroutineScope(Dispatchers.IO).launch {
-            currentWeatherDao.deleteCurrentWeatherEntitiesOlderThan(selectedTimeStamp = timeStamp)
+            reverseGeocodingDao.deleteReverseGeocodingEntitiesOlderThan(selectedTimeStamp = timeStamp)
         }
     }
 
     override fun invalidateCache() {
-        invalidateCurrentWeatherInformationCache = CoroutineScope(Dispatchers.IO).launch {
-            currentWeatherDao.invalidateCache()
+        invalidateCoordinateInformationCache = CoroutineScope(Dispatchers.IO).launch {
+            reverseGeocodingDao.invalidateCache()
         }
     }
 
     override fun dispose() {
-        if (this::fetchCurrentWeatherInformationJob.isInitialized
-            && !fetchCurrentWeatherInformationJob.isCompleted
-            && !fetchCurrentWeatherInformationJob.isCancelled
+        if (this::fetchCoordinatesInformationJob.isInitialized
+            && !fetchCoordinatesInformationJob.isCompleted
+            && !fetchCoordinatesInformationJob.isCancelled
         ) {
-            fetchCurrentWeatherInformationJob.cancel()
+            fetchCoordinatesInformationJob.cancel()
         }
 
-        if (this::invalidateCurrentWeatherInformationCache.isInitialized
-            && !invalidateCurrentWeatherInformationCache.isCompleted
-            && !invalidateCurrentWeatherInformationCache.isCancelled
+        if (this::invalidateCoordinateInformationCache.isInitialized
+            && !invalidateCoordinateInformationCache.isCompleted
+            && !invalidateCoordinateInformationCache.isCancelled
         ) {
-            removeCacheInformationJob.cancel()
+            invalidateCoordinateInformationCache.cancel()
         }
 
         if (this::removeCacheInformationJob.isInitialized
@@ -129,25 +126,26 @@ internal class CurrentWeatherRepositoryImpl(
     private suspend fun startNetworkRequest(
         latitude: Double,
         longitude: Double,
-        responseCallback: (Response<WeatherNotFoundResponse<CurrentWeatherModel>, WeatherNotFoundError>) -> Unit,
-        responseReceivedCallback: suspend (currentWeatherResponseModel: CurrentWeatherResponseModel) -> Unit
+        limit: Int,
+        responseCallback: (Response<WeatherNotFoundResponse<LocationInfoModel>, WeatherNotFoundError>) -> Unit,
+        responseReceivedCallback: suspend (reverseGeocodingResponse: ReversGeocodingResponse) -> Unit
     ) {
-        val request = RequestProvider.provideCurrentWeatherRequest(
-            url = UrlProvider.CURRENT_WEATHER_URL,
+        val request = RequestProvider.provideReverseGeocodingRequest(
+            url = UrlProvider.REVERSE_GEOCODING_URL,
             latitude = latitude,
-            longitude = longitude
-        )
-            ?: throw IllegalStateException("Request is null! Check currentWeatherInformation request!")
+            longitude = longitude,
+            limit = limit
+        ) ?: throw IllegalStateException("Request is null! Check reverseGeocoding request!")
 
         try {
             val response = okHttpClient.newCall(request).execute()
             if (response.isSuccessful && response.body != null) {
-                val responseModel: CurrentWeatherResponseModel?
+                val responseModel: ReversGeocodingResponse
 
                 try {
                     responseModel = gsonConverter.fromJson(
                         response.body!!.toString(),
-                        CurrentWeatherResponseModel::class.java
+                        ReversGeocodingResponse::class.java
                     )
                 } catch (jsonSyntaxException: JsonSyntaxException) {
                     responseCallback.invoke(
@@ -166,7 +164,7 @@ internal class CurrentWeatherRepositoryImpl(
                         WeatherNotFoundResponse(
                             httpResponseCode = response.code,
                             responseType = ResponseType.NETWORK,
-                            responseModel = Converters.currentWeatherResponseModelToCurrentWeatherModel(
+                            responseModel = Converters.reverseGeocodingResponseToLocationInfoModel(
                                 responseModel
                             )
                         )
@@ -193,18 +191,18 @@ internal class CurrentWeatherRepositoryImpl(
     }
 
     private suspend fun cacheResponseModelIntoDatabase(
-        lastCurrentWeather: CurrentWeatherEntity?,
-        currentWeatherResponseModel: CurrentWeatherResponseModel,
+        lastReversInformationEntity: ReverseGeocodingEntity?,
+        reverseGeocodingResponse: ReversGeocodingResponse,
     ) {
         val finalEntityModel =
-            Converters.currentWeatherResponseToCurrentWeatherEntity(
-                response = currentWeatherResponseModel,
-                entityId = lastCurrentWeather?.id
+            Converters.reverseGeocodingResponseToReverseGeocodingEntity(
+                response = reverseGeocodingResponse,
+                entityId = lastReversInformationEntity?.entityId
             )
-        if (lastCurrentWeather == null) {
-            currentWeatherDao.insertCurrentWeatherEntity(finalEntityModel)
+        if (lastReversInformationEntity == null) {
+            reverseGeocodingDao.insertReverseGeocodingEntity(finalEntityModel)
         } else {
-            currentWeatherDao.updateCurrentWeatherEntity(finalEntityModel)
+            reverseGeocodingDao.updateReverseGeocodingEntity(finalEntityModel)
         }
     }
 }

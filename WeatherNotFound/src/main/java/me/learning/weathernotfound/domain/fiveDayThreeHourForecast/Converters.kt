@@ -17,7 +17,7 @@ import me.learning.weathernotfound.domain.fiveDayThreeHourForecast.presentationM
 import me.learning.weathernotfound.domain.fiveDayThreeHourForecast.presentationModels.WeatherConditionInformationModel
 import me.learning.weathernotfound.domain.fiveDayThreeHourForecast.presentationModels.WeatherInformationModel
 import me.learning.weathernotfound.domain.fiveDayThreeHourForecast.presentationModels.WindInformationModel
-import me.learning.weathernotfound.domain.utils.Utilities
+import me.learning.weathernotfound.utils.Utilities
 
 internal object Converters {
 

@@ -24,7 +24,7 @@ internal interface CurrentWeatherDao {
     suspend fun getCurrentWeatherEntityByCoordinates(
         latitude: Double,
         longitude: Double
-    ): CurrentWeatherEntity
+    ): CurrentWeatherEntity?
 
     @Query("SELECT * FROM tbl_weather_status WHERE current_weather_id =:currentWeatherId")
     suspend fun getWeatherStatusesByCurrentWeatherId(currentWeatherId: Long): List<WeatherStatusEntity>

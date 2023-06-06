@@ -13,16 +13,17 @@ import me.learning.weathernotfound.domain.currentWeather.presentationModels.Snow
 import me.learning.weathernotfound.domain.currentWeather.presentationModels.WeatherInformationModel
 import me.learning.weathernotfound.domain.currentWeather.presentationModels.WeatherStatusModel
 import me.learning.weathernotfound.domain.currentWeather.presentationModels.WindInformationModel
-import me.learning.weathernotfound.domain.utils.Utilities
+import me.learning.weathernotfound.utils.Utilities
 
 internal object Converters {
 
     // Network to Database entity converters
     fun currentWeatherResponseToCurrentWeatherEntity(
-        response: CurrentWeatherResponseModel
+        response: CurrentWeatherResponseModel,
+        entityId: Long? = null,
     ): CurrentWeatherEntity {
         return CurrentWeatherEntity(
-            id = null,
+            id = entityId,
             cityId = response.cityId,
             cityName = response.cityName,
             latitude = response.cityCoordinates.latitude,

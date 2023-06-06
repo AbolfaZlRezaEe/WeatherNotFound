@@ -38,7 +38,7 @@ internal interface FiveDayThreeHourDao {
     suspend fun getFiveThreeHourForecastEntityByCoordinates(
         latitude: Double,
         longitude: Double
-    ): FiveDayThreeHourForecastEntity
+    ): FiveDayThreeHourForecastEntity?
 
     @Query("SELECT * FROM tbl_forecast WHERE five_day_forecast_id=:fiveDayForecastId")
     suspend fun getForecastEntitiesListByFiveDayForecastId(fiveDayForecastId: Long): List<ForecastEntity>

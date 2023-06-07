@@ -1,5 +1,6 @@
 package me.learning.weathernotfound.data.network.providers
 
+import com.google.gson.Gson
 import me.learning.weathernotfound.data.network.WeatherNotFoundInterceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -12,6 +13,8 @@ internal object NetworkInterfaceProvider {
 
     private var OKHTTP_CLIENT_NORMAL_INSTANCE: OkHttpClient? = null
     private var OKHTTP_CLIENT_CUSTOM_INSTANCE: OkHttpClient? = null
+
+    private var GSON_INSTANCE: Gson? = null
 
     @Synchronized
     fun init(
@@ -39,6 +42,13 @@ internal object NetworkInterfaceProvider {
             .addInterceptor(getLoggingInterceptor(httpLoggingLevel))
             .addInterceptor(getWeatherNotFoundInterceptor())
             .build()
+    }
+
+    @Synchronized
+    fun initGsonConverter() {
+        if (GSON_INSTANCE == null) {
+            GSON_INSTANCE = Gson()
+        }
     }
 
     fun getOkHttpClient(): OkHttpClient {

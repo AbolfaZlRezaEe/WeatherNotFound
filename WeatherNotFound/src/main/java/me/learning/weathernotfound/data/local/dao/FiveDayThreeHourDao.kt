@@ -38,14 +38,17 @@ internal interface FiveDayThreeHourDao {
     suspend fun getFiveThreeHourForecastEntityByCoordinates(
         latitude: Double,
         longitude: Double
-    ): FiveDayThreeHourForecastEntity
+    ): FiveDayThreeHourForecastEntity?
 
     @Query("SELECT * FROM tbl_forecast WHERE five_day_forecast_id=:fiveDayForecastId")
-    suspend fun getForecastEntitiesListByFiveDayForecastId(fiveDayForecastId: Long): List<ForecastEntity>
+    suspend fun getForecastEntitiesListByFiveDayForecastId(fiveDayForecastId: Long): List<ForecastEntity>?
 
     @Query("SELECT * FROM tbl_weather_information WHERE forecast_id=:forecastId")
     suspend fun getWeatherInformationEntitiesByForecastId(forecastId: Long): List<WeatherInformationEntity>
 
     @Query("DELETE FROM tbl_five_three_forecast WHERE updated_at<=:selectedTimeStamp")
     suspend fun deleteFiveDayThreeHourEntitiesOlderThan(selectedTimeStamp: Long)
+
+    @Query("DELETE FROM tbl_five_three_forecast")
+    suspend fun invalidateCache()
 }

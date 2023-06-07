@@ -5,16 +5,17 @@ import me.learning.weathernotfound.domain.reverseGeocoding.networkModels.ReversG
 import me.learning.weathernotfound.domain.reverseGeocoding.presentationModels.LocationCoordinatesModel
 import me.learning.weathernotfound.domain.reverseGeocoding.presentationModels.LocationInfoModel
 import me.learning.weathernotfound.domain.reverseGeocoding.presentationModels.LocationNamesModel
-import me.learning.weathernotfound.domain.utils.Utilities
+import me.learning.weathernotfound.utils.Utilities
 
 internal object Converters {
 
     // Network to Database entity converters
     fun reverseGeocodingResponseToReverseGeocodingEntity(
-        response: ReversGeocodingResponse
+        response: ReversGeocodingResponse,
+        entityId: Long? = null,
     ): ReverseGeocodingEntity {
         return ReverseGeocodingEntity(
-            entityId = null,
+            entityId = entityId,
             latitude = response.latitude,
             longitude = response.longitude,
             coordinateName = response.coordinateName,

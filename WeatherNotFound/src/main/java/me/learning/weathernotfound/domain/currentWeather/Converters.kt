@@ -13,16 +13,17 @@ import me.learning.weathernotfound.domain.currentWeather.presentationModels.Snow
 import me.learning.weathernotfound.domain.currentWeather.presentationModels.WeatherInformationModel
 import me.learning.weathernotfound.domain.currentWeather.presentationModels.WeatherStatusModel
 import me.learning.weathernotfound.domain.currentWeather.presentationModels.WindInformationModel
-import me.learning.weathernotfound.domain.utils.Utilities
+import me.learning.weathernotfound.utils.Utilities
 
 internal object Converters {
 
     // Network to Database entity converters
     fun currentWeatherResponseToCurrentWeatherEntity(
-        response: CurrentWeatherResponseModel
+        response: CurrentWeatherResponseModel,
+        entityId: Long? = null,
     ): CurrentWeatherEntity {
         return CurrentWeatherEntity(
-            id = null,
+            id = entityId,
             cityId = response.cityId,
             cityName = response.cityName,
             latitude = response.cityCoordinates.latitude,
@@ -58,17 +59,19 @@ internal object Converters {
     }
 
     fun weatherStatusResponseToWeatherStatusEntity(
-        response: WeatherStatusResponseModel,
-        responseId: Long
-    ): WeatherStatusEntity {
-        return WeatherStatusEntity(
-            id = null,
-            currentWeatherId = responseId,
-            weatherStatusId = response.id,
-            status = response.status,
-            description = response.description,
-            icon = response.icon,
-        )
+        weatherStatusResponseModels: List<WeatherStatusResponseModel>,
+        currentWeatherId: Long
+    ): List<WeatherStatusEntity> {
+        return weatherStatusResponseModels.map {
+            WeatherStatusEntity(
+                id = null,
+                currentWeatherId = currentWeatherId,
+                weatherStatusId = it.id,
+                status = it.status,
+                description = it.description,
+                icon = it.icon,
+            )
+        }
     }
 
     // Database to Presentation model converters

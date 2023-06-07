@@ -59,17 +59,19 @@ internal object Converters {
     }
 
     fun weatherStatusResponseToWeatherStatusEntity(
-        response: WeatherStatusResponseModel,
-        responseId: Long
-    ): WeatherStatusEntity {
-        return WeatherStatusEntity(
-            id = null,
-            currentWeatherId = responseId,
-            weatherStatusId = response.id,
-            status = response.status,
-            description = response.description,
-            icon = response.icon,
-        )
+        weatherStatusResponseModels: List<WeatherStatusResponseModel>,
+        currentWeatherId: Long
+    ): List<WeatherStatusEntity> {
+        return weatherStatusResponseModels.map {
+            WeatherStatusEntity(
+                id = null,
+                currentWeatherId = currentWeatherId,
+                weatherStatusId = it.id,
+                status = it.status,
+                description = it.description,
+                icon = it.icon,
+            )
+        }
     }
 
     // Database to Presentation model converters

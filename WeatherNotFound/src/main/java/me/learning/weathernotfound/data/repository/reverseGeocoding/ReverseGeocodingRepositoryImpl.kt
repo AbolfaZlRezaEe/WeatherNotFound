@@ -29,7 +29,7 @@ internal class ReverseGeocodingRepositoryImpl(
 ) : ReverseGeocodingRepository {
 
     private lateinit var fetchCoordinatesInformationJob: Job
-    private lateinit var invalidateCoordinateInformationCache: Job
+    private lateinit var invalidateCoordinateInformationCacheJob: Job
     private lateinit var removeCacheInformationJob: Job
 
     override fun getCoordinateInformation(
@@ -95,7 +95,7 @@ internal class ReverseGeocodingRepositoryImpl(
     }
 
     override fun invalidateCache() {
-        invalidateCoordinateInformationCache = CoroutineScope(Dispatchers.IO).launch {
+        invalidateCoordinateInformationCacheJob = CoroutineScope(Dispatchers.IO).launch {
             reverseGeocodingDao.invalidateCache()
         }
     }
@@ -108,11 +108,11 @@ internal class ReverseGeocodingRepositoryImpl(
             fetchCoordinatesInformationJob.cancel()
         }
 
-        if (this::invalidateCoordinateInformationCache.isInitialized
-            && !invalidateCoordinateInformationCache.isCompleted
-            && !invalidateCoordinateInformationCache.isCancelled
+        if (this::invalidateCoordinateInformationCacheJob.isInitialized
+            && !invalidateCoordinateInformationCacheJob.isCompleted
+            && !invalidateCoordinateInformationCacheJob.isCancelled
         ) {
-            invalidateCoordinateInformationCache.cancel()
+            invalidateCoordinateInformationCacheJob.cancel()
         }
 
         if (this::removeCacheInformationJob.isInitialized

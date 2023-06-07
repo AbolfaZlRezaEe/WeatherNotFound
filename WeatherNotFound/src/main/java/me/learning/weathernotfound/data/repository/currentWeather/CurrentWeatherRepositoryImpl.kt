@@ -202,9 +202,29 @@ internal class CurrentWeatherRepositoryImpl(
                 entityId = lastCurrentWeather?.id
             )
         if (lastCurrentWeather == null) {
-            currentWeatherDao.insertCurrentWeatherEntity(finalEntityModel)
+            val currentWeatherId = currentWeatherDao.insertCurrentWeatherEntity(finalEntityModel)
+
+            val finalWeatherStatusEntityModels =
+                Converters.weatherStatusResponseToWeatherStatusEntity(
+                    currentWeatherId = currentWeatherId,
+                    weatherStatusResponseModels = currentWeatherResponseModel.weatherStatus
+                )
+
+            currentWeatherDao.insertAllWeatherStatusEntities(finalWeatherStatusEntityModels)
         } else {
+            // First, delete weather status information that were old
+            // Todo: in this case, the right choice is to diff the response with cache information and then update it.
+            currentWeatherDao.deleteWeatherStatuesByCurrentWeatherId(finalEntityModel.id!!)
+
             currentWeatherDao.updateCurrentWeatherEntity(finalEntityModel)
+
+            val finalWeatherStatusEntityModels =
+                Converters.weatherStatusResponseToWeatherStatusEntity(
+                    currentWeatherId = finalEntityModel.id,
+                    weatherStatusResponseModels = currentWeatherResponseModel.weatherStatus
+                )
+
+            currentWeatherDao.insertAllWeatherStatusEntities(finalWeatherStatusEntityModels)
         }
     }
 }

@@ -183,7 +183,7 @@ internal class FiveDayThreeHourForecastRepositoryImpl(
                         Failure(
                             WeatherNotFoundError(
                                 exception = jsonSyntaxException,
-                                internalErrorMessage = "Failed to parse response into CurrentWeatherModel!"
+                                internalErrorMessage = "Failed to parse response into FiveDayThreeHourForecastModel!"
                             )
                         )
                     )

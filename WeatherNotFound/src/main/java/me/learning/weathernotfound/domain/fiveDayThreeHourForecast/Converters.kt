@@ -23,10 +23,11 @@ internal object Converters {
 
     // Network to Database entity converters
     fun fiveDayThreeHourForecastResponseToFiveDayThreeHourForecastEntity(
-        response: FiveDayThreeHourForecastResponseModel
+        response: FiveDayThreeHourForecastResponseModel,
+        entityId: Long? = null,
     ): FiveDayThreeHourForecastEntity {
         return FiveDayThreeHourForecastEntity(
-            id = null,
+            id = entityId,
             cnt = response.cnt,
             cityId = response.cityInformation.id,
             cityName = response.cityInformation.cityName,
@@ -94,7 +95,7 @@ internal object Converters {
     fun fiveDayThreeOurForecastEntityToFiveDayThreeHourForecastModel(
         fiveDayEntity: FiveDayThreeHourForecastEntity,
         forecastEntities: List<ForecastEntity>,
-        weatherInformationEntity: List<WeatherInformationEntity>
+        weatherInformationEntities: List<List<WeatherInformationEntity>>
     ): FiveDayThreeHourForecastModel {
         return FiveDayThreeHourForecastModel(
             cnt = fiveDayEntity.cnt,
@@ -111,10 +112,10 @@ internal object Converters {
                 sunset = fiveDayEntity.sunset,
                 timezone = fiveDayEntity.timezone,
             ),
-            forecastModels = forecastEntities.map {
+            forecastModels = forecastEntities.mapIndexed { index, forecastEntity ->
                 forecastEntityToForecastModel(
-                    entity = it,
-                    weatherInformation = weatherInformationEntity
+                    entity = forecastEntity,
+                    weatherInformation = weatherInformationEntities[index]
                 )
             }
         )

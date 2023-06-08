@@ -51,6 +51,13 @@ internal object NetworkInterfaceProvider {
         }
     }
 
+    fun getGsonConverter(): Gson {
+        if (GSON_INSTANCE == null) {
+            initGsonConverter()
+        }
+        return GSON_INSTANCE!!
+    }
+
     fun getOkHttpClient(): OkHttpClient {
         return if (OKHTTP_CLIENT_CUSTOM_INSTANCE != null) {
             OKHTTP_CLIENT_CUSTOM_INSTANCE!!

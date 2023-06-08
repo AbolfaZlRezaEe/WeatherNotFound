@@ -3,7 +3,7 @@ package me.learning.weathernotfound.data.local
 import android.content.Context
 import androidx.room.Room
 
-internal object DatabaseInterfaceProvider {
+internal object LocalInterfaceProvider {
     private var DATABASE_INSTANCE: WeatherNotFoundDatabase? = null
 
     private const val DATABASE_NAME = "WeatherNotFound_db"

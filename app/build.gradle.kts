@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "me.abolfazl.weathernotfound"
+    namespace = "me.learning.app"
     compileSdk = 33
 
     defaultConfig {
-        applicationId = "me.abolfazl.weathernotfound"
+        applicationId = "me.learning.app"
         minSdk = 21
         targetSdk = 33
         versionCode = 1
@@ -24,5 +24,16 @@ android {
 }
 
 dependencies {
+    val coreKTXVersion = "1.10.1"
+    val appCompatVersion = "1.6.1"
+    val materialVersion = "1.9.0"
+    val constraintLayoutVersion = "2.1.4"
+
+    implementation("androidx.core:core-ktx:$coreKTXVersion")
+    implementation("androidx.appcompat:appcompat:$appCompatVersion")
+    implementation("com.google.android.material:material:$materialVersion")
+    implementation("androidx.constraintlayout:constraintlayout:$constraintLayoutVersion")
+
+
     implementation(project(":WeatherNotFound"))
 }

@@ -78,7 +78,7 @@ dependencies {
 
     implementation("com.google.code.gson:gson:$gsonConverterVersion")
     implementation("com.squareup.okhttp3:okhttp:$okhttpClientVersion")
-    implementation("com.squareup.okhttp3:logging-interceptor:$okhttpClientVersion")
+    api("com.squareup.okhttp3:logging-interceptor:$okhttpClientVersion")
 
     // Database Dependencies
     val roomVersion = "2.5.1"

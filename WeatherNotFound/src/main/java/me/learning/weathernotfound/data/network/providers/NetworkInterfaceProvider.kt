@@ -32,14 +32,24 @@ internal object NetworkInterfaceProvider {
 
     @Synchronized
     fun initManually(
-        httpLoggingLevel: HttpLoggingInterceptor.Level,
-        readTimeoutInSeconds: Long,
-        connectTimeoutInSeconds: Long
+        httpLoggingLevel: HttpLoggingInterceptor.Level?,
+        readTimeoutInSeconds: Long?,
+        connectTimeoutInSeconds: Long?,
     ) {
         OKHTTP_CLIENT_CUSTOM_INSTANCE = OkHttpClient.Builder()
-            .connectTimeout(timeout = connectTimeoutInSeconds, unit = TimeUnit.SECONDS)
-            .readTimeout(timeout = readTimeoutInSeconds, unit = TimeUnit.SECONDS)
-            .addInterceptor(getLoggingInterceptor(httpLoggingLevel))
+            .connectTimeout(
+                timeout = connectTimeoutInSeconds ?: OKHTTP_NORMAL_CONNECT_TIMEOUT,
+                unit = TimeUnit.SECONDS
+            )
+            .readTimeout(
+                timeout = readTimeoutInSeconds ?: OKHTTP_NORMAL_READ_TIMEOUT,
+                unit = TimeUnit.SECONDS
+            )
+            .addInterceptor(
+                getLoggingInterceptor(
+                    httpLoggingLevel ?: OKHTTP_NORMAL_LOGGING_INTERCEPTOR
+                )
+            )
             .addInterceptor(getWeatherNotFoundInterceptor())
             .build()
     }

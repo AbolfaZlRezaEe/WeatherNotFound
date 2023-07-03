@@ -5,10 +5,15 @@ import okhttp3.Request
 
 internal object RequestProvider {
 
-    // Geocoding request params
-    private const val GEOCODING_PARAM_LATITUDE = "lat"
-    private const val GEOCODING_PARAM_LONGITUDE = "lon"
-    private const val GEOCODING_PARAM_LIMIT = "limit"
+    // Reverse Geocoding request params
+    private const val REVERSE_GEOCODING_PARAM_LATITUDE = "lat"
+    private const val REVERSE_GEOCODING_PARAM_LONGITUDE = "lon"
+    private const val REVERSE_GEOCODING_PARAM_LIMIT = "limit"
+
+    // Direct Geocoding request params
+    private const val DIRECT_GEOCODING_PARAM_LATITUDE = "lat"
+    private const val DIRECT_GEOCODING_PARAM_LONGITUDE = "lon"
+    private const val DIRECT_GEOCODING_PARAM_LIMIT = "limit"
 
     // Current weather request params
     private const val CURRENT_WEATHER_PARAM_LATITUDE = "lat"
@@ -25,9 +30,24 @@ internal object RequestProvider {
         limit: Int,
     ): Request? {
         val httpUrl = url.toHttpUrlOrNull()?.newBuilder()
-            ?.addQueryParameter(GEOCODING_PARAM_LATITUDE, latitude.toString())
-            ?.addQueryParameter(GEOCODING_PARAM_LONGITUDE, longitude.toString())
-            ?.addQueryParameter(GEOCODING_PARAM_LIMIT, limit.toString())
+            ?.addQueryParameter(REVERSE_GEOCODING_PARAM_LATITUDE, latitude.toString())
+            ?.addQueryParameter(REVERSE_GEOCODING_PARAM_LONGITUDE, longitude.toString())
+            ?.addQueryParameter(REVERSE_GEOCODING_PARAM_LIMIT, limit.toString())
+            ?.build() ?: return null
+
+        return Request.Builder().url(httpUrl).build()
+    }
+
+    fun provideDirectGeocodingRequest(
+        url: String,
+        latitude: Double,
+        longitude: Double,
+        limit: Int,
+    ): Request? {
+        val httpUrl = url.toHttpUrlOrNull()?.newBuilder()
+            ?.addQueryParameter(DIRECT_GEOCODING_PARAM_LATITUDE, latitude.toString())
+            ?.addQueryParameter(DIRECT_GEOCODING_PARAM_LONGITUDE, longitude.toString())
+            ?.addQueryParameter(DIRECT_GEOCODING_PARAM_LIMIT, limit.toString())
             ?.build() ?: return null
 
         return Request.Builder().url(httpUrl).build()

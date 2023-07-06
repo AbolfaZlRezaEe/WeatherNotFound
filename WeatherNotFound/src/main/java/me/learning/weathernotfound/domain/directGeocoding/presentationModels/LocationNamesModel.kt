@@ -3,7 +3,7 @@ package me.learning.weathernotfound.domain.directGeocoding.presentationModels
 /**
  * Representing local names of given city name
  */
-data class LocationNamesModel(
+internal data class LocationNamesModel(
     val ab: String? = null,
     val af: String? = null,
     val am: String? = null,

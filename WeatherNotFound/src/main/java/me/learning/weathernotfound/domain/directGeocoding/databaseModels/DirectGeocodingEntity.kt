@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import java.util.Date
 
 @Entity(tableName = "tbl_direct_geocoding")
-data class DirectGeocodingEntity(
+internal data class DirectGeocodingEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "entity_id")
     val entityId: Long? = null,

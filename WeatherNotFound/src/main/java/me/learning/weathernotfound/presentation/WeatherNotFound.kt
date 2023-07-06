@@ -67,6 +67,18 @@ class WeatherNotFound private constructor() {
         limit: Int,
         weatherNotFoundCallback: WeatherNotFoundCallback<WeatherNotFoundResponse<CurrentWeatherModel>, WeatherNotFoundError>,
     ) {
+        if (!openWeatherApiKeyIsRegistered) {
+            validateOpenWeatherApiKey { registered ->
+                if (registered) {
+                    getCurrentWeatherInformation(
+                        cityName = cityName,
+                        limit = limit,
+                        weatherNotFoundCallback = weatherNotFoundCallback
+                    )
+                }
+            }
+            return
+        }
         RepositoryProvider.getDirectRepository()
             .getCityNameCoordinatesInformation(
                 cityName = cityName,
@@ -126,6 +138,18 @@ class WeatherNotFound private constructor() {
         limit: Int,
         weatherNotFoundCallback: WeatherNotFoundCallback<WeatherNotFoundResponse<FiveDayThreeHourForecastModel>, WeatherNotFoundError>,
     ) {
+        if (!openWeatherApiKeyIsRegistered) {
+            validateOpenWeatherApiKey { registered ->
+                if (registered) {
+                    getFiveDayThreeHourForecastInformation(
+                        cityName = cityName,
+                        limit = limit,
+                        weatherNotFoundCallback = weatherNotFoundCallback
+                    )
+                }
+            }
+            return
+        }
         RepositoryProvider.getDirectRepository()
             .getCityNameCoordinatesInformation(
                 cityName = cityName,
@@ -189,7 +213,7 @@ class WeatherNotFound private constructor() {
                 if (!result) {
                     Log.e(
                         TAG, "Validation failed! Your Api key is not working... Please ensure" +
-                                " about your payment in OpenWeatherApi!"
+                                " about your payment in OpenWeatherMap!"
                     )
                 }
             }

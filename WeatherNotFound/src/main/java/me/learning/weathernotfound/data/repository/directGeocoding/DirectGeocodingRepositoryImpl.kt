@@ -190,11 +190,11 @@ internal class DirectGeocodingRepositoryImpl constructor(
         directGeocodingResponse: DirectGeocodingResponse,
     ) {
         lastDirectInformationEntity?.let {
-            directGeocodingDao.deleteDirectGeocodingEntity(lastDirectInformationEntity)
+            directGeocodingDao.deleteDirectGeocodingEntities(lastDirectInformationEntity)
         }
-        val finalEntityModel = Converters.directGeocodingResponseToDirectGeocodingEntity(
+        val finalEntityModels = Converters.directGeocodingResponseToDirectGeocodingEntity(
             response = directGeocodingResponse
         )
-        directGeocodingDao.insertDirectGeocodingEntity(finalEntityModel)
+        directGeocodingDao.insertDirectGeocodingEntities(finalEntityModels)
     }
 }

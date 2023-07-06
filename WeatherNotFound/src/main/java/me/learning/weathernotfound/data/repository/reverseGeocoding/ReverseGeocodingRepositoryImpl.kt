@@ -44,19 +44,19 @@ internal class ReverseGeocodingRepositoryImpl(
                 longitude = longitude
             )
 
-            if (cacheResponse != null) {
+            if (cacheResponse.isNotEmpty()) {
                 resultInvoker.invoke(
                     Success(
                         WeatherNotFoundResponse(
                             responseType = ResponseType.CACHE,
                             responseModel = Converters.reverseGeocodingEntitiesToReverseGeocodingModel(
-                                entity = cacheResponse
+                                entities = cacheResponse
                             )
                         )
                     )
                 )
 
-                if (cacheResponse.updatedAt.threeDayPassed()) {
+                if (cacheResponse[0].updatedAt.threeDayPassed() /* For now we just check one of them... */) {
                     // Update cached Information
                     startNetworkRequest(
                         latitude = latitude,
@@ -190,19 +190,18 @@ internal class ReverseGeocodingRepositoryImpl(
         }
     }
 
+    // TODO: Performance improving needed!
     private suspend fun cacheResponseModelIntoDatabase(
-        lastReversInformationEntity: ReverseGeocodingEntity?,
+        lastReversInformationEntity: List<ReverseGeocodingEntity>?,
         reverseGeocodingResponse: ReversGeocodingResponse,
     ) {
-        val finalEntityModel =
-            Converters.reverseGeocodingResponseToReverseGeocodingEntity(
-                response = reverseGeocodingResponse,
-                entityId = lastReversInformationEntity?.entityId
-            )
-        if (lastReversInformationEntity == null) {
-            reverseGeocodingDao.insertReverseGeocodingEntity(finalEntityModel)
-        } else {
-            reverseGeocodingDao.updateReverseGeocodingEntity(finalEntityModel)
+        lastReversInformationEntity?.let {
+            reverseGeocodingDao.deleteReverseGeocodingEntities(lastReversInformationEntity)
         }
+        val finalEntityModels = Converters.reverseGeocodingResponseToReverseGeocodingEntity(
+            response = reverseGeocodingResponse
+        )
+
+        reverseGeocodingDao.insertReverseGeocodingEntities(finalEntityModels)
     }
 }

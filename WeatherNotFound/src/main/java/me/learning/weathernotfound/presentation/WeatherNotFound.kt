@@ -1,7 +1,10 @@
 package me.learning.weathernotfound.presentation
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.util.Log
+import androidx.core.content.ContextCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,6 +25,7 @@ class WeatherNotFound private constructor() {
         private const val TAG = "WeatherNotFound"
 
         private var INSTANCE: WeatherNotFound? = null
+        private var initCalled = false
 
         @Synchronized
         fun getInstance(): WeatherNotFound {
@@ -39,6 +43,10 @@ class WeatherNotFound private constructor() {
         connectTimeoutInSeconds: Long? = null,
         cacheMechanismEnabled: Boolean = false,
     ) {
+        checkInternetPermission(context)
+
+        setInitCalledState(true)
+
         LocalInterfaceProvider.setCacheMechanism(cacheMechanismEnabled)
         if (cacheMechanismEnabled) {
             LocalInterfaceProvider.init(context)
@@ -67,6 +75,7 @@ class WeatherNotFound private constructor() {
         limit: Int,
         weatherNotFoundCallback: WeatherNotFoundCallback<WeatherNotFoundResponse<CurrentWeatherModel>, WeatherNotFoundError>,
     ) {
+        validateInitFunction()
         if (!openWeatherApiKeyIsRegistered) {
             validateOpenWeatherApiKey { registered ->
                 if (registered) {
@@ -102,6 +111,7 @@ class WeatherNotFound private constructor() {
         longitude: Double,
         weatherNotFoundCallback: WeatherNotFoundCallback<WeatherNotFoundResponse<CurrentWeatherModel>, WeatherNotFoundError>,
     ) {
+        validateInitFunction()
         if (!openWeatherApiKeyIsRegistered) {
             validateOpenWeatherApiKey { registered ->
                 if (registered) {
@@ -138,6 +148,7 @@ class WeatherNotFound private constructor() {
         limit: Int,
         weatherNotFoundCallback: WeatherNotFoundCallback<WeatherNotFoundResponse<FiveDayThreeHourForecastModel>, WeatherNotFoundError>,
     ) {
+        validateInitFunction()
         if (!openWeatherApiKeyIsRegistered) {
             validateOpenWeatherApiKey { registered ->
                 if (registered) {
@@ -173,6 +184,7 @@ class WeatherNotFound private constructor() {
         longitude: Double,
         weatherNotFoundCallback: WeatherNotFoundCallback<WeatherNotFoundResponse<FiveDayThreeHourForecastModel>, WeatherNotFoundError>,
     ) {
+        validateInitFunction()
         if (!openWeatherApiKeyIsRegistered) {
             validateOpenWeatherApiKey { registered ->
                 if (registered) {
@@ -213,9 +225,40 @@ class WeatherNotFound private constructor() {
                 if (!result) {
                     Log.e(
                         TAG, "Validation failed! Your Api key is not working... Please ensure" +
-                                " about your payment in OpenWeatherMap!"
+                                " about your ApiKey in OpenWeatherMap user panel!"
                     )
                 }
             }
+    }
+
+    @Synchronized
+    private fun setInitCalledState(isCalled: Boolean) {
+        initCalled = isCalled
+    }
+
+    private fun isInitCalled(): Boolean {
+        return initCalled
+    }
+
+    private fun validateInitFunction() {
+        if (!isInitCalled()) {
+            throw IllegalStateException(
+                "You didn't call init() function of WeatherNotFound! " +
+                        "Make sure you call this function on your Application class!"
+            )
+        }
+    }
+
+    private fun checkInternetPermission(context: Context) {
+        if (ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.INTERNET
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            throw IllegalStateException(
+                "Please ensure you have INTERNET permission in your application!" +
+                        " You can't use WeatherNotFound unless you add this permission to your Manifest file!"
+            )
+        }
     }
 }

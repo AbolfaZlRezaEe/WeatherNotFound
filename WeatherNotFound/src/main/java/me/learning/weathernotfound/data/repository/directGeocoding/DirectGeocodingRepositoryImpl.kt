@@ -150,7 +150,7 @@ internal class DirectGeocodingRepositoryImpl constructor(
 
                 try {
                     responseModel = gsonConverter.fromJson(
-                        response.body!!.toString(),
+                        response.body!!.string(),
                         DirectGeocodingResponse::class.java
                     )
                 } catch (jsonSyntaxException: JsonSyntaxException) {

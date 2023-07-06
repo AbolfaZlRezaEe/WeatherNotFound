@@ -187,7 +187,7 @@ internal class FiveDayThreeHourForecastRepositoryImpl(
 
                 try {
                     responseModel = gsonConverter.fromJson(
-                        response.body!!.toString(),
+                        response.body!!.string(),
                         FiveDayThreeHourForecastResponseModel::class.java
                     )
                 } catch (jsonSyntaxException: JsonSyntaxException) {

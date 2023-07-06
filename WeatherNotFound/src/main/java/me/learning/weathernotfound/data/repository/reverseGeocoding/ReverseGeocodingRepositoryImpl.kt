@@ -157,7 +157,7 @@ internal class ReverseGeocodingRepositoryImpl(
 
                 try {
                     responseModel = gsonConverter.fromJson(
-                        response.body!!.toString(),
+                        response.body!!.string(),
                         ReversGeocodingResponse::class.java
                     )
                 } catch (jsonSyntaxException: JsonSyntaxException) {

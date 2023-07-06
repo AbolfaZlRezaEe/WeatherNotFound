@@ -191,7 +191,7 @@ internal class CurrentWeatherRepositoryImpl(
 
                 try {
                     responseModel = gsonConverter.fromJson(
-                        response.body!!.toString(),
+                        response.body!!.string(),
                         CurrentWeatherResponseModel::class.java
                     )
                 } catch (jsonSyntaxException: JsonSyntaxException) {

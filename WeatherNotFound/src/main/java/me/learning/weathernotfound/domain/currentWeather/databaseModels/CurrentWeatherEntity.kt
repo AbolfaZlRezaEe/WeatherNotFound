@@ -21,7 +21,7 @@ internal data class CurrentWeatherEntity(
     @ColumnInfo(name = "base")
     val base: String,
     @ColumnInfo(name = "cloudiness")
-    val cloudiness: Int,
+    val cloudiness: Int?,
     @ColumnInfo(name = "feels_like")
     val feelsLike: Double,
     @ColumnInfo(name = "ground_level_pressure")
@@ -39,11 +39,11 @@ internal data class CurrentWeatherEntity(
     @ColumnInfo(name = "min_temperature")
     val minimumTemperature: Double,
     @ColumnInfo(name = "degree")
-    val degree: Int,
+    val degree: Int?,
     @ColumnInfo(name = "gust")
-    val gust: Double,
+    val gust: Double?,
     @ColumnInfo(name = "speed")
-    val speed: Double,
+    val speed: Double?,
     @ColumnInfo(name = "one_hour_rain_information")
     val oneHourRainInformation: Double?,
     @ColumnInfo(name = "three_hour_rain_information")

@@ -5,5 +5,5 @@ package me.learning.weathernotfound.domain.currentWeather.presentationModels
  * @property cloudiness The cloudiness in percentage
  */
 data class CloudInformationModel(
-    val cloudiness: Int
+    val cloudiness: Int?
 )

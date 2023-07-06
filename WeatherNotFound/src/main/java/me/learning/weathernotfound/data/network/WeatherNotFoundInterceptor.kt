@@ -17,11 +17,15 @@ internal class WeatherNotFoundInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val oldRequest = chain.request()
 
+        val newHttpURL = oldRequest.url.newBuilder()
+            .addQueryParameter(HEADER_KEY_API_KEY, BuildConfig.OpenWeatherApiKey)
+            .build()
+
         val newRequest = oldRequest.newBuilder()
             .addHeader(HEADER_KEY_MODE, HEADER_VALUE_MODE)
             .addHeader(HEADER_KEY_LANGUAGE, BuildConfig.OpenWeatherResponseLanguage)
-            .addHeader(HEADER_KEY_API_KEY, BuildConfig.OpenWeatherApiKey)
             .addHeader(HEADER_KEY_UNITS, BuildConfig.OpenWeatherResponseUnit)
+            .url(newHttpURL)
             .build()
 
         return chain.proceed(newRequest)

@@ -19,7 +19,7 @@ internal object LocalInterfaceProvider {
                 context = context,
                 klass = WeatherNotFoundDatabase::class.java,
                 name = DATABASE_NAME
-            ).addTypeConverter(DatabaseTypeConverter::class.java).build()
+            ).build()
         }
     }
 

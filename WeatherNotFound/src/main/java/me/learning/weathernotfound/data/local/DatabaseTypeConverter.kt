@@ -3,7 +3,7 @@ package me.learning.weathernotfound.data.local
 import androidx.room.TypeConverter
 import java.util.Date
 
-internal object DatabaseTypeConverter {
+internal class DatabaseTypeConverter {
 
     @TypeConverter
     fun dateToTimeStamp(date: Date): Long {

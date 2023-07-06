@@ -63,6 +63,29 @@ class WeatherNotFound private constructor() {
     }
 
     fun getCurrentWeatherInformation(
+        cityName: String,
+        limit: Int,
+        weatherNotFoundCallback: WeatherNotFoundCallback<WeatherNotFoundResponse<CurrentWeatherModel>, WeatherNotFoundError>,
+    ) {
+        RepositoryProvider.getDirectRepository()
+            .getCityNameCoordinatesInformation(
+                cityName = cityName,
+                limit = limit,
+            ) { response ->
+                response.ifSuccessful { result ->
+                    getCurrentWeatherInformation(
+                        latitude = result.responseModel[0].locationCoordinates.latitude,
+                        longitude = result.responseModel[0].locationCoordinates.longitude,
+                        weatherNotFoundCallback = weatherNotFoundCallback
+                    )
+                }
+                response.ifNotSuccessful { error ->
+                    weatherNotFoundCallback.onError(error)
+                }
+            }
+    }
+
+    fun getCurrentWeatherInformation(
         latitude: Double,
         longitude: Double,
         weatherNotFoundCallback: WeatherNotFoundCallback<WeatherNotFoundResponse<CurrentWeatherModel>, WeatherNotFoundError>,
@@ -96,6 +119,29 @@ class WeatherNotFound private constructor() {
                 }
             }
         }
+    }
+
+    fun getFiveDayThreeHourForecastInformation(
+        cityName: String,
+        limit: Int,
+        weatherNotFoundCallback: WeatherNotFoundCallback<WeatherNotFoundResponse<FiveDayThreeHourForecastModel>, WeatherNotFoundError>,
+    ) {
+        RepositoryProvider.getDirectRepository()
+            .getCityNameCoordinatesInformation(
+                cityName = cityName,
+                limit = limit,
+            ) { response ->
+                response.ifSuccessful { result ->
+                    getFiveDayThreeHourForecastInformation(
+                        latitude = result.responseModel[0].locationCoordinates.latitude,
+                        longitude = result.responseModel[0].locationCoordinates.longitude,
+                        weatherNotFoundCallback = weatherNotFoundCallback
+                    )
+                }
+                response.ifNotSuccessful { error ->
+                    weatherNotFoundCallback.onError(error)
+                }
+            }
     }
 
     fun getFiveDayThreeHourForecastInformation(

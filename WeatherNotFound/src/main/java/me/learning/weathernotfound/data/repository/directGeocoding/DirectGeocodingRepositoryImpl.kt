@@ -11,14 +11,14 @@ import me.learning.weathernotfound.data.network.providers.RequestProvider
 import me.learning.weathernotfound.data.network.providers.UrlProvider
 import me.learning.weathernotfound.data.repository.Failure
 import me.learning.weathernotfound.data.repository.Response
-import me.learning.weathernotfound.data.repository.ResponseType
 import me.learning.weathernotfound.data.repository.Success
-import me.learning.weathernotfound.data.repository.WeatherNotFoundError
-import me.learning.weathernotfound.data.repository.WeatherNotFoundResponse
 import me.learning.weathernotfound.domain.directGeocoding.Converters
 import me.learning.weathernotfound.domain.directGeocoding.databaseModels.DirectGeocodingEntity
 import me.learning.weathernotfound.domain.directGeocoding.networkModels.DirectGeocodingResponse
 import me.learning.weathernotfound.domain.directGeocoding.presentationModels.DirectGeocodingModel
+import me.learning.weathernotfound.presentation.ResponseType
+import me.learning.weathernotfound.presentation.WeatherNotFoundError
+import me.learning.weathernotfound.presentation.WeatherNotFoundResponse
 import me.learning.weathernotfound.utils.Utilities.threeDayPassed
 import okhttp3.OkHttpClient
 

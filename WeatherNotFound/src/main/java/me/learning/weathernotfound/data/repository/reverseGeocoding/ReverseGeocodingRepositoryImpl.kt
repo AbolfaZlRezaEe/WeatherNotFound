@@ -18,7 +18,7 @@ import me.learning.weathernotfound.data.repository.WeatherNotFoundResponse
 import me.learning.weathernotfound.domain.reverseGeocoding.Converters
 import me.learning.weathernotfound.domain.reverseGeocoding.databaseModels.ReverseGeocodingEntity
 import me.learning.weathernotfound.domain.reverseGeocoding.networkModels.ReversGeocodingResponse
-import me.learning.weathernotfound.domain.reverseGeocoding.presentationModels.LocationInfoModel
+import me.learning.weathernotfound.domain.reverseGeocoding.presentationModels.ReverseGeocodingModel
 import me.learning.weathernotfound.utils.Utilities.threeDayPassed
 import okhttp3.OkHttpClient
 
@@ -36,7 +36,7 @@ internal class ReverseGeocodingRepositoryImpl(
         latitude: Double,
         longitude: Double,
         limit: Int,
-        resultInvoker: (Response<WeatherNotFoundResponse<LocationInfoModel>, WeatherNotFoundError>) -> Unit
+        resultInvoker: (Response<WeatherNotFoundResponse<ReverseGeocodingModel>, WeatherNotFoundError>) -> Unit
     ) {
         fetchCoordinatesInformationJob = CoroutineScope(Dispatchers.IO).launch {
             val cacheResponse = reverseGeocodingDao.getReverseGeocodingByCoordinates(
@@ -44,19 +44,19 @@ internal class ReverseGeocodingRepositoryImpl(
                 longitude = longitude
             )
 
-            if (cacheResponse != null) {
+            if (cacheResponse.isNotEmpty()) {
                 resultInvoker.invoke(
                     Success(
                         WeatherNotFoundResponse(
                             responseType = ResponseType.CACHE,
-                            responseModel = Converters.reverseGeocodingEntityToLocationInfoModel(
-                                entity = cacheResponse
+                            responseModel = Converters.reverseGeocodingEntitiesToReverseGeocodingModel(
+                                entities = cacheResponse
                             )
                         )
                     )
                 )
 
-                if (cacheResponse.updatedAt.threeDayPassed()) {
+                if (cacheResponse[0].updatedAt.threeDayPassed() /* For now we just check one of them... */) {
                     // Update cached Information
                     startNetworkRequest(
                         latitude = latitude,
@@ -127,7 +127,7 @@ internal class ReverseGeocodingRepositoryImpl(
         latitude: Double,
         longitude: Double,
         limit: Int,
-        responseCallback: (Response<WeatherNotFoundResponse<LocationInfoModel>, WeatherNotFoundError>) -> Unit,
+        responseCallback: (Response<WeatherNotFoundResponse<ReverseGeocodingModel>, WeatherNotFoundError>) -> Unit,
         responseReceivedCallback: suspend (reverseGeocodingResponse: ReversGeocodingResponse) -> Unit
     ) {
         val request = RequestProvider.provideReverseGeocodingRequest(
@@ -190,19 +190,18 @@ internal class ReverseGeocodingRepositoryImpl(
         }
     }
 
+    // TODO: Performance improving needed!
     private suspend fun cacheResponseModelIntoDatabase(
-        lastReversInformationEntity: ReverseGeocodingEntity?,
+        lastReversInformationEntity: List<ReverseGeocodingEntity>?,
         reverseGeocodingResponse: ReversGeocodingResponse,
     ) {
-        val finalEntityModel =
-            Converters.reverseGeocodingResponseToReverseGeocodingEntity(
-                response = reverseGeocodingResponse,
-                entityId = lastReversInformationEntity?.entityId
-            )
-        if (lastReversInformationEntity == null) {
-            reverseGeocodingDao.insertReverseGeocodingEntity(finalEntityModel)
-        } else {
-            reverseGeocodingDao.updateReverseGeocodingEntity(finalEntityModel)
+        lastReversInformationEntity?.let {
+            reverseGeocodingDao.deleteReverseGeocodingEntities(lastReversInformationEntity)
         }
+        val finalEntityModels = Converters.reverseGeocodingResponseToReverseGeocodingEntity(
+            response = reverseGeocodingResponse
+        )
+
+        reverseGeocodingDao.insertReverseGeocodingEntities(finalEntityModels)
     }
 }

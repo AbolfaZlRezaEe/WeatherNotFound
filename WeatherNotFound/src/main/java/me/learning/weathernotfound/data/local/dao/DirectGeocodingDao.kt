@@ -12,10 +12,10 @@ import me.learning.weathernotfound.domain.directGeocoding.databaseModels.DirectG
 internal interface DirectGeocodingDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertDirectGeocodingEntity(directGeocodingEntities: List<DirectGeocodingEntity>): List<Long>
+    suspend fun insertDirectGeocodingEntities(directGeocodingEntities: List<DirectGeocodingEntity>): List<Long>
 
     @Delete
-    suspend fun deleteDirectGeocodingEntity(directGeocodingEntities: List<DirectGeocodingEntity>)
+    suspend fun deleteDirectGeocodingEntities(directGeocodingEntities: List<DirectGeocodingEntity>)
 
     @Update
     suspend fun updateDirectGeocodingEntity(directGeocodingEntity: DirectGeocodingEntity)

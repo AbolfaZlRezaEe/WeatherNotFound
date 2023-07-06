@@ -8,7 +8,7 @@ package me.learning.weathernotfound.domain.reverseGeocoding.presentationModels
  * @property locationNameInOtherLanguages The list of names of this coordinate in different languages
  * @see <a href="https://openweathermap.org/api/geocoding-api#reverse">OpenWeatherMap api documentation</a>
  */
-data class LocationInfoModel(
+data class ReverseGeocodingItemModel(
     val locationName: String,
     val countryName: String,
     val locationCoordinates: LocationCoordinatesModel,

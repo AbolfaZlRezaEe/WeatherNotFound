@@ -183,7 +183,7 @@ internal object Converters {
     }
 
     // Database to Presentation model converters
-    fun directGeocodingEntityToDirectGeocodingModel(
+    fun directGeocodingEntitiesToDirectGeocodingModel(
         entities: List<DirectGeocodingEntity>
     ): DirectGeocodingModel {
         val result = mutableListOf<DirectGeocodingItemModel>()

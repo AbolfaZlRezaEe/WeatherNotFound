@@ -47,7 +47,7 @@ internal class DirectGeocodingRepositoryImpl constructor(
                     Success(
                         WeatherNotFoundResponse(
                             responseType = ResponseType.CACHE,
-                            responseModel = Converters.directGeocodingEntityToDirectGeocodingModel(
+                            responseModel = Converters.directGeocodingEntitiesToDirectGeocodingModel(
                                 entities = cacheResponse
                             )
                         )

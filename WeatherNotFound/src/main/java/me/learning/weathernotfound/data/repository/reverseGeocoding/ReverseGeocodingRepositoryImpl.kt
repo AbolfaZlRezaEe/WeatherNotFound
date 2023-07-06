@@ -6,24 +6,25 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import me.learning.weathernotfound.data.local.LocalInterfaceProvider
 import me.learning.weathernotfound.data.local.dao.ReverseGeocodingDao
 import me.learning.weathernotfound.data.network.providers.RequestProvider
 import me.learning.weathernotfound.data.network.providers.UrlProvider
 import me.learning.weathernotfound.data.repository.Failure
 import me.learning.weathernotfound.data.repository.Response
-import me.learning.weathernotfound.presentation.ResponseType
 import me.learning.weathernotfound.data.repository.Success
-import me.learning.weathernotfound.presentation.WeatherNotFoundError
-import me.learning.weathernotfound.presentation.WeatherNotFoundResponse
 import me.learning.weathernotfound.domain.reverseGeocoding.Converters
 import me.learning.weathernotfound.domain.reverseGeocoding.databaseModels.ReverseGeocodingEntity
 import me.learning.weathernotfound.domain.reverseGeocoding.networkModels.ReversGeocodingResponse
 import me.learning.weathernotfound.domain.reverseGeocoding.presentationModels.ReverseGeocodingModel
+import me.learning.weathernotfound.presentation.ResponseType
+import me.learning.weathernotfound.presentation.WeatherNotFoundError
+import me.learning.weathernotfound.presentation.WeatherNotFoundResponse
 import me.learning.weathernotfound.utils.Utilities.threeDayPassed
 import okhttp3.OkHttpClient
 
 internal class ReverseGeocodingRepositoryImpl(
-    private val reverseGeocodingDao: ReverseGeocodingDao,
+    private val reverseGeocodingDao: ReverseGeocodingDao?,
     private val okHttpClient: OkHttpClient,
     private val gsonConverter: Gson
 ) : ReverseGeocodingRepository {
@@ -39,33 +40,48 @@ internal class ReverseGeocodingRepositoryImpl(
         resultInvoker: (Response<WeatherNotFoundResponse<ReverseGeocodingModel>, WeatherNotFoundError>) -> Unit
     ) {
         fetchCoordinatesInformationJob = CoroutineScope(Dispatchers.IO).launch {
-            val cacheResponse = reverseGeocodingDao.getReverseGeocodingByCoordinates(
-                latitude = latitude,
-                longitude = longitude
-            )
+            if (LocalInterfaceProvider.isCacheMechanismEnabled()) {
+                val cacheResponse = reverseGeocodingDao!!.getReverseGeocodingByCoordinates(
+                    latitude = latitude,
+                    longitude = longitude
+                )
 
-            if (cacheResponse.isNotEmpty()) {
-                resultInvoker.invoke(
-                    Success(
-                        WeatherNotFoundResponse(
-                            responseType = ResponseType.CACHE,
-                            responseModel = Converters.reverseGeocodingEntitiesToReverseGeocodingModel(
-                                entities = cacheResponse
+                if (cacheResponse.isNotEmpty()) {
+                    resultInvoker.invoke(
+                        Success(
+                            WeatherNotFoundResponse(
+                                responseType = ResponseType.CACHE,
+                                responseModel = Converters.reverseGeocodingEntitiesToReverseGeocodingModel(
+                                    entities = cacheResponse
+                                )
                             )
                         )
                     )
-                )
 
-                if (cacheResponse[0].updatedAt.threeDayPassed() /* For now we just check one of them... */) {
-                    // Update cached Information
+                    if (cacheResponse[0].updatedAt.threeDayPassed() /* For now we just check one of them... */) {
+                        // Update cached Information
+                        startNetworkRequest(
+                            latitude = latitude,
+                            longitude = longitude,
+                            limit = limit,
+                            responseCallback = { /* Do nothing */ },
+                            responseReceivedCallback = { responseModel ->
+                                cacheResponseModelIntoDatabase(
+                                    lastReversInformationEntity = cacheResponse,
+                                    reverseGeocodingResponse = responseModel
+                                )
+                            }
+                        )
+                    }
+                } else {
                     startNetworkRequest(
                         latitude = latitude,
                         longitude = longitude,
                         limit = limit,
-                        responseCallback = { /* Do nothing */ },
+                        responseCallback = resultInvoker,
                         responseReceivedCallback = { responseModel ->
                             cacheResponseModelIntoDatabase(
-                                lastReversInformationEntity = cacheResponse,
+                                lastReversInformationEntity = null,
                                 reverseGeocodingResponse = responseModel
                             )
                         }
@@ -77,26 +93,23 @@ internal class ReverseGeocodingRepositoryImpl(
                     longitude = longitude,
                     limit = limit,
                     responseCallback = resultInvoker,
-                    responseReceivedCallback = { responseModel ->
-                        cacheResponseModelIntoDatabase(
-                            lastReversInformationEntity = null,
-                            reverseGeocodingResponse = responseModel
-                        )
-                    }
+                    responseReceivedCallback = { /* Do nothing */ }
                 )
             }
         }
     }
 
     override fun removeCacheInformationOlderThan(timeStamp: Long) {
+        if (LocalInterfaceProvider.isCacheMechanismDisabled()) return
         removeCacheInformationJob = CoroutineScope(Dispatchers.IO).launch {
-            reverseGeocodingDao.deleteReverseGeocodingEntitiesOlderThan(selectedTimeStamp = timeStamp)
+            reverseGeocodingDao!!.deleteReverseGeocodingEntitiesOlderThan(selectedTimeStamp = timeStamp)
         }
     }
 
     override fun invalidateCache() {
+        if (LocalInterfaceProvider.isCacheMechanismDisabled()) return
         invalidateCoordinateInformationCacheJob = CoroutineScope(Dispatchers.IO).launch {
-            reverseGeocodingDao.invalidateCache()
+            reverseGeocodingDao!!.invalidateCache()
         }
     }
 
@@ -196,12 +209,12 @@ internal class ReverseGeocodingRepositoryImpl(
         reverseGeocodingResponse: ReversGeocodingResponse,
     ) {
         lastReversInformationEntity?.let {
-            reverseGeocodingDao.deleteReverseGeocodingEntities(lastReversInformationEntity)
+            reverseGeocodingDao!!.deleteReverseGeocodingEntities(lastReversInformationEntity)
         }
         val finalEntityModels = Converters.reverseGeocodingResponseToReverseGeocodingEntity(
             response = reverseGeocodingResponse
         )
 
-        reverseGeocodingDao.insertReverseGeocodingEntities(finalEntityModels)
+        reverseGeocodingDao!!.insertReverseGeocodingEntities(finalEntityModels)
     }
 }

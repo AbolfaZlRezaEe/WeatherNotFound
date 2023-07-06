@@ -23,7 +23,7 @@ internal object RepositoryProvider {
             reverseGeocodingRepository = ReverseGeocodingRepositoryImpl(
                 reverseGeocodingDao = LocalInterfaceProvider
                     .getDatabaseInstance()
-                    .reverseGeocodingDao(),
+                    ?.reverseGeocodingDao(),
                 okHttpClient = NetworkInterfaceProvider.getOkHttpClient(),
                 gsonConverter = NetworkInterfaceProvider.getGsonConverter(),
             )
@@ -37,7 +37,7 @@ internal object RepositoryProvider {
             directGeocodingRepository = DirectGeocodingRepositoryImpl(
                 directGeocodingDao = LocalInterfaceProvider
                     .getDatabaseInstance()
-                    .directGeocodingDao(),
+                    ?.directGeocodingDao(),
                 okHttpClient = NetworkInterfaceProvider.getOkHttpClient(),
                 gsonConverter = NetworkInterfaceProvider.getGsonConverter(),
             )
@@ -51,7 +51,7 @@ internal object RepositoryProvider {
             currentWeatherRepository = CurrentWeatherRepositoryImpl(
                 currentWeatherDao = LocalInterfaceProvider
                     .getDatabaseInstance()
-                    .currentWeatherDao(),
+                    ?.currentWeatherDao(),
                 okHttpClient = NetworkInterfaceProvider.getOkHttpClient(),
                 gsonConverter = NetworkInterfaceProvider.getGsonConverter(),
             )
@@ -65,7 +65,7 @@ internal object RepositoryProvider {
             fiveDayThreeHourForecastRepository = FiveDayThreeHourForecastRepositoryImpl(
                 fiveDayThreeHourDao = LocalInterfaceProvider
                     .getDatabaseInstance()
-                    .fiveDayThreeHourDao(),
+                    ?.fiveDayThreeHourDao(),
                 okHttpClient = NetworkInterfaceProvider.getOkHttpClient(),
                 gsonConverter = NetworkInterfaceProvider.getGsonConverter()
             )

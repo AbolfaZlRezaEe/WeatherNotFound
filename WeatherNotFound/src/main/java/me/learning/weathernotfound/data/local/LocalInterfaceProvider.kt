@@ -10,6 +10,8 @@ internal object LocalInterfaceProvider {
 
     const val DATABASE_VERSION = 1
 
+    private var cacheMechanism = false
+
     @Synchronized
     fun init(context: Context) {
         if (DATABASE_INSTANCE == null) {
@@ -21,8 +23,23 @@ internal object LocalInterfaceProvider {
         }
     }
 
-    fun getDatabaseInstance(): WeatherNotFoundDatabase {
+    @Synchronized
+    fun setCacheMechanism(enabled: Boolean) {
+        this.cacheMechanism = enabled
+    }
+
+    fun isCacheMechanismEnabled(): Boolean {
+        return this.cacheMechanism
+    }
+
+    fun isCacheMechanismDisabled(): Boolean {
+        return !this.cacheMechanism
+    }
+
+    fun getDatabaseInstance(): WeatherNotFoundDatabase? {
+        if (isCacheMechanismEnabled() && DATABASE_INSTANCE == null){
+            throw NullPointerException("Database initialization failed. check provider please!")
+        }
         return DATABASE_INSTANCE
-            ?: throw NullPointerException("Database initialization failed. check provider please!")
     }
 }

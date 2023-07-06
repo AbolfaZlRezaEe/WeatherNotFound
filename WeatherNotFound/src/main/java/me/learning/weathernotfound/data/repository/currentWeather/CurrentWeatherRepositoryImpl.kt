@@ -6,24 +6,25 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import me.learning.weathernotfound.data.local.LocalInterfaceProvider
 import me.learning.weathernotfound.data.local.dao.CurrentWeatherDao
 import me.learning.weathernotfound.data.network.providers.RequestProvider
 import me.learning.weathernotfound.data.network.providers.UrlProvider
 import me.learning.weathernotfound.data.repository.Failure
 import me.learning.weathernotfound.data.repository.Response
-import me.learning.weathernotfound.presentation.ResponseType
 import me.learning.weathernotfound.data.repository.Success
-import me.learning.weathernotfound.presentation.WeatherNotFoundError
-import me.learning.weathernotfound.presentation.WeatherNotFoundResponse
 import me.learning.weathernotfound.domain.currentWeather.Converters
 import me.learning.weathernotfound.domain.currentWeather.databaseModels.CurrentWeatherEntity
 import me.learning.weathernotfound.domain.currentWeather.networkModels.CurrentWeatherResponseModel
 import me.learning.weathernotfound.domain.currentWeather.presentationModels.CurrentWeatherModel
+import me.learning.weathernotfound.presentation.ResponseType
+import me.learning.weathernotfound.presentation.WeatherNotFoundError
+import me.learning.weathernotfound.presentation.WeatherNotFoundResponse
 import me.learning.weathernotfound.utils.Utilities.halfDayPassed
 import okhttp3.OkHttpClient
 
 internal class CurrentWeatherRepositoryImpl(
-    private val currentWeatherDao: CurrentWeatherDao,
+    private val currentWeatherDao: CurrentWeatherDao?,
     private val okHttpClient: OkHttpClient,
     private val gsonConverter: Gson,
 ) : CurrentWeatherRepository {
@@ -38,68 +39,79 @@ internal class CurrentWeatherRepositoryImpl(
         resultInvoker: (Response<WeatherNotFoundResponse<CurrentWeatherModel>, WeatherNotFoundError>) -> Unit
     ) {
         fetchCurrentWeatherInformationJob = CoroutineScope(Dispatchers.IO).launch {
-            val cacheResponse = currentWeatherDao.getCurrentWeatherEntityByCoordinates(
-                latitude = latitude,
-                longitude = longitude
-            )
+            if (LocalInterfaceProvider.isCacheMechanismEnabled()) {
+                val cacheResponse = currentWeatherDao!!.getCurrentWeatherEntityByCoordinates(
+                    latitude = latitude,
+                    longitude = longitude
+                )
 
-            if (cacheResponse != null) {
-                if (cacheResponse.updatedAt.halfDayPassed()) {
-                    // Cache information is no longer valid, should be updated with network request!
+                if (cacheResponse != null) {
+                    if (cacheResponse.updatedAt.halfDayPassed()) {
+                        // Cache information is no longer valid, should be updated with network request!
+                        startNetworkRequest(
+                            latitude = latitude,
+                            longitude = longitude,
+                            responseCallback = resultInvoker,
+                            responseReceivedCallback = { responseModel ->
+                                cacheResponseModelIntoDatabase(
+                                    lastCurrentWeather = cacheResponse,
+                                    currentWeatherResponseModel = responseModel
+                                )
+                            }
+                        )
+                    } else {
+                        val weatherStatusList =
+                            currentWeatherDao.getWeatherStatusesByCurrentWeatherId(
+                                currentWeatherId = cacheResponse.id!!
+                            )
+                        resultInvoker.invoke(
+                            Success(
+                                WeatherNotFoundResponse(
+                                    responseType = ResponseType.CACHE,
+                                    responseModel = Converters.currentWeatherEntityToCurrentWeatherModel(
+                                        currentWeather = cacheResponse,
+                                        weatherStatuses = weatherStatusList
+                                    )
+                                )
+                            )
+                        )
+
+                    }
+                } else {
                     startNetworkRequest(
                         latitude = latitude,
                         longitude = longitude,
                         responseCallback = resultInvoker,
                         responseReceivedCallback = { responseModel ->
                             cacheResponseModelIntoDatabase(
-                                lastCurrentWeather = cacheResponse,
+                                lastCurrentWeather = null,
                                 currentWeatherResponseModel = responseModel
                             )
                         }
                     )
-                } else {
-                    val weatherStatusList =
-                        currentWeatherDao.getWeatherStatusesByCurrentWeatherId(
-                            currentWeatherId = cacheResponse.id!!
-                        )
-                    resultInvoker.invoke(
-                        Success(
-                            WeatherNotFoundResponse(
-                                responseType = ResponseType.CACHE,
-                                responseModel = Converters.currentWeatherEntityToCurrentWeatherModel(
-                                    currentWeather = cacheResponse,
-                                    weatherStatuses = weatherStatusList
-                                )
-                            )
-                        )
-                    )
-
                 }
             } else {
                 startNetworkRequest(
                     latitude = latitude,
                     longitude = longitude,
                     responseCallback = resultInvoker,
-                    responseReceivedCallback = { responseModel ->
-                        cacheResponseModelIntoDatabase(
-                            lastCurrentWeather = null,
-                            currentWeatherResponseModel = responseModel
-                        )
-                    }
+                    responseReceivedCallback = { /* Do nothing */ }
                 )
             }
         }
     }
 
     override fun removeCacheInformationOlderThan(timeStamp: Long) {
+        if (LocalInterfaceProvider.isCacheMechanismDisabled()) return
         removeCacheInformationJob = CoroutineScope(Dispatchers.IO).launch {
-            currentWeatherDao.deleteCurrentWeatherEntitiesOlderThan(selectedTimeStamp = timeStamp)
+            currentWeatherDao!!.deleteCurrentWeatherEntitiesOlderThan(selectedTimeStamp = timeStamp)
         }
     }
 
     override fun invalidateCache() {
+        if (LocalInterfaceProvider.isCacheMechanismDisabled()) return
         invalidateCurrentWeatherInformationCache = CoroutineScope(Dispatchers.IO).launch {
-            currentWeatherDao.invalidateCache()
+            currentWeatherDao!!.invalidateCache()
         }
     }
 
@@ -202,7 +214,7 @@ internal class CurrentWeatherRepositoryImpl(
                 entityId = lastCurrentWeather?.id
             )
         if (lastCurrentWeather == null) {
-            val currentWeatherId = currentWeatherDao.insertCurrentWeatherEntity(finalEntityModel)
+            val currentWeatherId = currentWeatherDao!!.insertCurrentWeatherEntity(finalEntityModel)
 
             val finalWeatherStatusEntityModels =
                 Converters.weatherStatusResponseToWeatherStatusEntity(
@@ -214,7 +226,7 @@ internal class CurrentWeatherRepositoryImpl(
         } else {
             // First, delete weather status information that were old
             // Todo: in this case, the right choice is to diff the response with cache information and then update it.
-            currentWeatherDao.deleteWeatherStatuesByCurrentWeatherId(finalEntityModel.id!!)
+            currentWeatherDao!!.deleteWeatherStatuesByCurrentWeatherId(finalEntityModel.id!!)
 
             currentWeatherDao.updateCurrentWeatherEntity(finalEntityModel)
 

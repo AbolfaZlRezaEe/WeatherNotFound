@@ -32,8 +32,12 @@ class WeatherNotFound private constructor() {
         httpLoggingLevel: HttpLoggingInterceptor.Level? = null,
         readTimeoutInSeconds: Long? = null,
         connectTimeoutInSeconds: Long? = null,
+        cacheMechanismEnabled: Boolean = false,
     ) {
-        LocalInterfaceProvider.init(context)
+        LocalInterfaceProvider.setCacheMechanism(cacheMechanismEnabled)
+        if (cacheMechanismEnabled) {
+            LocalInterfaceProvider.init(context)
+        }
 
         NetworkInterfaceProvider.initGsonConverter()
 

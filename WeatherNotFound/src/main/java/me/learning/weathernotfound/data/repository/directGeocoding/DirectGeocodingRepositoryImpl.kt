@@ -6,6 +6,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import me.learning.weathernotfound.data.local.LocalInterfaceProvider
 import me.learning.weathernotfound.data.local.dao.DirectGeocodingDao
 import me.learning.weathernotfound.data.network.providers.RequestProvider
 import me.learning.weathernotfound.data.network.providers.UrlProvider
@@ -23,7 +24,7 @@ import me.learning.weathernotfound.utils.Utilities.threeDayPassed
 import okhttp3.OkHttpClient
 
 internal class DirectGeocodingRepositoryImpl constructor(
-    private val directGeocodingDao: DirectGeocodingDao,
+    private val directGeocodingDao: DirectGeocodingDao?,
     private val okHttpClient: OkHttpClient,
     private val gsonConverter: Gson,
 ) : DirectGeocodingRepository {
@@ -38,31 +39,45 @@ internal class DirectGeocodingRepositoryImpl constructor(
         resultInvoker: (Response<WeatherNotFoundResponse<DirectGeocodingModel>, WeatherNotFoundError>) -> Unit
     ) {
         fetchCityNameCoordinatesInformationJob = CoroutineScope(Dispatchers.IO).launch {
-            val cacheResponse = directGeocodingDao.getDirectGeocodingByCoordinateName(
-                coordinateName = cityName
-            )
+            if (LocalInterfaceProvider.isCacheMechanismEnabled()) {
+                val cacheResponse = directGeocodingDao!!.getDirectGeocodingByCoordinateName(
+                    coordinateName = cityName
+                )
 
-            if (cacheResponse.isNotEmpty()) {
-                resultInvoker.invoke(
-                    Success(
-                        WeatherNotFoundResponse(
-                            responseType = ResponseType.CACHE,
-                            responseModel = Converters.directGeocodingEntitiesToDirectGeocodingModel(
-                                entities = cacheResponse
+                if (cacheResponse.isNotEmpty()) {
+                    resultInvoker.invoke(
+                        Success(
+                            WeatherNotFoundResponse(
+                                responseType = ResponseType.CACHE,
+                                responseModel = Converters.directGeocodingEntitiesToDirectGeocodingModel(
+                                    entities = cacheResponse
+                                )
                             )
                         )
                     )
-                )
 
-                if (cacheResponse[0].updatedAt.threeDayPassed() /* For now we just check one of them... */) {
-                    // Update cached Information
+                    if (cacheResponse[0].updatedAt.threeDayPassed() /* For now we just check one of them... */) {
+                        // Update cached Information
+                        startNetworkRequest(
+                            coordinateName = cityName,
+                            limit = limit,
+                            responseCallback = { /* Do nothing */ },
+                            responseReceivedCallback = { responseModel ->
+                                cacheResponseModelIntoDatabase(
+                                    lastDirectInformationEntity = cacheResponse,
+                                    directGeocodingResponse = responseModel
+                                )
+                            }
+                        )
+                    }
+                } else {
                     startNetworkRequest(
                         coordinateName = cityName,
                         limit = limit,
-                        responseCallback = { /* Do nothing */ },
+                        responseCallback = resultInvoker,
                         responseReceivedCallback = { responseModel ->
                             cacheResponseModelIntoDatabase(
-                                lastDirectInformationEntity = cacheResponse,
+                                lastDirectInformationEntity = null,
                                 directGeocodingResponse = responseModel
                             )
                         }
@@ -73,26 +88,23 @@ internal class DirectGeocodingRepositoryImpl constructor(
                     coordinateName = cityName,
                     limit = limit,
                     responseCallback = resultInvoker,
-                    responseReceivedCallback = { responseModel ->
-                        cacheResponseModelIntoDatabase(
-                            lastDirectInformationEntity = null,
-                            directGeocodingResponse = responseModel
-                        )
-                    }
+                    responseReceivedCallback = { /* Do nothing */ }
                 )
             }
         }
     }
 
     override fun removeCacheInformationOlderThen(timeStamp: Long) {
+        if (LocalInterfaceProvider.isCacheMechanismDisabled()) return
         removeCacheInformationJob = CoroutineScope(Dispatchers.IO).launch {
-            directGeocodingDao.deleteDirectGeocodingEntitiesOlderThan(selectedTimeStamp = timeStamp)
+            directGeocodingDao!!.deleteDirectGeocodingEntitiesOlderThan(selectedTimeStamp = timeStamp)
         }
     }
 
     override fun invalidateCache() {
+        if (LocalInterfaceProvider.isCacheMechanismDisabled()) return
         invalidateCityNameCoordinateInformationCacheJob = CoroutineScope(Dispatchers.IO).launch {
-            directGeocodingDao.invalidateCache()
+            directGeocodingDao!!.invalidateCache()
         }
     }
 
@@ -190,11 +202,11 @@ internal class DirectGeocodingRepositoryImpl constructor(
         directGeocodingResponse: DirectGeocodingResponse,
     ) {
         lastDirectInformationEntity?.let {
-            directGeocodingDao.deleteDirectGeocodingEntities(lastDirectInformationEntity)
+            directGeocodingDao!!.deleteDirectGeocodingEntities(lastDirectInformationEntity)
         }
         val finalEntityModels = Converters.directGeocodingResponseToDirectGeocodingEntity(
             response = directGeocodingResponse
         )
-        directGeocodingDao.insertDirectGeocodingEntities(finalEntityModels)
+        directGeocodingDao!!.insertDirectGeocodingEntities(finalEntityModels)
     }
 }

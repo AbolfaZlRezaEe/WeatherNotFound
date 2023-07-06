@@ -4,7 +4,7 @@ import me.learning.weathernotfound.BuildConfig
 import okhttp3.Interceptor
 import okhttp3.Response
 
-class WeatherNotFoundInterceptor : Interceptor {
+internal class WeatherNotFoundInterceptor : Interceptor {
     companion object {
         private const val HEADER_KEY_LANGUAGE = "lang"
         private const val HEADER_KEY_MODE = "mode"

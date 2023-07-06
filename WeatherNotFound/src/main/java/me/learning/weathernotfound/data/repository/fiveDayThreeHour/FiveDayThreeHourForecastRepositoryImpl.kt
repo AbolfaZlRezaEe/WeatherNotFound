@@ -6,25 +6,26 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import me.learning.weathernotfound.data.local.LocalInterfaceProvider
 import me.learning.weathernotfound.data.local.dao.FiveDayThreeHourDao
 import me.learning.weathernotfound.data.network.providers.RequestProvider
 import me.learning.weathernotfound.data.network.providers.UrlProvider
 import me.learning.weathernotfound.data.repository.Failure
 import me.learning.weathernotfound.data.repository.Response
-import me.learning.weathernotfound.data.repository.ResponseType
 import me.learning.weathernotfound.data.repository.Success
-import me.learning.weathernotfound.data.repository.WeatherNotFoundError
-import me.learning.weathernotfound.data.repository.WeatherNotFoundResponse
 import me.learning.weathernotfound.domain.fiveDayThreeHourForecast.Converters
 import me.learning.weathernotfound.domain.fiveDayThreeHourForecast.databaseModels.FiveDayThreeHourForecastEntity
 import me.learning.weathernotfound.domain.fiveDayThreeHourForecast.databaseModels.WeatherInformationEntity
 import me.learning.weathernotfound.domain.fiveDayThreeHourForecast.networkModels.FiveDayThreeHourForecastResponseModel
 import me.learning.weathernotfound.domain.fiveDayThreeHourForecast.presentationModels.FiveDayThreeHourForecastModel
+import me.learning.weathernotfound.presentation.ResponseType
+import me.learning.weathernotfound.presentation.WeatherNotFoundError
+import me.learning.weathernotfound.presentation.WeatherNotFoundResponse
 import me.learning.weathernotfound.utils.Utilities.halfDayPassed
 import okhttp3.OkHttpClient
 
 internal class FiveDayThreeHourForecastRepositoryImpl(
-    private val fiveDayThreeHourDao: FiveDayThreeHourDao,
+    private val fiveDayThreeHourDao: FiveDayThreeHourDao?,
     private val okHttpClient: OkHttpClient,
     private val gsonConverter: Gson
 ) : FiveDayThreeHourForecastRepository {
@@ -39,19 +40,61 @@ internal class FiveDayThreeHourForecastRepositoryImpl(
         resultInvoker: (Response<WeatherNotFoundResponse<FiveDayThreeHourForecastModel>, WeatherNotFoundError>) -> Unit,
     ) {
         fetchFiveDayThreeHourForecastInformationJob = CoroutineScope(Dispatchers.IO).launch {
-            val fiveDayCacheResponse =
-                fiveDayThreeHourDao.getFiveThreeHourForecastEntityByCoordinates(
-                    latitude = latitude,
-                    longitude = longitude
-                )
-            if (fiveDayCacheResponse != null) {
-                val forecastCacheResponse =
-                    fiveDayThreeHourDao.getForecastEntitiesListByFiveDayForecastId(
-                        fiveDayForecastId = fiveDayCacheResponse.id!!
+            if (LocalInterfaceProvider.isCacheMechanismEnabled()) {
+                val fiveDayCacheResponse =
+                    fiveDayThreeHourDao!!.getFiveThreeHourForecastEntityByCoordinates(
+                        latitude = latitude,
+                        longitude = longitude
                     )
-                if (!forecastCacheResponse.isNullOrEmpty()) {
-                    if (fiveDayCacheResponse.updatedAt.halfDayPassed()) {
-                        // Cache information is no longer valid, should be updated with network request!
+                if (fiveDayCacheResponse != null) {
+                    val forecastCacheResponse =
+                        fiveDayThreeHourDao.getForecastEntitiesListByFiveDayForecastId(
+                            fiveDayForecastId = fiveDayCacheResponse.id!!
+                        )
+                    if (!forecastCacheResponse.isNullOrEmpty()) {
+                        if (fiveDayCacheResponse.updatedAt.halfDayPassed()) {
+                            // Cache information is no longer valid, should be updated with network request!
+                            startNetworkRequest(
+                                latitude = latitude,
+                                longitude = longitude,
+                                responseCallback = resultInvoker,
+                                responseReceivedCallback = { responseModel ->
+                                    cacheResponseModelIntoDatabase(
+                                        lastFiveDayThreeHourForecastEntity = fiveDayCacheResponse,
+                                        fiveDayThreeHourForecastResponseModel = responseModel
+                                    )
+                                }
+                            )
+                        } else {
+                            /*
+                            We have several ideas about select query like this, but because we don't
+                            have much records in this scenario, it's ok to query for each forecast
+                            weather information!
+                            */
+                            val weatherInformationCacheResponse =
+                                mutableListOf<List<WeatherInformationEntity>>()
+                            forecastCacheResponse.forEach { forecastEntity ->
+                                weatherInformationCacheResponse.add(
+                                    fiveDayThreeHourDao.getWeatherInformationEntitiesByForecastId(
+                                        forecastId = forecastEntity.id!!
+                                    )
+                                )
+                            }
+
+                            resultInvoker.invoke(
+                                Success(
+                                    WeatherNotFoundResponse(
+                                        responseType = ResponseType.CACHE,
+                                        responseModel = Converters.fiveDayThreeOurForecastEntityToFiveDayThreeHourForecastModel(
+                                            fiveDayEntity = fiveDayCacheResponse,
+                                            forecastEntities = forecastCacheResponse,
+                                            weatherInformationEntities = weatherInformationCacheResponse
+                                        )
+                                    )
+                                )
+                            )
+                        }
+                    } else {
                         startNetworkRequest(
                             latitude = latitude,
                             longitude = longitude,
@@ -63,34 +106,6 @@ internal class FiveDayThreeHourForecastRepositoryImpl(
                                 )
                             }
                         )
-                    } else {
-                        /*
-                            We have several ideas about select query like this, but because we don't
-                            have much records in this scenario, it's ok to query for each forecast
-                            weather information!
-                         */
-                        val weatherInformationCacheResponse =
-                            mutableListOf<List<WeatherInformationEntity>>()
-                        forecastCacheResponse.forEach { forecastEntity ->
-                            weatherInformationCacheResponse.add(
-                                        fiveDayThreeHourDao.getWeatherInformationEntitiesByForecastId(
-                                            forecastId = forecastEntity.id!!
-                                )
-                            )
-                        }
-
-                        resultInvoker.invoke(
-                            Success(
-                                WeatherNotFoundResponse(
-                                    responseType = ResponseType.CACHE,
-                                    responseModel = Converters.fiveDayThreeOurForecastEntityToFiveDayThreeHourForecastModel(
-                                        fiveDayEntity = fiveDayCacheResponse,
-                                        forecastEntities = forecastCacheResponse,
-                                        weatherInformationEntities = weatherInformationCacheResponse
-                                    )
-                                )
-                            )
-                        )
                     }
                 } else {
                     startNetworkRequest(
@@ -99,7 +114,7 @@ internal class FiveDayThreeHourForecastRepositoryImpl(
                         responseCallback = resultInvoker,
                         responseReceivedCallback = { responseModel ->
                             cacheResponseModelIntoDatabase(
-                                lastFiveDayThreeHourForecastEntity = fiveDayCacheResponse,
+                                lastFiveDayThreeHourForecastEntity = null,
                                 fiveDayThreeHourForecastResponseModel = responseModel
                             )
                         }
@@ -110,26 +125,23 @@ internal class FiveDayThreeHourForecastRepositoryImpl(
                     latitude = latitude,
                     longitude = longitude,
                     responseCallback = resultInvoker,
-                    responseReceivedCallback = { responseModel ->
-                        cacheResponseModelIntoDatabase(
-                            lastFiveDayThreeHourForecastEntity = null,
-                            fiveDayThreeHourForecastResponseModel = responseModel
-                        )
-                    }
+                    responseReceivedCallback = { /* Do nothing */ }
                 )
             }
         }
     }
 
     override fun removeCacheInformationOlderThan(timeStamp: Long) {
+        if (LocalInterfaceProvider.isCacheMechanismDisabled()) return
         removeCacheInformationJob = CoroutineScope(Dispatchers.IO).launch {
-            fiveDayThreeHourDao.deleteFiveDayThreeHourEntitiesOlderThan(timeStamp)
+            fiveDayThreeHourDao!!.deleteFiveDayThreeHourEntitiesOlderThan(timeStamp)
         }
     }
 
     override fun invalidateCache() {
+        if (LocalInterfaceProvider.isCacheMechanismDisabled()) return
         invalidateFiveDayThreeHourForecastCacheJob = CoroutineScope(Dispatchers.IO).launch {
-            fiveDayThreeHourDao.invalidateCache()
+            fiveDayThreeHourDao!!.invalidateCache()
         }
     }
 
@@ -248,7 +260,7 @@ internal class FiveDayThreeHourForecastRepositoryImpl(
             )
 
         // Insert parent information
-        val forecastId = fiveDayThreeHourDao.insertFiveDayThreeHourForecastEntity(
+        val forecastId = fiveDayThreeHourDao!!.insertFiveDayThreeHourForecastEntity(
             fiveDayThreeHourForecastEntity = finalFiveDayThreeHourForecastEntityModel
         )
 
@@ -285,7 +297,7 @@ internal class FiveDayThreeHourForecastRepositoryImpl(
 
         // First, delete forecast and weather information that were old
         // Todo: in this case, the right choice is to diff the response with cache information and then update it.
-        fiveDayThreeHourDao.deleteForecastEntitiesByFiveDayForecastId(
+        fiveDayThreeHourDao!!.deleteForecastEntitiesByFiveDayForecastId(
             fiveDayForecastId = lastFiveDayThreeHourForecastEntity.id!!
         )
 

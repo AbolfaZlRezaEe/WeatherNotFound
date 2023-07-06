@@ -16,6 +16,8 @@ internal object NetworkInterfaceProvider {
 
     private var GSON_INSTANCE: Gson? = null
 
+    const val NETWORK_AUTHORIZED_FAILED_HTTP_CODE = 401
+
     @Synchronized
     fun init(
         httpLoggingLevel: HttpLoggingInterceptor.Level = OKHTTP_NORMAL_LOGGING_INTERCEPTOR
@@ -32,14 +34,24 @@ internal object NetworkInterfaceProvider {
 
     @Synchronized
     fun initManually(
-        httpLoggingLevel: HttpLoggingInterceptor.Level,
-        readTimeoutInSeconds: Long,
-        connectTimeoutInSeconds: Long
+        httpLoggingLevel: HttpLoggingInterceptor.Level?,
+        readTimeoutInSeconds: Long?,
+        connectTimeoutInSeconds: Long?,
     ) {
         OKHTTP_CLIENT_CUSTOM_INSTANCE = OkHttpClient.Builder()
-            .connectTimeout(timeout = connectTimeoutInSeconds, unit = TimeUnit.SECONDS)
-            .readTimeout(timeout = readTimeoutInSeconds, unit = TimeUnit.SECONDS)
-            .addInterceptor(getLoggingInterceptor(httpLoggingLevel))
+            .connectTimeout(
+                timeout = connectTimeoutInSeconds ?: OKHTTP_NORMAL_CONNECT_TIMEOUT,
+                unit = TimeUnit.SECONDS
+            )
+            .readTimeout(
+                timeout = readTimeoutInSeconds ?: OKHTTP_NORMAL_READ_TIMEOUT,
+                unit = TimeUnit.SECONDS
+            )
+            .addInterceptor(
+                getLoggingInterceptor(
+                    httpLoggingLevel ?: OKHTTP_NORMAL_LOGGING_INTERCEPTOR
+                )
+            )
             .addInterceptor(getWeatherNotFoundInterceptor())
             .build()
     }
@@ -49,6 +61,13 @@ internal object NetworkInterfaceProvider {
         if (GSON_INSTANCE == null) {
             GSON_INSTANCE = Gson()
         }
+    }
+
+    fun getGsonConverter(): Gson {
+        if (GSON_INSTANCE == null) {
+            initGsonConverter()
+        }
+        return GSON_INSTANCE!!
     }
 
     fun getOkHttpClient(): OkHttpClient {

@@ -1,6 +1,6 @@
-package me.learning.weathernotfound.data.repository
+package me.learning.weathernotfound.presentation
 
-internal data class WeatherNotFoundResponse<T>(
+data class WeatherNotFoundResponse<T>(
     val httpResponseCode: Int = -1,
     val responseType: ResponseType,
     val responseModel: T

@@ -25,7 +25,7 @@ import me.learning.weathernotfound.domain.reverseGeocoding.databaseModels.Revers
         ReverseGeocodingEntity::class,
         DirectGeocodingEntity::class,
     ],
-    version = DatabaseInterfaceProvider.DATABASE_VERSION,
+    version = LocalInterfaceProvider.DATABASE_VERSION,
     exportSchema = true,
 )
 @TypeConverters(DatabaseTypeConverter::class)

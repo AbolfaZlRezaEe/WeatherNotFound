@@ -1,9 +1,9 @@
 package me.learning.weathernotfound.data.repository.directGeocoding
 
 import me.learning.weathernotfound.data.repository.Response
-import me.learning.weathernotfound.data.repository.WeatherNotFoundError
-import me.learning.weathernotfound.data.repository.WeatherNotFoundResponse
 import me.learning.weathernotfound.domain.directGeocoding.presentationModels.DirectGeocodingModel
+import me.learning.weathernotfound.presentation.WeatherNotFoundError
+import me.learning.weathernotfound.presentation.WeatherNotFoundResponse
 
 internal interface DirectGeocodingRepository {
 

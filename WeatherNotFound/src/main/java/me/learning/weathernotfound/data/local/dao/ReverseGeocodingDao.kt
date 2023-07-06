@@ -12,10 +12,10 @@ import me.learning.weathernotfound.domain.reverseGeocoding.databaseModels.Revers
 internal interface ReverseGeocodingDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertReverseGeocodingEntity(reverseGeocodingEntity: ReverseGeocodingEntity): Long
+    suspend fun insertReverseGeocodingEntities(reverseGeocodingEntities: List<ReverseGeocodingEntity>): List<Long>
 
     @Delete
-    suspend fun deleteReverseGeocodingEntity(reverseGeocodingEntity: ReverseGeocodingEntity)
+    suspend fun deleteReverseGeocodingEntities(reverseGeocodingEntity: List<ReverseGeocodingEntity>)
 
     @Update
     suspend fun updateReverseGeocodingEntity(reverseGeocodingEntity: ReverseGeocodingEntity)
@@ -24,7 +24,7 @@ internal interface ReverseGeocodingDao {
     suspend fun getReverseGeocodingByCoordinates(
         latitude: Double,
         longitude: Double
-    ): ReverseGeocodingEntity?
+    ): List<ReverseGeocodingEntity>
 
     @Query("DELETE FROM tbl_reverse_geocoding WHERE updated_at<=:selectedTimeStamp")
     suspend fun deleteReverseGeocodingEntitiesOlderThan(selectedTimeStamp: Long)

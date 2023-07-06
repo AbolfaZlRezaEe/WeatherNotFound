@@ -1,4 +1,4 @@
-package me.learning.weathernotfound.data.repository.reverseGeocoding
+package me.learning.weathernotfound.data.repository.directGeocoding
 
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
@@ -6,42 +6,40 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import me.learning.weathernotfound.data.local.dao.ReverseGeocodingDao
+import me.learning.weathernotfound.data.local.dao.DirectGeocodingDao
 import me.learning.weathernotfound.data.network.providers.RequestProvider
 import me.learning.weathernotfound.data.network.providers.UrlProvider
 import me.learning.weathernotfound.data.repository.Failure
 import me.learning.weathernotfound.data.repository.Response
-import me.learning.weathernotfound.presentation.ResponseType
+import me.learning.weathernotfound.data.repository.ResponseType
 import me.learning.weathernotfound.data.repository.Success
-import me.learning.weathernotfound.presentation.WeatherNotFoundError
-import me.learning.weathernotfound.presentation.WeatherNotFoundResponse
-import me.learning.weathernotfound.domain.reverseGeocoding.Converters
-import me.learning.weathernotfound.domain.reverseGeocoding.databaseModels.ReverseGeocodingEntity
-import me.learning.weathernotfound.domain.reverseGeocoding.networkModels.ReversGeocodingResponse
-import me.learning.weathernotfound.domain.reverseGeocoding.presentationModels.ReverseGeocodingModel
+import me.learning.weathernotfound.data.repository.WeatherNotFoundError
+import me.learning.weathernotfound.data.repository.WeatherNotFoundResponse
+import me.learning.weathernotfound.domain.directGeocoding.Converters
+import me.learning.weathernotfound.domain.directGeocoding.databaseModels.DirectGeocodingEntity
+import me.learning.weathernotfound.domain.directGeocoding.networkModels.DirectGeocodingResponse
+import me.learning.weathernotfound.domain.directGeocoding.presentationModels.DirectGeocodingModel
 import me.learning.weathernotfound.utils.Utilities.threeDayPassed
 import okhttp3.OkHttpClient
 
-internal class ReverseGeocodingRepositoryImpl(
-    private val reverseGeocodingDao: ReverseGeocodingDao,
+internal class DirectGeocodingRepositoryImpl constructor(
+    private val directGeocodingDao: DirectGeocodingDao,
     private val okHttpClient: OkHttpClient,
-    private val gsonConverter: Gson
-) : ReverseGeocodingRepository {
+    private val gsonConverter: Gson,
+) : DirectGeocodingRepository {
 
-    private lateinit var fetchCoordinatesInformationJob: Job
-    private lateinit var invalidateCoordinateInformationCacheJob: Job
+    private lateinit var fetchCityNameCoordinatesInformationJob: Job
+    private lateinit var invalidateCityNameCoordinateInformationCacheJob: Job
     private lateinit var removeCacheInformationJob: Job
 
-    override fun getCoordinateInformation(
-        latitude: Double,
-        longitude: Double,
+    override fun getCityNameCoordinatesInformation(
+        cityName: String,
         limit: Int,
-        resultInvoker: (Response<WeatherNotFoundResponse<ReverseGeocodingModel>, WeatherNotFoundError>) -> Unit
+        resultInvoker: (Response<WeatherNotFoundResponse<DirectGeocodingModel>, WeatherNotFoundError>) -> Unit
     ) {
-        fetchCoordinatesInformationJob = CoroutineScope(Dispatchers.IO).launch {
-            val cacheResponse = reverseGeocodingDao.getReverseGeocodingByCoordinates(
-                latitude = latitude,
-                longitude = longitude
+        fetchCityNameCoordinatesInformationJob = CoroutineScope(Dispatchers.IO).launch {
+            val cacheResponse = directGeocodingDao.getDirectGeocodingByCoordinateName(
+                coordinateName = cityName
             )
 
             if (cacheResponse.isNotEmpty()) {
@@ -49,7 +47,7 @@ internal class ReverseGeocodingRepositoryImpl(
                     Success(
                         WeatherNotFoundResponse(
                             responseType = ResponseType.CACHE,
-                            responseModel = Converters.reverseGeocodingEntitiesToReverseGeocodingModel(
+                            responseModel = Converters.directGeocodingEntitiesToDirectGeocodingModel(
                                 entities = cacheResponse
                             )
                         )
@@ -59,28 +57,26 @@ internal class ReverseGeocodingRepositoryImpl(
                 if (cacheResponse[0].updatedAt.threeDayPassed() /* For now we just check one of them... */) {
                     // Update cached Information
                     startNetworkRequest(
-                        latitude = latitude,
-                        longitude = longitude,
+                        coordinateName = cityName,
                         limit = limit,
                         responseCallback = { /* Do nothing */ },
                         responseReceivedCallback = { responseModel ->
                             cacheResponseModelIntoDatabase(
-                                lastReversInformationEntity = cacheResponse,
-                                reverseGeocodingResponse = responseModel
+                                lastDirectInformationEntity = cacheResponse,
+                                directGeocodingResponse = responseModel
                             )
                         }
                     )
                 }
             } else {
                 startNetworkRequest(
-                    latitude = latitude,
-                    longitude = longitude,
+                    coordinateName = cityName,
                     limit = limit,
                     responseCallback = resultInvoker,
                     responseReceivedCallback = { responseModel ->
                         cacheResponseModelIntoDatabase(
-                            lastReversInformationEntity = null,
-                            reverseGeocodingResponse = responseModel
+                            lastDirectInformationEntity = null,
+                            directGeocodingResponse = responseModel
                         )
                     }
                 )
@@ -88,31 +84,31 @@ internal class ReverseGeocodingRepositoryImpl(
         }
     }
 
-    override fun removeCacheInformationOlderThan(timeStamp: Long) {
+    override fun removeCacheInformationOlderThen(timeStamp: Long) {
         removeCacheInformationJob = CoroutineScope(Dispatchers.IO).launch {
-            reverseGeocodingDao.deleteReverseGeocodingEntitiesOlderThan(selectedTimeStamp = timeStamp)
+            directGeocodingDao.deleteDirectGeocodingEntitiesOlderThan(selectedTimeStamp = timeStamp)
         }
     }
 
     override fun invalidateCache() {
-        invalidateCoordinateInformationCacheJob = CoroutineScope(Dispatchers.IO).launch {
-            reverseGeocodingDao.invalidateCache()
+        invalidateCityNameCoordinateInformationCacheJob = CoroutineScope(Dispatchers.IO).launch {
+            directGeocodingDao.invalidateCache()
         }
     }
 
     override fun dispose() {
-        if (this::fetchCoordinatesInformationJob.isInitialized
-            && !fetchCoordinatesInformationJob.isCompleted
-            && !fetchCoordinatesInformationJob.isCancelled
+        if (this::fetchCityNameCoordinatesInformationJob.isInitialized
+            && !fetchCityNameCoordinatesInformationJob.isCompleted
+            && !fetchCityNameCoordinatesInformationJob.isCancelled
         ) {
-            fetchCoordinatesInformationJob.cancel()
+            fetchCityNameCoordinatesInformationJob.cancel()
         }
 
-        if (this::invalidateCoordinateInformationCacheJob.isInitialized
-            && !invalidateCoordinateInformationCacheJob.isCompleted
-            && !invalidateCoordinateInformationCacheJob.isCancelled
+        if (this::invalidateCityNameCoordinateInformationCacheJob.isInitialized
+            && !invalidateCityNameCoordinateInformationCacheJob.isCompleted
+            && !invalidateCityNameCoordinateInformationCacheJob.isCancelled
         ) {
-            invalidateCoordinateInformationCacheJob.cancel()
+            invalidateCityNameCoordinateInformationCacheJob.cancel()
         }
 
         if (this::removeCacheInformationJob.isInitialized
@@ -124,35 +120,33 @@ internal class ReverseGeocodingRepositoryImpl(
     }
 
     private suspend fun startNetworkRequest(
-        latitude: Double,
-        longitude: Double,
+        coordinateName: String,
         limit: Int,
-        responseCallback: (Response<WeatherNotFoundResponse<ReverseGeocodingModel>, WeatherNotFoundError>) -> Unit,
-        responseReceivedCallback: suspend (reverseGeocodingResponse: ReversGeocodingResponse) -> Unit
+        responseCallback: (Response<WeatherNotFoundResponse<DirectGeocodingModel>, WeatherNotFoundError>) -> Unit,
+        responseReceivedCallback: suspend (directGeocodingResponse: DirectGeocodingResponse) -> Unit
     ) {
-        val request = RequestProvider.provideReverseGeocodingRequest(
-            url = UrlProvider.REVERSE_GEOCODING_URL,
-            latitude = latitude,
-            longitude = longitude,
+        val request = RequestProvider.provideDirectGeocodingRequest(
+            url = UrlProvider.DIRECT_GEOCODING_URL,
+            coordinateName = coordinateName,
             limit = limit
-        ) ?: throw IllegalStateException("Request is null! Check reverseGeocoding request!")
+        ) ?: throw IllegalStateException("Request is null! Check directGeocoding request!")
 
         try {
             val response = okHttpClient.newCall(request).execute()
             if (response.isSuccessful && response.body != null) {
-                val responseModel: ReversGeocodingResponse
+                val responseModel: DirectGeocodingResponse
 
                 try {
                     responseModel = gsonConverter.fromJson(
                         response.body!!.toString(),
-                        ReversGeocodingResponse::class.java
+                        DirectGeocodingResponse::class.java
                     )
                 } catch (jsonSyntaxException: JsonSyntaxException) {
                     responseCallback.invoke(
                         Failure(
                             WeatherNotFoundError(
                                 exception = jsonSyntaxException,
-                                internalErrorMessage = "Failed to parse response into LocationInfoModel!"
+                                internalErrorMessage = "Failed to parse response into DirectGeocodingResponse!"
                             )
                         )
                     )
@@ -164,8 +158,8 @@ internal class ReverseGeocodingRepositoryImpl(
                         WeatherNotFoundResponse(
                             httpResponseCode = response.code,
                             responseType = ResponseType.NETWORK,
-                            responseModel = Converters.reverseGeocodingResponseToLocationInfoModel(
-                                responseModel
+                            responseModel = Converters.directGeocodingResponseToDirectGeocodingModel(
+                                response = responseModel
                             )
                         )
                     )
@@ -192,16 +186,15 @@ internal class ReverseGeocodingRepositoryImpl(
 
     // TODO: Performance improving needed!
     private suspend fun cacheResponseModelIntoDatabase(
-        lastReversInformationEntity: List<ReverseGeocodingEntity>?,
-        reverseGeocodingResponse: ReversGeocodingResponse,
+        lastDirectInformationEntity: List<DirectGeocodingEntity>?,
+        directGeocodingResponse: DirectGeocodingResponse,
     ) {
-        lastReversInformationEntity?.let {
-            reverseGeocodingDao.deleteReverseGeocodingEntities(lastReversInformationEntity)
+        lastDirectInformationEntity?.let {
+            directGeocodingDao.deleteDirectGeocodingEntities(lastDirectInformationEntity)
         }
-        val finalEntityModels = Converters.reverseGeocodingResponseToReverseGeocodingEntity(
-            response = reverseGeocodingResponse
+        val finalEntityModels = Converters.directGeocodingResponseToDirectGeocodingEntity(
+            response = directGeocodingResponse
         )
-
-        reverseGeocodingDao.insertReverseGeocodingEntities(finalEntityModels)
+        directGeocodingDao.insertDirectGeocodingEntities(finalEntityModels)
     }
 }

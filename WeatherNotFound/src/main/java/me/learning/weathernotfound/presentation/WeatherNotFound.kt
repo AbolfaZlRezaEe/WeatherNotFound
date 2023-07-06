@@ -1,6 +1,7 @@
 package me.learning.weathernotfound.presentation
 
 import android.content.Context
+import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -15,7 +16,11 @@ import okhttp3.logging.HttpLoggingInterceptor
 
 class WeatherNotFound private constructor() {
 
+    private var openWeatherApiKeyIsRegistered = true
+
     companion object {
+        private const val TAG = "WeatherNotFound"
+
         private var INSTANCE: WeatherNotFound? = null
 
         @Synchronized
@@ -53,6 +58,8 @@ class WeatherNotFound private constructor() {
         } else {
             NetworkInterfaceProvider.init()
         }
+
+        validateOpenWeatherApiKey {}
     }
 
     fun getCurrentWeatherInformation(
@@ -60,6 +67,18 @@ class WeatherNotFound private constructor() {
         longitude: Double,
         weatherNotFoundCallback: WeatherNotFoundCallback<WeatherNotFoundResponse<CurrentWeatherModel>, WeatherNotFoundError>,
     ) {
+        if (!openWeatherApiKeyIsRegistered) {
+            validateOpenWeatherApiKey { registered ->
+                if (registered) {
+                    getCurrentWeatherInformation(
+                        latitude = latitude,
+                        longitude = longitude,
+                        weatherNotFoundCallback = weatherNotFoundCallback
+                    )
+                }
+            }
+            return
+        }
         RepositoryProvider.getCurrentWeatherRepository().getCurrentWeatherInformation(
             latitude = latitude,
             longitude = longitude
@@ -84,6 +103,18 @@ class WeatherNotFound private constructor() {
         longitude: Double,
         weatherNotFoundCallback: WeatherNotFoundCallback<WeatherNotFoundResponse<FiveDayThreeHourForecastModel>, WeatherNotFoundError>,
     ) {
+        if (!openWeatherApiKeyIsRegistered) {
+            validateOpenWeatherApiKey { registered ->
+                if (registered) {
+                    getFiveDayThreeHourForecastInformation(
+                        latitude = latitude,
+                        longitude = longitude,
+                        weatherNotFoundCallback = weatherNotFoundCallback
+                    )
+                }
+            }
+            return
+        }
         RepositoryProvider.getFiveDayThreeHourForecastRepository()
             .getFiveDayThreeHourForecastInformation(
                 latitude = latitude,
@@ -100,6 +131,20 @@ class WeatherNotFound private constructor() {
                             error = errorResponse
                         )
                     }
+                }
+            }
+    }
+
+    private fun validateOpenWeatherApiKey(validationResult: (isRegistered: Boolean) -> Unit) {
+        RepositoryProvider.getCurrentWeatherRepository()
+            .validateOpenWeatherApiKeyByPingARequest { result ->
+                openWeatherApiKeyIsRegistered = result
+                validationResult.invoke(result)
+                if (!result) {
+                    Log.e(
+                        TAG, "Validation failed! Your Api key is not working... Please ensure" +
+                                " about your payment in OpenWeatherApi!"
+                    )
                 }
             }
     }

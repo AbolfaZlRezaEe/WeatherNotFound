@@ -16,6 +16,8 @@ internal object NetworkInterfaceProvider {
 
     private var GSON_INSTANCE: Gson? = null
 
+    const val NETWORK_AUTHORIZED_FAILED_HTTP_CODE = 401
+
     @Synchronized
     fun init(
         httpLoggingLevel: HttpLoggingInterceptor.Level = OKHTTP_NORMAL_LOGGING_INTERCEPTOR

@@ -8,11 +8,14 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import me.learning.weathernotfound.data.local.LocalInterfaceProvider
 import me.learning.weathernotfound.data.local.dao.CurrentWeatherDao
+import me.learning.weathernotfound.data.network.providers.NetworkInterfaceProvider
 import me.learning.weathernotfound.data.network.providers.RequestProvider
 import me.learning.weathernotfound.data.network.providers.UrlProvider
 import me.learning.weathernotfound.data.repository.Failure
 import me.learning.weathernotfound.data.repository.Response
 import me.learning.weathernotfound.data.repository.Success
+import me.learning.weathernotfound.data.repository.ifNotSuccessful
+import me.learning.weathernotfound.data.repository.ifSuccessful
 import me.learning.weathernotfound.domain.currentWeather.Converters
 import me.learning.weathernotfound.domain.currentWeather.databaseModels.CurrentWeatherEntity
 import me.learning.weathernotfound.domain.currentWeather.networkModels.CurrentWeatherResponseModel
@@ -29,9 +32,32 @@ internal class CurrentWeatherRepositoryImpl(
     private val gsonConverter: Gson,
 ) : CurrentWeatherRepository {
 
+    private lateinit var validateOpenWeatherApiKeyJob: Job
     private lateinit var fetchCurrentWeatherInformationJob: Job
     private lateinit var invalidateCurrentWeatherInformationCache: Job
     private lateinit var removeCacheInformationJob: Job
+
+    override fun validateOpenWeatherApiKeyByPingARequest(resultInvoker: (apiKeyIsValid: Boolean) -> Unit) {
+        validateOpenWeatherApiKeyJob = CoroutineScope(Dispatchers.IO).launch {
+            startNetworkRequest(
+                latitude = 0.0,
+                longitude = 0.0,
+                responseCallback = { response ->
+                    response.ifSuccessful {
+                        resultInvoker.invoke(true)
+                    }
+                    response.ifNotSuccessful { weatherNotFoundError ->
+                        if (weatherNotFoundError.httpResponseCode == NetworkInterfaceProvider.NETWORK_AUTHORIZED_FAILED_HTTP_CODE) {
+                            resultInvoker.invoke(false)
+                        } else {
+                            resultInvoker.invoke(true)
+                        }
+                    }
+                },
+                responseReceivedCallback = { /* Do nothing */ }
+            )
+        }
+    }
 
     override fun getCurrentWeatherInformation(
         latitude: Double,
@@ -116,6 +142,13 @@ internal class CurrentWeatherRepositoryImpl(
     }
 
     override fun dispose() {
+        if (this::validateOpenWeatherApiKeyJob.isInitialized
+            && !validateOpenWeatherApiKeyJob.isCompleted
+            && !validateOpenWeatherApiKeyJob.isCancelled
+        ) {
+            validateOpenWeatherApiKeyJob.cancel()
+        }
+
         if (this::fetchCurrentWeatherInformationJob.isInitialized
             && !fetchCurrentWeatherInformationJob.isCompleted
             && !fetchCurrentWeatherInformationJob.isCancelled

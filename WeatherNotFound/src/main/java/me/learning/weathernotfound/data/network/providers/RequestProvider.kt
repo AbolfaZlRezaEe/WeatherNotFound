@@ -11,8 +11,7 @@ internal object RequestProvider {
     private const val REVERSE_GEOCODING_PARAM_LIMIT = "limit"
 
     // Direct Geocoding request params
-    private const val DIRECT_GEOCODING_PARAM_LATITUDE = "lat"
-    private const val DIRECT_GEOCODING_PARAM_LONGITUDE = "lon"
+    private const val DIRECT_GEOCODING_PARAM_COORDINATE_NAME = "q"
     private const val DIRECT_GEOCODING_PARAM_LIMIT = "limit"
 
     // Current weather request params
@@ -40,13 +39,11 @@ internal object RequestProvider {
 
     fun provideDirectGeocodingRequest(
         url: String,
-        latitude: Double,
-        longitude: Double,
+        coordinateName: String,
         limit: Int,
     ): Request? {
         val httpUrl = url.toHttpUrlOrNull()?.newBuilder()
-            ?.addQueryParameter(DIRECT_GEOCODING_PARAM_LATITUDE, latitude.toString())
-            ?.addQueryParameter(DIRECT_GEOCODING_PARAM_LONGITUDE, longitude.toString())
+            ?.addQueryParameter(DIRECT_GEOCODING_PARAM_COORDINATE_NAME, coordinateName)
             ?.addQueryParameter(DIRECT_GEOCODING_PARAM_LIMIT, limit.toString())
             ?.build() ?: return null
 

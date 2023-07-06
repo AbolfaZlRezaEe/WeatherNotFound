@@ -12,19 +12,16 @@ import me.learning.weathernotfound.domain.directGeocoding.databaseModels.DirectG
 internal interface DirectGeocodingDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertDirectGeocodingEntity(directGeocodingEntity: DirectGeocodingEntity): Long
+    suspend fun insertDirectGeocodingEntity(directGeocodingEntities: List<DirectGeocodingEntity>): List<Long>
 
     @Delete
-    suspend fun deleteDirectGeocodingEntity(directGeocodingEntity: DirectGeocodingEntity)
+    suspend fun deleteDirectGeocodingEntity(directGeocodingEntities: List<DirectGeocodingEntity>)
 
     @Update
     suspend fun updateDirectGeocodingEntity(directGeocodingEntity: DirectGeocodingEntity)
 
-    @Query("SELECT * FROM tbl_direct_geocoding WHERE latitude =:latitude AND longitude =:longitude")
-    suspend fun getDirectGeocodingByCoordinates(
-        latitude: Double,
-        longitude: Double
-    ): DirectGeocodingEntity?
+    @Query("SELECT * FROM tbl_direct_geocoding WHERE coordinate_name=:coordinateName")
+    suspend fun getDirectGeocodingByCoordinateName(coordinateName: String): List<DirectGeocodingEntity>
 
     @Query("DELETE FROM tbl_direct_geocoding WHERE updated_at<=:selectedTimeStamp")
     suspend fun deleteDirectGeocodingEntitiesOlderThan(selectedTimeStamp: Long)

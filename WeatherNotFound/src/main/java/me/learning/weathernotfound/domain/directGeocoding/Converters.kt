@@ -13,13 +13,12 @@ internal object Converters {
     // Network to Database entity converters
     fun directGeocodingResponseToDirectGeocodingEntity(
         response: DirectGeocodingResponse,
-        entityId: Long? = null,
     ): List<DirectGeocodingEntity> {
         val result = mutableListOf<DirectGeocodingEntity>()
         response.forEach { directGeocodingResponseItem ->
             result.add(
                 DirectGeocodingEntity(
-                    entityId = entityId,
+                    entityId = null,
                     latitude = directGeocodingResponseItem.latitude,
                     longitude = directGeocodingResponseItem.longitude,
                     coordinateName = directGeocodingResponseItem.coordinateName,

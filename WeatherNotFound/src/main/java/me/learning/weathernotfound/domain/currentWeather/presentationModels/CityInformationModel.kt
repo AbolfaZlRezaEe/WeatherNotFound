@@ -10,7 +10,7 @@ package me.learning.weathernotfound.domain.currentWeather.presentationModels
  */
 data class CityInformationModel(
     val id: Int,
-    val countryName: String,
+    val countryName: String?,
     val sunrise: Int,
     val sunset: Int,
     val type: Int

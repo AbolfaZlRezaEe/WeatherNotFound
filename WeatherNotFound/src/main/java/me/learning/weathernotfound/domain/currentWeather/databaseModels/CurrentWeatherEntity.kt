@@ -55,7 +55,7 @@ internal data class CurrentWeatherEntity(
     @ColumnInfo(name = "sys_id")
     val sysId: Int,
     @ColumnInfo(name = "country_name")
-    val countryName: String,
+    val countryName: String?,
     @ColumnInfo(name = "sunrise")
     val sunrise: Int,
     @ColumnInfo(name = "sunset")

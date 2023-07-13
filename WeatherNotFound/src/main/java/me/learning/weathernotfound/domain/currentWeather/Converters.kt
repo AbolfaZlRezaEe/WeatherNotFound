@@ -279,11 +279,13 @@ internal object Converters {
         assert(responseModel.dateTime == presentationModel.dateTime)
         assert(responseModel.timezone == presentationModel.timezone)
 
-        responseModel.weatherStatus.forEachIndexed { index, item ->
-            assert(item.id == presentationModel.weatherStatus[index].id)
-            assert(item.status == presentationModel.weatherStatus[index].status)
-            assert(item.description == presentationModel.weatherStatus[index].description)
-            assert(item.icon == presentationModel.weatherStatus[index].icon)
+        responseModel.weatherStatus.forEachIndexed { index, weatherStatusResponseModel ->
+            val weatherStatusPresentationModel = presentationModel.weatherStatus[index]
+
+            assert(weatherStatusResponseModel.id == weatherStatusPresentationModel.id)
+            assert(weatherStatusResponseModel.status == weatherStatusPresentationModel.status)
+            assert(weatherStatusResponseModel.description == weatherStatusPresentationModel.description)
+            assert(weatherStatusResponseModel.icon == weatherStatusPresentationModel.icon)
         }
     }
 
@@ -348,9 +350,11 @@ internal object Converters {
     ) {
         if (!BuildConfig.DEBUG) return
         responseModels.forEachIndexed { index, responseModel ->
-            assert(responseModel.status == entityModels[index].status)
-            assert(responseModel.description == entityModels[index].description)
-            assert(responseModel.icon == entityModels[index].icon)
+            val weatherStatusEntityModel = entityModels[index]
+
+            assert(responseModel.status == weatherStatusEntityModel.status)
+            assert(responseModel.description == weatherStatusEntityModel.description)
+            assert(responseModel.icon == weatherStatusEntityModel.icon)
         }
     }
 
@@ -422,9 +426,11 @@ internal object Converters {
         assert(presentationModel.timezone == currentWeatherEntityModel.timezone)
 
         presentationModel.weatherStatus.forEachIndexed { index, weatherStatusModel ->
-            assert(weatherStatusModel.status == weatherStatusEntityModels[index].status)
-            assert(weatherStatusModel.description == weatherStatusEntityModels[index].description)
-            assert(weatherStatusModel.icon == weatherStatusEntityModels[index].icon)
+            val weatherStatusEntityModel = weatherStatusEntityModels[index]
+
+            assert(weatherStatusModel.status == weatherStatusEntityModel.status)
+            assert(weatherStatusModel.description == weatherStatusEntityModel.description)
+            assert(weatherStatusModel.icon == weatherStatusEntityModel.icon)
         }
     }
 }

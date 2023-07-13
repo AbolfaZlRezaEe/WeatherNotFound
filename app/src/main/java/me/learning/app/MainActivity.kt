@@ -14,6 +14,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var currentWeatherMaterialButton: MaterialButton
     private lateinit var fiveDayThreeHourMaterialButton: MaterialButton
+    private lateinit var invalidateFiveDayThreeHourMaterialButton: MaterialButton
+    private lateinit var invalidateCurrentWeatherMaterialButton: MaterialButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,11 +26,23 @@ class MainActivity : AppCompatActivity() {
         currentWeatherMaterialButton.setOnClickListener { startCurrentWeatherRequest() }
 
         fiveDayThreeHourMaterialButton.setOnClickListener { startFiveDayThreeHourRequest() }
+
+        invalidateFiveDayThreeHourMaterialButton.setOnClickListener {
+            WeatherNotFound.getInstance().invalidateFiveDayThreeHourForecastCache()
+        }
+
+        invalidateCurrentWeatherMaterialButton.setOnClickListener {
+            WeatherNotFound.getInstance().invalidateCurrentWeatherCache()
+        }
     }
 
     private fun initViews() {
         currentWeatherMaterialButton = findViewById(R.id.currentWeatherMaterialButton)
         fiveDayThreeHourMaterialButton = findViewById(R.id.fiveDayThreeHourMaterialButton)
+        invalidateFiveDayThreeHourMaterialButton =
+            findViewById(R.id.invalidateFiveDayThreeHourMaterialButton)
+        invalidateCurrentWeatherMaterialButton =
+            findViewById(R.id.invalidateCurrentWeatherMaterialButton)
     }
 
     private fun startCurrentWeatherRequest() {

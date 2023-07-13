@@ -217,6 +217,14 @@ class WeatherNotFound private constructor() {
             }
     }
 
+    fun invalidateCurrentWeatherCache() {
+        RepositoryProvider.getCurrentWeatherRepository().invalidateCache()
+    }
+
+    fun invalidateFiveDayThreeHourForecastCache() {
+        RepositoryProvider.getFiveDayThreeHourForecastRepository().invalidateCache()
+    }
+
     private fun validateOpenWeatherApiKey(validationResult: (isRegistered: Boolean) -> Unit) {
         RepositoryProvider.getCurrentWeatherRepository()
             .validateOpenWeatherApiKeyByPingARequest { result ->

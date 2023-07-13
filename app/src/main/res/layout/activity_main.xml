@@ -28,4 +28,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/currentWeatherMaterialButton" />
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/invalidateFiveDayThreeHourMaterialButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Invalidate Five Day Three Hour Cache"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fiveDayThreeHourMaterialButton" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/invalidateCurrentWeatherMaterialButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Invalidate CurrentWeather Cache"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/invalidateFiveDayThreeHourMaterialButton" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,7 +7,7 @@ package me.learning.weathernotfound.domain.fiveDayThreeHourForecast.presentation
  * @property speed Wind speed
  */
 data class WindInformationModel(
-    val speed: Double,
-    val degree: Int,
-    val gust: Double
+    val speed: Double?,
+    val degree: Int?,
+    val gust: Double?
 )

@@ -9,5 +9,5 @@ import com.google.gson.annotations.SerializedName
  */
 internal data class RainInformationResponseModel(
     @SerializedName("3h")
-    val threeHour: Double?
+    val threeHour: Double
 )

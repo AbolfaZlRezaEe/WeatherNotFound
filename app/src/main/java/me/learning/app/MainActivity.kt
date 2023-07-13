@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 import me.learning.weathernotfound.domain.currentWeather.presentationModels.CurrentWeatherModel
+import me.learning.weathernotfound.domain.fiveDayThreeHourForecast.presentationModels.FiveDayThreeHourForecastModel
 import me.learning.weathernotfound.presentation.WeatherNotFound
 import me.learning.weathernotfound.presentation.WeatherNotFoundCallback
 import me.learning.weathernotfound.presentation.WeatherNotFoundError
@@ -12,6 +13,7 @@ import me.learning.weathernotfound.presentation.WeatherNotFoundResponse
 class MainActivity : AppCompatActivity() {
 
     private lateinit var currentWeatherMaterialButton: MaterialButton
+    private lateinit var fiveDayThreeHourMaterialButton: MaterialButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,10 +22,13 @@ class MainActivity : AppCompatActivity() {
         initViews()
 
         currentWeatherMaterialButton.setOnClickListener { startCurrentWeatherRequest() }
+
+        fiveDayThreeHourMaterialButton.setOnClickListener { startFiveDayThreeHourRequest() }
     }
 
     private fun initViews() {
         currentWeatherMaterialButton = findViewById(R.id.currentWeatherMaterialButton)
+        fiveDayThreeHourMaterialButton = findViewById(R.id.fiveDayThreeHourMaterialButton)
     }
 
     private fun startCurrentWeatherRequest() {
@@ -42,4 +47,22 @@ class MainActivity : AppCompatActivity() {
             }
         )
     }
+
+    private fun startFiveDayThreeHourRequest() {
+        WeatherNotFound.getInstance().getFiveDayThreeHourForecastInformation(
+            latitude = 0.0,
+            longitude = 0.0,
+            weatherNotFoundCallback = object :
+                WeatherNotFoundCallback<WeatherNotFoundResponse<FiveDayThreeHourForecastModel>, WeatherNotFoundError> {
+                override fun onSuccess(response: WeatherNotFoundResponse<FiveDayThreeHourForecastModel>) {
+                    // Do whatever you want...
+                }
+
+                override fun onError(error: WeatherNotFoundError) {
+                    error.exception?.printStackTrace()
+                }
+            }
+        )
+    }
+
 }

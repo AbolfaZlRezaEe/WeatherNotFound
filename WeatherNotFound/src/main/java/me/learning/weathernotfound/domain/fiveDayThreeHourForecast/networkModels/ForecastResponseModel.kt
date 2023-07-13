@@ -26,11 +26,11 @@ internal data class ForecastResponseModel(
     @SerializedName("clouds")
     val cloudsInformation: CloudsInformationResponseModel,
     @SerializedName("wind")
-    val windInformation: WindInformationResponseModel,
+    val windInformation: WindInformationResponseModel?,
     @SerializedName("rain")
-    val rainInformation: RainInformationResponseModel,
+    val rainInformation: RainInformationResponseModel?,
     @SerializedName("snow")
-    val snowInformation: SnowInformationResponseModel,
+    val snowInformation: SnowInformationResponseModel?,
     @SerializedName("sys")
     val dayInformation: DayInformationResponseModel,
     @SerializedName("visibility")

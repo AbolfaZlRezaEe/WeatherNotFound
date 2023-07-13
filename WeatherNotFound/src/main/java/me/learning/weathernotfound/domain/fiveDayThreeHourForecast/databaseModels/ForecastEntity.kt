@@ -43,15 +43,15 @@ internal data class ForecastEntity(
     @ColumnInfo(name = "cloudiness")
     val cloudiness: Int,
     @ColumnInfo(name = "speed")
-    val speed: Double,
+    val speed: Double?,
     @ColumnInfo(name = "degree")
-    val degree: Int,
+    val degree: Int?,
     @ColumnInfo(name = "gust")
-    val gust: Double,
+    val gust: Double?,
     @ColumnInfo(name = "three_hour_rain_information")
     val threeHourRainInformation: Double?,
     @ColumnInfo(name = "three_hour_snow_information")
-    val threeHourSnowInformation: Double,
+    val threeHourSnowInformation: Double?,
     @ColumnInfo(name = "day_status")
     val dayStatus: String,
     @ColumnInfo(name = "visibility")

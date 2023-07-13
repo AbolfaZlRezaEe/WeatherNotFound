@@ -9,6 +9,7 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp") version "1.8.10-1.0.9"
+    id("maven-publish")
 }
 
 android {
@@ -95,6 +96,20 @@ dependencies {
     // Kotlin Coroutines Dependencies
     val coroutinesVersion = "1.6.4"
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
+}
+
+publishing {
+    publications {
+        register<MavenPublication>("release") {
+            groupId = "com.personal"
+            artifactId = "WeatherNotFound"
+            version = "1.0.0"
+
+            afterEvaluate {
+                from(components["release"])
+            }
+        }
+    }
 }
 
 fun <T> getPropertyFromPropertiesFile(key: String): T {

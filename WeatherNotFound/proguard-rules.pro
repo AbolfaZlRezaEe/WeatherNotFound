@@ -52,3 +52,16 @@
 -keep,allowobfuscation,allowshrinking class * extends com.google.gson.reflect.TypeToken
 
 ##---------------End: proguard configuration for Gson  ----------
+
+##---------------Begin: proguard configuration for ROOM  ----------
+
+-keep class * extends androidx.room.RoomDatabase
+-dontwarn androidx.room.paging.**
+
+##---------------End: proguard configuration for ROOM  ----------
+
+##---------------Begin: proguard configuration for Domain Layer  ----------
+
+-keep class me.learning.weathernotfound.domain.*
+
+##---------------End: proguard configuration for Domain Layer  ----------

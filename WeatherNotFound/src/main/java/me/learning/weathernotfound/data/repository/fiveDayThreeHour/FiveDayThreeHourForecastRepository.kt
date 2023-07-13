@@ -10,7 +10,7 @@ internal interface FiveDayThreeHourForecastRepository {
     fun getFiveDayThreeHourForecastInformation(
         latitude: Double,
         longitude: Double,
-        resultInvoker: (Response<WeatherNotFoundResponse<FiveDayThreeHourForecastModel>, WeatherNotFoundError>) -> Unit,
+        resultInvoker: suspend (Response<WeatherNotFoundResponse<FiveDayThreeHourForecastModel>, WeatherNotFoundError>) -> Unit,
     )
 
     fun removeCacheInformationOlderThan(timeStamp: Long)

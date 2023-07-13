@@ -11,7 +11,7 @@ internal interface ReverseGeocodingRepository {
         latitude: Double,
         longitude: Double,
         limit: Int,
-        resultInvoker: (Response<WeatherNotFoundResponse<ReverseGeocodingModel>, WeatherNotFoundError>) -> Unit
+        resultInvoker: suspend (Response<WeatherNotFoundResponse<ReverseGeocodingModel>, WeatherNotFoundError>) -> Unit
     )
 
     fun removeCacheInformationOlderThan(timeStamp: Long)

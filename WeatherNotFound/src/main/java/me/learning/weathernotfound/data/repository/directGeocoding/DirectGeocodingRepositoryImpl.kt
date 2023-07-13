@@ -36,7 +36,7 @@ internal class DirectGeocodingRepositoryImpl constructor(
     override fun getCityNameCoordinatesInformation(
         cityName: String,
         limit: Int,
-        resultInvoker: (Response<WeatherNotFoundResponse<DirectGeocodingModel>, WeatherNotFoundError>) -> Unit
+        resultInvoker: suspend (Response<WeatherNotFoundResponse<DirectGeocodingModel>, WeatherNotFoundError>) -> Unit
     ) {
         fetchCityNameCoordinatesInformationJob = CoroutineScope(Dispatchers.IO).launch {
             if (LocalInterfaceProvider.isCacheMechanismEnabled()) {
@@ -134,7 +134,7 @@ internal class DirectGeocodingRepositoryImpl constructor(
     private suspend fun startNetworkRequest(
         coordinateName: String,
         limit: Int,
-        responseCallback: (Response<WeatherNotFoundResponse<DirectGeocodingModel>, WeatherNotFoundError>) -> Unit,
+        responseCallback: suspend (Response<WeatherNotFoundResponse<DirectGeocodingModel>, WeatherNotFoundError>) -> Unit,
         responseReceivedCallback: suspend (directGeocodingResponse: DirectGeocodingResponse) -> Unit
     ) {
         val request = RequestProvider.provideDirectGeocodingRequest(

@@ -62,7 +62,7 @@ internal class CurrentWeatherRepositoryImpl(
     override fun getCurrentWeatherInformation(
         latitude: Double,
         longitude: Double,
-        resultInvoker: (Response<WeatherNotFoundResponse<CurrentWeatherModel>, WeatherNotFoundError>) -> Unit
+        resultInvoker: suspend (Response<WeatherNotFoundResponse<CurrentWeatherModel>, WeatherNotFoundError>) -> Unit
     ) {
         fetchCurrentWeatherInformationJob = CoroutineScope(Dispatchers.IO).launch {
             if (LocalInterfaceProvider.isCacheMechanismEnabled()) {
@@ -174,7 +174,7 @@ internal class CurrentWeatherRepositoryImpl(
     private suspend fun startNetworkRequest(
         latitude: Double,
         longitude: Double,
-        responseCallback: (Response<WeatherNotFoundResponse<CurrentWeatherModel>, WeatherNotFoundError>) -> Unit,
+        responseCallback: suspend (Response<WeatherNotFoundResponse<CurrentWeatherModel>, WeatherNotFoundError>) -> Unit,
         responseReceivedCallback: suspend (currentWeatherResponseModel: CurrentWeatherResponseModel) -> Unit
     ) {
         val request = RequestProvider.provideCurrentWeatherRequest(

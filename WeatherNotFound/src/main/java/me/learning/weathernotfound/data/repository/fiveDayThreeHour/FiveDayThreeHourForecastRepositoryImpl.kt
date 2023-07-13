@@ -37,7 +37,7 @@ internal class FiveDayThreeHourForecastRepositoryImpl(
     override fun getFiveDayThreeHourForecastInformation(
         latitude: Double,
         longitude: Double,
-        resultInvoker: (Response<WeatherNotFoundResponse<FiveDayThreeHourForecastModel>, WeatherNotFoundError>) -> Unit,
+        resultInvoker: suspend (Response<WeatherNotFoundResponse<FiveDayThreeHourForecastModel>, WeatherNotFoundError>) -> Unit,
     ) {
         fetchFiveDayThreeHourForecastInformationJob = CoroutineScope(Dispatchers.IO).launch {
             if (LocalInterfaceProvider.isCacheMechanismEnabled()) {
@@ -171,7 +171,7 @@ internal class FiveDayThreeHourForecastRepositoryImpl(
     private suspend fun startNetworkRequest(
         latitude: Double,
         longitude: Double,
-        responseCallback: (Response<WeatherNotFoundResponse<FiveDayThreeHourForecastModel>, WeatherNotFoundError>) -> Unit,
+        responseCallback: suspend (Response<WeatherNotFoundResponse<FiveDayThreeHourForecastModel>, WeatherNotFoundError>) -> Unit,
         responseReceivedCallback: suspend (fiveDayThreeHourForecastResponseModel: FiveDayThreeHourForecastResponseModel) -> Unit
     ) {
         val request = RequestProvider.provideFiveDayThreeHourForecastRequest(

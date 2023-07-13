@@ -12,7 +12,7 @@ internal interface CurrentWeatherRepository {
     fun getCurrentWeatherInformation(
         latitude: Double,
         longitude: Double,
-        resultInvoker: (Response<WeatherNotFoundResponse<CurrentWeatherModel>, WeatherNotFoundError>) -> Unit
+        resultInvoker: suspend (Response<WeatherNotFoundResponse<CurrentWeatherModel>, WeatherNotFoundError>) -> Unit
     )
 
     fun removeCacheInformationOlderThan(timeStamp: Long)

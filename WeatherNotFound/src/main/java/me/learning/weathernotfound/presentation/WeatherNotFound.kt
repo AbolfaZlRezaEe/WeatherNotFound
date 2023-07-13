@@ -5,9 +5,8 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.util.Log
 import androidx.core.content.ContextCompat
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.learning.weathernotfound.data.local.LocalInterfaceProvider
 import me.learning.weathernotfound.data.network.providers.NetworkInterfaceProvider
 import me.learning.weathernotfound.data.repository.ifNotSuccessful
@@ -132,7 +131,7 @@ class WeatherNotFound private constructor() {
             latitude = latitude,
             longitude = longitude
         ) { response ->
-            CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.Main) {
                 response.ifSuccessful { successfulResponse ->
                     weatherNotFoundCallback.onSuccess(
                         response = successfulResponse
@@ -204,7 +203,7 @@ class WeatherNotFound private constructor() {
                 latitude = latitude,
                 longitude = longitude,
             ) { response ->
-                CoroutineScope(Dispatchers.Main).launch {
+                withContext(Dispatchers.Main) {
                     response.ifSuccessful { successfulResponse ->
                         weatherNotFoundCallback.onSuccess(
                             response = successfulResponse

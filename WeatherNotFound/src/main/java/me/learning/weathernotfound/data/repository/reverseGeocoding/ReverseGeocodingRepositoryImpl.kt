@@ -37,7 +37,7 @@ internal class ReverseGeocodingRepositoryImpl(
         latitude: Double,
         longitude: Double,
         limit: Int,
-        resultInvoker: (Response<WeatherNotFoundResponse<ReverseGeocodingModel>, WeatherNotFoundError>) -> Unit
+        resultInvoker: suspend (Response<WeatherNotFoundResponse<ReverseGeocodingModel>, WeatherNotFoundError>) -> Unit
     ) {
         fetchCoordinatesInformationJob = CoroutineScope(Dispatchers.IO).launch {
             if (LocalInterfaceProvider.isCacheMechanismEnabled()) {
@@ -140,7 +140,7 @@ internal class ReverseGeocodingRepositoryImpl(
         latitude: Double,
         longitude: Double,
         limit: Int,
-        responseCallback: (Response<WeatherNotFoundResponse<ReverseGeocodingModel>, WeatherNotFoundError>) -> Unit,
+        responseCallback: suspend (Response<WeatherNotFoundResponse<ReverseGeocodingModel>, WeatherNotFoundError>) -> Unit,
         responseReceivedCallback: suspend (reverseGeocodingResponse: ReversGeocodingResponse) -> Unit
     ) {
         val request = RequestProvider.provideReverseGeocodingRequest(

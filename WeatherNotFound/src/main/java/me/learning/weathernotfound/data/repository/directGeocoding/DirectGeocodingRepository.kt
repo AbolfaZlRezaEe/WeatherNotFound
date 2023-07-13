@@ -10,7 +10,7 @@ internal interface DirectGeocodingRepository {
     fun getCityNameCoordinatesInformation(
         cityName: String,
         limit: Int,
-        resultInvoker: (Response<WeatherNotFoundResponse<DirectGeocodingModel>, WeatherNotFoundError>) -> Unit
+        resultInvoker: suspend (Response<WeatherNotFoundResponse<DirectGeocodingModel>, WeatherNotFoundError>) -> Unit
     )
 
     fun removeCacheInformationOlderThen(timeStamp: Long)

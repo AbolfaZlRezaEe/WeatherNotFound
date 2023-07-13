@@ -18,6 +18,8 @@ internal object NetworkInterfaceProvider {
 
     const val NETWORK_AUTHORIZED_FAILED_HTTP_CODE = 401
 
+    const val GEOCODING_LIMIT_REQUEST_PARAMETER_VALUE = 10
+
     @Synchronized
     fun init(
         httpLoggingLevel: HttpLoggingInterceptor.Level = OKHTTP_NORMAL_LOGGING_INTERCEPTOR

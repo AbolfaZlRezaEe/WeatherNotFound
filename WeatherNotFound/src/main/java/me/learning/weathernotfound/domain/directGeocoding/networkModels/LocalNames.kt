@@ -7,305 +7,305 @@ import com.google.gson.annotations.SerializedName
  */
 internal data class LocalNames(
     @SerializedName("ab")
-    val ab: String,
+    val ab: String?,
     @SerializedName("af")
-    val af: String,
+    val af: String?,
     @SerializedName("am")
-    val am: String,
+    val am: String?,
     @SerializedName("an")
-    val an: String,
+    val an: String?,
     @SerializedName("ar")
-    val ar: String,
+    val ar: String?,
     @SerializedName("ascii")
-    val ascii: String,
+    val ascii: String?,
     @SerializedName("av")
-    val av: String,
+    val av: String?,
     @SerializedName("ay")
-    val ay: String,
+    val ay: String?,
     @SerializedName("az")
-    val az: String,
+    val az: String?,
     @SerializedName("ba")
-    val ba: String,
+    val ba: String?,
     @SerializedName("be")
-    val be: String,
+    val be: String?,
     @SerializedName("bg")
-    val bg: String,
+    val bg: String?,
     @SerializedName("bh")
-    val bh: String,
+    val bh: String?,
     @SerializedName("bi")
-    val bi: String,
+    val bi: String?,
     @SerializedName("bm")
-    val bm: String,
+    val bm: String?,
     @SerializedName("bn")
-    val bn: String,
+    val bn: String?,
     @SerializedName("bo")
-    val bo: String,
+    val bo: String?,
     @SerializedName("br")
-    val br: String,
+    val br: String?,
     @SerializedName("bs")
-    val bs: String,
+    val bs: String?,
     @SerializedName("ca")
-    val ca: String,
+    val ca: String?,
     @SerializedName("ce")
-    val ce: String,
+    val ce: String?,
     @SerializedName("co")
-    val co: String,
+    val co: String?,
     @SerializedName("cr")
-    val cr: String,
+    val cr: String?,
     @SerializedName("cs")
-    val cs: String,
+    val cs: String?,
     @SerializedName("cu")
-    val cu: String,
+    val cu: String?,
     @SerializedName("cv")
-    val cv: String,
+    val cv: String?,
     @SerializedName("cy")
-    val cy: String,
+    val cy: String?,
     @SerializedName("da")
-    val da: String,
+    val da: String?,
     @SerializedName("de")
-    val de: String,
+    val de: String?,
     @SerializedName("ee")
-    val ee: String,
+    val ee: String?,
     @SerializedName("el")
-    val el: String,
+    val el: String?,
     @SerializedName("en")
-    val en: String,
+    val en: String?,
     @SerializedName("eo")
-    val eo: String,
+    val eo: String?,
     @SerializedName("es")
-    val es: String,
+    val es: String?,
     @SerializedName("et")
-    val et: String,
+    val et: String?,
     @SerializedName("eu")
-    val eu: String,
+    val eu: String?,
     @SerializedName("fa")
-    val fa: String,
+    val fa: String?,
     @SerializedName("feature_name")
-    val featureName: String,
+    val featureName: String?,
     @SerializedName("ff")
-    val ff: String,
+    val ff: String?,
     @SerializedName("fi")
-    val fi: String,
+    val fi: String?,
     @SerializedName("fj")
-    val fj: String,
+    val fj: String?,
     @SerializedName("fo")
-    val fo: String,
+    val fo: String?,
     @SerializedName("fr")
-    val fr: String,
+    val fr: String?,
     @SerializedName("fy")
-    val fy: String,
+    val fy: String?,
     @SerializedName("ga")
-    val ga: String,
+    val ga: String?,
     @SerializedName("gd")
-    val gd: String,
+    val gd: String?,
     @SerializedName("gl")
-    val gl: String,
+    val gl: String?,
     @SerializedName("gn")
-    val gn: String,
+    val gn: String?,
     @SerializedName("gu")
-    val gu: String,
+    val gu: String?,
     @SerializedName("gv")
-    val gv: String,
+    val gv: String?,
     @SerializedName("ha")
-    val ha: String,
+    val ha: String?,
     @SerializedName("he")
-    val he: String,
+    val he: String?,
     @SerializedName("hi")
-    val hi: String,
+    val hi: String?,
     @SerializedName("hr")
-    val hr: String,
+    val hr: String?,
     @SerializedName("ht")
-    val ht: String,
+    val ht: String?,
     @SerializedName("hu")
-    val hu: String,
+    val hu: String?,
     @SerializedName("hy")
-    val hy: String,
+    val hy: String?,
     @SerializedName("ia")
-    val ia: String,
+    val ia: String?,
     @SerializedName("id")
-    val id: String,
+    val id: String?,
     @SerializedName("ie")
-    val ie: String,
+    val ie: String?,
     @SerializedName("ig")
-    val ig: String,
+    val ig: String?,
     @SerializedName("io")
-    val io: String,
+    val io: String?,
     @SerializedName("is")
-    val `is`: String,
+    val `is`: String?,
     @SerializedName("it")
-    val `it`: String,
+    val `it`: String?,
     @SerializedName("iu")
-    val iu: String,
+    val iu: String?,
     @SerializedName("ja")
-    val ja: String,
+    val ja: String?,
     @SerializedName("jv")
-    val jv: String,
+    val jv: String?,
     @SerializedName("ka")
-    val ka: String,
+    val ka: String?,
     @SerializedName("kk")
-    val kk: String,
+    val kk: String?,
     @SerializedName("kl")
-    val kl: String,
+    val kl: String?,
     @SerializedName("km")
-    val km: String,
+    val km: String?,
     @SerializedName("kn")
-    val kn: String,
+    val kn: String?,
     @SerializedName("ko")
-    val ko: String,
+    val ko: String?,
     @SerializedName("ku")
-    val ku: String,
+    val ku: String?,
     @SerializedName("kv")
-    val kv: String,
+    val kv: String?,
     @SerializedName("kw")
-    val kw: String,
+    val kw: String?,
     @SerializedName("ky")
-    val ky: String,
+    val ky: String?,
     @SerializedName("lb")
-    val lb: String,
+    val lb: String?,
     @SerializedName("li")
-    val li: String,
+    val li: String?,
     @SerializedName("ln")
-    val ln: String,
+    val ln: String?,
     @SerializedName("lo")
-    val lo: String,
+    val lo: String?,
     @SerializedName("lt")
-    val lt: String,
+    val lt: String?,
     @SerializedName("lv")
-    val lv: String,
+    val lv: String?,
     @SerializedName("mg")
-    val mg: String,
+    val mg: String?,
     @SerializedName("mi")
-    val mi: String,
+    val mi: String?,
     @SerializedName("mk")
-    val mk: String,
+    val mk: String?,
     @SerializedName("ml")
-    val ml: String,
+    val ml: String?,
     @SerializedName("mn")
-    val mn: String,
+    val mn: String?,
     @SerializedName("mr")
-    val mr: String,
+    val mr: String?,
     @SerializedName("ms")
-    val ms: String,
+    val ms: String?,
     @SerializedName("mt")
-    val mt: String,
+    val mt: String?,
     @SerializedName("my")
-    val my: String,
+    val my: String?,
     @SerializedName("na")
-    val na: String,
+    val na: String?,
     @SerializedName("ne")
-    val ne: String,
+    val ne: String?,
     @SerializedName("nl")
-    val nl: String,
+    val nl: String?,
     @SerializedName("nn")
-    val nn: String,
+    val nn: String?,
     @SerializedName("no")
-    val no: String,
+    val no: String?,
     @SerializedName("nv")
-    val nv: String,
+    val nv: String?,
     @SerializedName("ny")
-    val ny: String,
+    val ny: String?,
     @SerializedName("oc")
-    val oc: String,
+    val oc: String?,
     @SerializedName("oj")
-    val oj: String,
+    val oj: String?,
     @SerializedName("om")
-    val om: String,
+    val om: String?,
     @SerializedName("or")
-    val or: String,
+    val or: String?,
     @SerializedName("os")
-    val os: String,
+    val os: String?,
     @SerializedName("pa")
-    val pa: String,
+    val pa: String?,
     @SerializedName("pl")
-    val pl: String,
+    val pl: String?,
     @SerializedName("ps")
-    val ps: String,
+    val ps: String?,
     @SerializedName("pt")
-    val pt: String,
+    val pt: String?,
     @SerializedName("qu")
-    val qu: String,
+    val qu: String?,
     @SerializedName("rm")
-    val rm: String,
+    val rm: String?,
     @SerializedName("ro")
-    val ro: String,
+    val ro: String?,
     @SerializedName("ru")
-    val ru: String,
+    val ru: String?,
     @SerializedName("sa")
-    val sa: String,
+    val sa: String?,
     @SerializedName("sc")
-    val sc: String,
+    val sc: String?,
     @SerializedName("sd")
-    val sd: String,
+    val sd: String?,
     @SerializedName("se")
-    val se: String,
+    val se: String?,
     @SerializedName("sh")
-    val sh: String,
+    val sh: String?,
     @SerializedName("si")
-    val si: String,
+    val si: String?,
     @SerializedName("sk")
-    val sk: String,
+    val sk: String?,
     @SerializedName("sl")
-    val sl: String,
+    val sl: String?,
     @SerializedName("sm")
-    val sm: String,
+    val sm: String?,
     @SerializedName("sn")
-    val sn: String,
+    val sn: String?,
     @SerializedName("so")
-    val so: String,
+    val so: String?,
     @SerializedName("sq")
-    val sq: String,
+    val sq: String?,
     @SerializedName("sr")
-    val sr: String,
+    val sr: String?,
     @SerializedName("st")
-    val st: String,
+    val st: String?,
     @SerializedName("su")
-    val su: String,
+    val su: String?,
     @SerializedName("sv")
-    val sv: String,
+    val sv: String?,
     @SerializedName("sw")
-    val sw: String,
+    val sw: String?,
     @SerializedName("ta")
-    val ta: String,
+    val ta: String?,
     @SerializedName("te")
-    val te: String,
+    val te: String?,
     @SerializedName("tg")
-    val tg: String,
+    val tg: String?,
     @SerializedName("th")
-    val th: String,
+    val th: String?,
     @SerializedName("tk")
-    var tk: String,
+    var tk: String?,
     @SerializedName("tl")
-    val tl: String,
+    val tl: String?,
     @SerializedName("to")
-    val to: String,
+    val to: String?,
     @SerializedName("tr")
-    val tr: String,
+    val tr: String?,
     @SerializedName("tt")
-    val tt: String,
+    val tt: String?,
     @SerializedName("tw")
-    val tw: String,
+    val tw: String?,
     @SerializedName("ug")
-    val ug: String,
+    val ug: String?,
     @SerializedName("uk")
-    val uk: String,
+    val uk: String?,
     @SerializedName("ur")
-    val ur: String,
+    val ur: String?,
     @SerializedName("uz")
-    val uz: String,
+    val uz: String?,
     @SerializedName("vi")
-    val vi: String,
+    val vi: String?,
     @SerializedName("vo")
-    val vo: String,
+    val vo: String?,
     @SerializedName("wa")
-    val wa: String,
+    val wa: String?,
     @SerializedName("wo")
-    val wo: String,
+    val wo: String?,
     @SerializedName("yi")
-    val yi: String,
+    val yi: String?,
     @SerializedName("yo")
-    val yo: String,
+    val yo: String?,
     @SerializedName("zh")
-    val zh: String,
+    val zh: String?,
     @SerializedName("zu")
-    val zu: String
+    val zu: String?
 )

@@ -73,13 +73,11 @@ class WeatherNotFound private constructor() {
     fun destroy() {
         RepositoryProvider.getActualFiveDayThreeHourRepository()?.dispose()
         RepositoryProvider.getActualDirectRepository()?.dispose()
-        RepositoryProvider.getActualReverseRepositoryValue()?.dispose()
         RepositoryProvider.getActualCurrentWeatherRepository()?.dispose()
     }
 
     fun getCurrentWeatherInformation(
         cityName: String,
-        limit: Int,
         weatherNotFoundCallback: WeatherNotFoundCallback<WeatherNotFoundResponse<CurrentWeatherModel>, WeatherNotFoundError>,
     ) {
         validateInitFunction()
@@ -88,7 +86,6 @@ class WeatherNotFound private constructor() {
                 if (registered) {
                     getCurrentWeatherInformation(
                         cityName = cityName,
-                        limit = limit,
                         weatherNotFoundCallback = weatherNotFoundCallback
                     )
                 }
@@ -98,7 +95,7 @@ class WeatherNotFound private constructor() {
         RepositoryProvider.getDirectRepository()
             .getCityNameCoordinatesInformation(
                 cityName = cityName,
-                limit = limit,
+                limit = NetworkInterfaceProvider.GEOCODING_LIMIT_REQUEST_PARAMETER_VALUE,
             ) { response ->
                 response.ifSuccessful { result ->
                     getCurrentWeatherInformation(
@@ -152,7 +149,6 @@ class WeatherNotFound private constructor() {
 
     fun getFiveDayThreeHourForecastInformation(
         cityName: String,
-        limit: Int,
         weatherNotFoundCallback: WeatherNotFoundCallback<WeatherNotFoundResponse<FiveDayThreeHourForecastModel>, WeatherNotFoundError>,
     ) {
         validateInitFunction()
@@ -161,7 +157,6 @@ class WeatherNotFound private constructor() {
                 if (registered) {
                     getFiveDayThreeHourForecastInformation(
                         cityName = cityName,
-                        limit = limit,
                         weatherNotFoundCallback = weatherNotFoundCallback
                     )
                 }
@@ -171,7 +166,7 @@ class WeatherNotFound private constructor() {
         RepositoryProvider.getDirectRepository()
             .getCityNameCoordinatesInformation(
                 cityName = cityName,
-                limit = limit,
+                limit = NetworkInterfaceProvider.GEOCODING_LIMIT_REQUEST_PARAMETER_VALUE,
             ) { response ->
                 response.ifSuccessful { result ->
                     getFiveDayThreeHourForecastInformation(
@@ -226,10 +221,12 @@ class WeatherNotFound private constructor() {
 
     fun invalidateCurrentWeatherCache() {
         RepositoryProvider.getCurrentWeatherRepository().invalidateCache()
+        RepositoryProvider.getDirectRepository().invalidateCache()
     }
 
     fun invalidateFiveDayThreeHourForecastCache() {
         RepositoryProvider.getFiveDayThreeHourForecastRepository().invalidateCache()
+        RepositoryProvider.getDirectRepository().invalidateCache()
     }
 
     private fun validateOpenWeatherApiKey(validationResult: (isRegistered: Boolean) -> Unit) {

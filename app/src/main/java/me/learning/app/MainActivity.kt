@@ -14,6 +14,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var currentWeatherMaterialButton: MaterialButton
     private lateinit var fiveDayThreeHourMaterialButton: MaterialButton
+    private lateinit var currentWeatherWithNameMaterialButton: MaterialButton
+    private lateinit var fiveDayThreeHourWithNameMaterialButton: MaterialButton
     private lateinit var invalidateFiveDayThreeHourMaterialButton: MaterialButton
     private lateinit var invalidateCurrentWeatherMaterialButton: MaterialButton
 
@@ -27,6 +29,10 @@ class MainActivity : AppCompatActivity() {
 
         fiveDayThreeHourMaterialButton.setOnClickListener { startFiveDayThreeHourRequest() }
 
+        currentWeatherWithNameMaterialButton.setOnClickListener { startCurrentWeatherRequest("US") }
+
+        fiveDayThreeHourWithNameMaterialButton.setOnClickListener { startFiveDayThreeHourRequest("US") }
+
         invalidateFiveDayThreeHourMaterialButton.setOnClickListener {
             WeatherNotFound.getInstance().invalidateFiveDayThreeHourForecastCache()
         }
@@ -37,18 +43,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
-        currentWeatherMaterialButton = findViewById(R.id.currentWeatherMaterialButton)
-        fiveDayThreeHourMaterialButton = findViewById(R.id.fiveDayThreeHourMaterialButton)
+        currentWeatherMaterialButton =
+            findViewById(R.id.currentWeatherWithCoordinatesMaterialButton)
+        fiveDayThreeHourMaterialButton =
+            findViewById(R.id.fiveDayThreeHourWithCoordinatesMaterialButton)
+        currentWeatherWithNameMaterialButton =
+            findViewById(R.id.currentWeatherWithNameMaterialButton)
+        fiveDayThreeHourWithNameMaterialButton =
+            findViewById(R.id.fiveDayThreeHourWithNameMaterialButton)
         invalidateFiveDayThreeHourMaterialButton =
             findViewById(R.id.invalidateFiveDayThreeHourMaterialButton)
         invalidateCurrentWeatherMaterialButton =
             findViewById(R.id.invalidateCurrentWeatherMaterialButton)
     }
 
-    private fun startCurrentWeatherRequest() {
+    private fun startCurrentWeatherRequest(latitude: Double = 0.0, longitude: Double = 0.0) {
         WeatherNotFound.getInstance().getCurrentWeatherInformation(
-            latitude = 0.0,
-            longitude = 0.0,
+            latitude = latitude,
+            longitude = longitude,
             weatherNotFoundCallback = object :
                 WeatherNotFoundCallback<WeatherNotFoundResponse<CurrentWeatherModel>, WeatherNotFoundError> {
                 override fun onSuccess(response: WeatherNotFoundResponse<CurrentWeatherModel>) {
@@ -62,10 +74,42 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    private fun startFiveDayThreeHourRequest() {
+    private fun startCurrentWeatherRequest(cityName: String) {
+        WeatherNotFound.getInstance().getCurrentWeatherInformation(
+            cityName = cityName,
+            weatherNotFoundCallback = object :
+                WeatherNotFoundCallback<WeatherNotFoundResponse<CurrentWeatherModel>, WeatherNotFoundError> {
+                override fun onSuccess(response: WeatherNotFoundResponse<CurrentWeatherModel>) {
+                    // Do whatever you want...
+                }
+
+                override fun onError(error: WeatherNotFoundError) {
+                    error.exception?.printStackTrace()
+                }
+            }
+        )
+    }
+
+    private fun startFiveDayThreeHourRequest(latitude: Double = 0.0, longitude: Double = 0.0) {
         WeatherNotFound.getInstance().getFiveDayThreeHourForecastInformation(
-            latitude = 0.0,
-            longitude = 0.0,
+            latitude = latitude,
+            longitude = longitude,
+            weatherNotFoundCallback = object :
+                WeatherNotFoundCallback<WeatherNotFoundResponse<FiveDayThreeHourForecastModel>, WeatherNotFoundError> {
+                override fun onSuccess(response: WeatherNotFoundResponse<FiveDayThreeHourForecastModel>) {
+                    // Do whatever you want...
+                }
+
+                override fun onError(error: WeatherNotFoundError) {
+                    error.exception?.printStackTrace()
+                }
+            }
+        )
+    }
+
+    private fun startFiveDayThreeHourRequest(cityName: String) {
+        WeatherNotFound.getInstance().getFiveDayThreeHourForecastInformation(
+            cityName = cityName,
             weatherNotFoundCallback = object :
                 WeatherNotFoundCallback<WeatherNotFoundResponse<FiveDayThreeHourForecastModel>, WeatherNotFoundError> {
                 override fun onSuccess(response: WeatherNotFoundResponse<FiveDayThreeHourForecastModel>) {

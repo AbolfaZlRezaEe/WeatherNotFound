@@ -7,26 +7,48 @@
     tools:context=".MainActivity">
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/currentWeatherMaterialButton"
+        android:id="@+id/currentWeatherWithCoordinatesMaterialButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
-        android:text="CurrentWeather Request"
+        android:text="CurrentWeather With Coordinates Request"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/fiveDayThreeHourMaterialButton"
+        android:id="@+id/fiveDayThreeHourWithCoordinatesMaterialButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Five Day Three Hour Request"
+        android:text="Five Day Three Hour With Coordinates Request"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/currentWeatherMaterialButton" />
+        app:layout_constraintTop_toBottomOf="@+id/currentWeatherWithCoordinatesMaterialButton" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/currentWeatherWithNameMaterialButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="CurrentWeather With Name Request"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fiveDayThreeHourWithCoordinatesMaterialButton" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/fiveDayThreeHourWithNameMaterialButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Five Day Three Hour With Name Request"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/currentWeatherWithNameMaterialButton" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/invalidateFiveDayThreeHourMaterialButton"
@@ -37,7 +59,7 @@
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fiveDayThreeHourMaterialButton" />
+        app:layout_constraintTop_toBottomOf="@+id/fiveDayThreeHourWithNameMaterialButton" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/invalidateCurrentWeatherMaterialButton"

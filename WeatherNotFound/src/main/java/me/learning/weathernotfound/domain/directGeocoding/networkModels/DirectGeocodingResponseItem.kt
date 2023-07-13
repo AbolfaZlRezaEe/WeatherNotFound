@@ -21,5 +21,5 @@ internal data class DirectGeocodingResponseItem(
     @SerializedName("lon")
     val longitude: Double,
     @SerializedName("local_names")
-    val coordinateNameInLanguages: LocalNames,
+    val coordinateNameInLanguages: LocalNames?,
 )

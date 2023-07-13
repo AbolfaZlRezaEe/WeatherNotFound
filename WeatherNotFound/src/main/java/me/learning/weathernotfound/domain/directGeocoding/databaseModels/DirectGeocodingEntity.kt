@@ -24,305 +24,305 @@ internal data class DirectGeocodingEntity(
     val updatedAt: Date,
     /* Coordinate name in different languages: */
     @ColumnInfo(name = "ab")
-    val ab: String,
+    val ab: String?,
     @ColumnInfo(name = "af")
-    val af: String,
+    val af: String?,
     @ColumnInfo(name = "am")
-    val am: String,
+    val am: String?,
     @ColumnInfo(name = "an")
-    val an: String,
+    val an: String?,
     @ColumnInfo(name = "ar")
-    val ar: String,
+    val ar: String?,
     @ColumnInfo(name = "ascii")
-    val ascii: String,
+    val ascii: String?,
     @ColumnInfo(name = "av")
-    val av: String,
+    val av: String?,
     @ColumnInfo(name = "ay")
-    val ay: String,
+    val ay: String?,
     @ColumnInfo(name = "az")
-    val az: String,
+    val az: String?,
     @ColumnInfo(name = "ba")
-    val ba: String,
+    val ba: String?,
     @ColumnInfo(name = "be")
-    val be: String,
+    val be: String?,
     @ColumnInfo(name = "bg")
-    val bg: String,
+    val bg: String?,
     @ColumnInfo(name = "bh")
-    val bh: String,
+    val bh: String?,
     @ColumnInfo(name = "bi")
-    val bi: String,
+    val bi: String?,
     @ColumnInfo(name = "bm")
-    val bm: String,
+    val bm: String?,
     @ColumnInfo(name = "bn")
-    val bn: String,
+    val bn: String?,
     @ColumnInfo(name = "bo")
-    val bo: String,
+    val bo: String?,
     @ColumnInfo(name = "br")
-    val br: String,
+    val br: String?,
     @ColumnInfo(name = "bs")
-    val bs: String,
+    val bs: String?,
     @ColumnInfo(name = "ca")
-    val ca: String,
+    val ca: String?,
     @ColumnInfo(name = "ce")
-    val ce: String,
+    val ce: String?,
     @ColumnInfo(name = "co")
-    val co: String,
+    val co: String?,
     @ColumnInfo(name = "cr")
-    val cr: String,
+    val cr: String?,
     @ColumnInfo(name = "cs")
-    val cs: String,
+    val cs: String?,
     @ColumnInfo(name = "cu")
-    val cu: String,
+    val cu: String?,
     @ColumnInfo(name = "cv")
-    val cv: String,
+    val cv: String?,
     @ColumnInfo(name = "cy")
-    val cy: String,
+    val cy: String?,
     @ColumnInfo(name = "da")
-    val da: String,
+    val da: String?,
     @ColumnInfo(name = "de")
-    val de: String,
+    val de: String?,
     @ColumnInfo(name = "ee")
-    val ee: String,
+    val ee: String?,
     @ColumnInfo(name = "el")
-    val el: String,
+    val el: String?,
     @ColumnInfo(name = "en")
-    val en: String,
+    val en: String?,
     @ColumnInfo(name = "eo")
-    val eo: String,
+    val eo: String?,
     @ColumnInfo(name = "es")
-    val es: String,
+    val es: String?,
     @ColumnInfo(name = "et")
-    val et: String,
+    val et: String?,
     @ColumnInfo(name = "eu")
-    val eu: String,
+    val eu: String?,
     @ColumnInfo(name = "fa")
-    val fa: String,
+    val fa: String?,
     @ColumnInfo(name = "feature_name")
-    val featureName: String,
+    val featureName: String?,
     @ColumnInfo(name = "ff")
-    val ff: String,
+    val ff: String?,
     @ColumnInfo(name = "fi")
-    val fi: String,
+    val fi: String?,
     @ColumnInfo(name = "fj")
-    val fj: String,
+    val fj: String?,
     @ColumnInfo(name = "fo")
-    val fo: String,
+    val fo: String?,
     @ColumnInfo(name = "fr")
-    val fr: String,
+    val fr: String?,
     @ColumnInfo(name = "fy")
-    val fy: String,
+    val fy: String?,
     @ColumnInfo(name = "ga")
-    val ga: String,
+    val ga: String?,
     @ColumnInfo(name = "gd")
-    val gd: String,
+    val gd: String?,
     @ColumnInfo(name = "gl")
-    val gl: String,
+    val gl: String?,
     @ColumnInfo(name = "gn")
-    val gn: String,
+    val gn: String?,
     @ColumnInfo(name = "gu")
-    val gu: String,
+    val gu: String?,
     @ColumnInfo(name = "gv")
-    val gv: String,
+    val gv: String?,
     @ColumnInfo(name = "ha")
-    val ha: String,
+    val ha: String?,
     @ColumnInfo(name = "he")
-    val he: String,
+    val he: String?,
     @ColumnInfo(name = "hi")
-    val hi: String,
+    val hi: String?,
     @ColumnInfo(name = "hr")
-    val hr: String,
+    val hr: String?,
     @ColumnInfo(name = "ht")
-    val ht: String,
+    val ht: String?,
     @ColumnInfo(name = "hu")
-    val hu: String,
+    val hu: String?,
     @ColumnInfo(name = "hy")
-    val hy: String,
+    val hy: String?,
     @ColumnInfo(name = "ia")
-    val ia: String,
+    val ia: String?,
     @ColumnInfo(name = "id")
-    val id: String,
+    val id: String?,
     @ColumnInfo(name = "ie")
-    val ie: String,
+    val ie: String?,
     @ColumnInfo(name = "ig")
-    val ig: String,
+    val ig: String?,
     @ColumnInfo(name = "io")
-    val io: String,
+    val io: String?,
     @ColumnInfo(name = "is")
-    val `is`: String,
+    val `is`: String?,
     @ColumnInfo(name = "it")
-    val `it`: String,
+    val `it`: String?,
     @ColumnInfo(name = "iu")
-    val iu: String,
+    val iu: String?,
     @ColumnInfo(name = "ja")
-    val ja: String,
+    val ja: String?,
     @ColumnInfo(name = "jv")
-    val jv: String,
+    val jv: String?,
     @ColumnInfo(name = "ka")
-    val ka: String,
+    val ka: String?,
     @ColumnInfo(name = "kk")
-    val kk: String,
+    val kk: String?,
     @ColumnInfo(name = "kl")
-    val kl: String,
+    val kl: String?,
     @ColumnInfo(name = "km")
-    val km: String,
+    val km: String?,
     @ColumnInfo(name = "kn")
-    val kn: String,
+    val kn: String?,
     @ColumnInfo(name = "ko")
-    val ko: String,
+    val ko: String?,
     @ColumnInfo(name = "ku")
-    val ku: String,
+    val ku: String?,
     @ColumnInfo(name = "kv")
-    val kv: String,
+    val kv: String?,
     @ColumnInfo(name = "kw")
-    val kw: String,
+    val kw: String?,
     @ColumnInfo(name = "ky")
-    val ky: String,
+    val ky: String?,
     @ColumnInfo(name = "lb")
-    val lb: String,
+    val lb: String?,
     @ColumnInfo(name = "li")
-    val li: String,
+    val li: String?,
     @ColumnInfo(name = "ln")
-    val ln: String,
+    val ln: String?,
     @ColumnInfo(name = "lo")
-    val lo: String,
+    val lo: String?,
     @ColumnInfo(name = "lt")
-    val lt: String,
+    val lt: String?,
     @ColumnInfo(name = "lv")
-    val lv: String,
+    val lv: String?,
     @ColumnInfo(name = "mg")
-    val mg: String,
+    val mg: String?,
     @ColumnInfo(name = "mi")
-    val mi: String,
+    val mi: String?,
     @ColumnInfo(name = "mk")
-    val mk: String,
+    val mk: String?,
     @ColumnInfo(name = "ml")
-    val ml: String,
+    val ml: String?,
     @ColumnInfo(name = "mn")
-    val mn: String,
+    val mn: String?,
     @ColumnInfo(name = "mr")
-    val mr: String,
+    val mr: String?,
     @ColumnInfo(name = "ms")
-    val ms: String,
+    val ms: String?,
     @ColumnInfo(name = "mt")
-    val mt: String,
+    val mt: String?,
     @ColumnInfo(name = "my")
-    val my: String,
+    val my: String?,
     @ColumnInfo(name = "na")
-    val na: String,
+    val na: String?,
     @ColumnInfo(name = "ne")
-    val ne: String,
+    val ne: String?,
     @ColumnInfo(name = "nl")
-    val nl: String,
+    val nl: String?,
     @ColumnInfo(name = "nn")
-    val nn: String,
+    val nn: String?,
     @ColumnInfo(name = "no")
-    val no: String,
+    val no: String?,
     @ColumnInfo(name = "nv")
-    val nv: String,
+    val nv: String?,
     @ColumnInfo(name = "ny")
-    val ny: String,
+    val ny: String?,
     @ColumnInfo(name = "oc")
-    val oc: String,
+    val oc: String?,
     @ColumnInfo(name = "oj")
-    val oj: String,
+    val oj: String?,
     @ColumnInfo(name = "om")
-    val om: String,
+    val om: String?,
     @ColumnInfo(name = "or")
-    val or: String,
+    val or: String?,
     @ColumnInfo(name = "os")
-    val os: String,
+    val os: String?,
     @ColumnInfo(name = "pa")
-    val pa: String,
+    val pa: String?,
     @ColumnInfo(name = "pl")
-    val pl: String,
+    val pl: String?,
     @ColumnInfo(name = "ps")
-    val ps: String,
+    val ps: String?,
     @ColumnInfo(name = "pt")
-    val pt: String,
+    val pt: String?,
     @ColumnInfo(name = "qu")
-    val qu: String,
+    val qu: String?,
     @ColumnInfo(name = "rm")
-    val rm: String,
+    val rm: String?,
     @ColumnInfo(name = "ro")
-    val ro: String,
+    val ro: String?,
     @ColumnInfo(name = "ru")
-    val ru: String,
+    val ru: String?,
     @ColumnInfo(name = "sa")
-    val sa: String,
+    val sa: String?,
     @ColumnInfo(name = "sc")
-    val sc: String,
+    val sc: String?,
     @ColumnInfo(name = "sd")
-    val sd: String,
+    val sd: String?,
     @ColumnInfo(name = "se")
-    val se: String,
+    val se: String?,
     @ColumnInfo(name = "sh")
-    val sh: String,
+    val sh: String?,
     @ColumnInfo(name = "si")
-    val si: String,
+    val si: String?,
     @ColumnInfo(name = "sk")
-    val sk: String,
+    val sk: String?,
     @ColumnInfo(name = "sl")
-    val sl: String,
+    val sl: String?,
     @ColumnInfo(name = "sm")
-    val sm: String,
+    val sm: String?,
     @ColumnInfo(name = "sn")
-    val sn: String,
+    val sn: String?,
     @ColumnInfo(name = "so")
-    val so: String,
+    val so: String?,
     @ColumnInfo(name = "sq")
-    val sq: String,
+    val sq: String?,
     @ColumnInfo(name = "sr")
-    val sr: String,
+    val sr: String?,
     @ColumnInfo(name = "st")
-    val st: String,
+    val st: String?,
     @ColumnInfo(name = "su")
-    val su: String,
+    val su: String?,
     @ColumnInfo(name = "sv")
-    val sv: String,
+    val sv: String?,
     @ColumnInfo(name = "sw")
-    val sw: String,
+    val sw: String?,
     @ColumnInfo(name = "ta")
-    val ta: String,
+    val ta: String?,
     @ColumnInfo(name = "te")
-    val te: String,
+    val te: String?,
     @ColumnInfo(name = "tg")
-    val tg: String,
+    val tg: String?,
     @ColumnInfo(name = "th")
-    val th: String,
+    val th: String?,
     @ColumnInfo(name = "tk")
-    var tk: String,
+    var tk: String?,
     @ColumnInfo(name = "tl")
-    val tl: String,
+    val tl: String?,
     @ColumnInfo(name = "to")
-    val to: String,
+    val to: String?,
     @ColumnInfo(name = "tr")
-    val tr: String,
+    val tr: String?,
     @ColumnInfo(name = "tt")
-    val tt: String,
+    val tt: String?,
     @ColumnInfo(name = "tw")
-    val tw: String,
+    val tw: String?,
     @ColumnInfo(name = "ug")
-    val ug: String,
+    val ug: String?,
     @ColumnInfo(name = "uk")
-    val uk: String,
+    val uk: String?,
     @ColumnInfo(name = "ur")
-    val ur: String,
+    val ur: String?,
     @ColumnInfo(name = "uz")
-    val uz: String,
+    val uz: String?,
     @ColumnInfo(name = "vi")
-    val vi: String,
+    val vi: String?,
     @ColumnInfo(name = "vo")
-    val vo: String,
+    val vo: String?,
     @ColumnInfo(name = "wa")
-    val wa: String,
+    val wa: String?,
     @ColumnInfo(name = "wo")
-    val wo: String,
+    val wo: String?,
     @ColumnInfo(name = "yi")
-    val yi: String,
+    val yi: String?,
     @ColumnInfo(name = "yo")
-    val yo: String,
+    val yo: String?,
     @ColumnInfo(name = "zh")
-    val zh: String,
+    val zh: String?,
     @ColumnInfo(name = "zu")
-    val zu: String
+    val zu: String?
 )

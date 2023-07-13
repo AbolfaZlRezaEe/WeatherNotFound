@@ -20,7 +20,7 @@ internal interface DirectGeocodingDao {
     @Update
     suspend fun updateDirectGeocodingEntity(directGeocodingEntity: DirectGeocodingEntity)
 
-    @Query("SELECT * FROM tbl_direct_geocoding WHERE coordinate_name=:coordinateName")
+    @Query("SELECT * FROM tbl_direct_geocoding WHERE coordinate_name LIKE :coordinateName")
     suspend fun getDirectGeocodingByCoordinateName(coordinateName: String): List<DirectGeocodingEntity>
 
     @Query("DELETE FROM tbl_direct_geocoding WHERE updated_at<=:selectedTimeStamp")

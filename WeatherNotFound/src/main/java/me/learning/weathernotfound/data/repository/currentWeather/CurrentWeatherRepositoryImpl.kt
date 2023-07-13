@@ -34,7 +34,6 @@ internal class CurrentWeatherRepositoryImpl(
 
     private lateinit var validateOpenWeatherApiKeyJob: Job
     private lateinit var fetchCurrentWeatherInformationJob: Job
-    private lateinit var cacheResponseInformationJob: Job
     private lateinit var invalidateCurrentWeatherInformationCache: Job
     private lateinit var removeCacheInformationJob: Job
 
@@ -155,13 +154,6 @@ internal class CurrentWeatherRepositoryImpl(
             && !fetchCurrentWeatherInformationJob.isCancelled
         ) {
             fetchCurrentWeatherInformationJob.cancel()
-        }
-
-        if (this::cacheResponseInformationJob.isInitialized
-            && !cacheResponseInformationJob.isCompleted
-            && !cacheResponseInformationJob.isCancelled
-        ) {
-            cacheResponseInformationJob.cancel()
         }
 
         if (this::invalidateCurrentWeatherInformationCache.isInitialized

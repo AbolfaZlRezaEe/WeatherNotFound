@@ -72,4 +72,13 @@ internal object RepositoryProvider {
         }
         return fiveDayThreeHourForecastRepository!!
     }
+
+    fun getActualReverseRepositoryValue(): ReverseGeocodingRepository? = reverseGeocodingRepository
+
+    fun getActualDirectRepository(): DirectGeocodingRepository? = directGeocodingRepository
+
+    fun getActualCurrentWeatherRepository(): CurrentWeatherRepository? = currentWeatherRepository
+
+    fun getActualFiveDayThreeHourRepository(): FiveDayThreeHourForecastRepository? =
+        fiveDayThreeHourForecastRepository
 }

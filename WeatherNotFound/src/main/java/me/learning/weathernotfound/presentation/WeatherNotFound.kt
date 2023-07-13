@@ -70,6 +70,13 @@ class WeatherNotFound private constructor() {
         validateOpenWeatherApiKey {}
     }
 
+    fun destroy() {
+        RepositoryProvider.getActualFiveDayThreeHourRepository()?.dispose()
+        RepositoryProvider.getActualDirectRepository()?.dispose()
+        RepositoryProvider.getActualReverseRepositoryValue()?.dispose()
+        RepositoryProvider.getActualCurrentWeatherRepository()?.dispose()
+    }
+
     fun getCurrentWeatherInformation(
         cityName: String,
         limit: Int,

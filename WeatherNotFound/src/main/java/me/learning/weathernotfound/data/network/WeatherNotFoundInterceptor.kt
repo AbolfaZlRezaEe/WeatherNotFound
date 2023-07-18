@@ -11,22 +11,39 @@ internal class WeatherNotFoundInterceptor : Interceptor {
         private const val HEADER_KEY_API_KEY = "appid"
         private const val HEADER_KEY_UNITS = "units"
 
-        private const val HEADER_VALUE_MODE = "json"
+        private const val HEADER_VALUE_DEFAULT_RESPONSE_FORMAT = "json"
+        private const val HEADER_VALUE_DEFAULT_LANGUAGE = "en"
+        private const val HEADER_VALUE_DEFAULT_RESPONSE_UNIT = "metric"
     }
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val oldRequest = chain.request()
 
         val newHttpURL = oldRequest.url.newBuilder()
-            .addQueryParameter(HEADER_KEY_API_KEY, BuildConfig.OpenWeatherApiKey)
-            .build()
+                .addQueryParameter(HEADER_KEY_API_KEY, BuildConfig.OpenWeatherApiKey)
+                .build()
+
+        var languageHeaderValue = BuildConfig.OpenWeatherResponseLanguage
+        if (languageHeaderValue.isEmpty() || languageHeaderValue.lowercase() == "null") {
+            languageHeaderValue = HEADER_VALUE_DEFAULT_LANGUAGE
+        }
+
+        var responseUnitHeaderValue = BuildConfig.OpenWeatherResponseUnit
+        if (responseUnitHeaderValue.isEmpty() || languageHeaderValue.lowercase() == "null") {
+            responseUnitHeaderValue = HEADER_VALUE_DEFAULT_RESPONSE_UNIT
+        }
+
+        var responseFormatHeaderValue = BuildConfig.OpenWeatherResponseFormat
+        if (responseFormatHeaderValue.isEmpty() || languageHeaderValue.lowercase() == "null") {
+            responseFormatHeaderValue = HEADER_VALUE_DEFAULT_RESPONSE_FORMAT
+        }
 
         val newRequest = oldRequest.newBuilder()
-            .addHeader(HEADER_KEY_MODE, HEADER_VALUE_MODE)
-            .addHeader(HEADER_KEY_LANGUAGE, BuildConfig.OpenWeatherResponseLanguage)
-            .addHeader(HEADER_KEY_UNITS, BuildConfig.OpenWeatherResponseUnit)
-            .url(newHttpURL)
-            .build()
+                .addHeader(HEADER_KEY_MODE, responseFormatHeaderValue)
+                .addHeader(HEADER_KEY_LANGUAGE, languageHeaderValue)
+                .addHeader(HEADER_KEY_UNITS, responseUnitHeaderValue)
+                .url(newHttpURL)
+                .build()
 
         return chain.proceed(newRequest)
     }

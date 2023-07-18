@@ -1,9 +1,15 @@
 import java.util.Properties
 
+// BuildConfig Keys
 val propertiesConfigurationFileName = "weatherNotFound.properties"
 val propertiesApiKeyName = "OpenWeatherApiKey"
 val propertiesResponseLanguage = "OpenWeatherResponseLanguage"
 val propertiesResponseUnit = "OpenWeatherResponseUnit"
+val propertiesResponseFormat = "OpenWeatherResponseFormat"
+val propertiesDatabaseExportSchemaEnabled = "DatabaseSchemaShouldEnable"
+
+// BuildConfig Default Values
+val propertiesDatabaseExportSchemaEnabledDefaultValue = "false"
 
 plugins {
     id("com.android.library")
@@ -23,24 +29,41 @@ android {
         printInfoLog("Reading weatherNotFound.properties file...")
 
         buildConfigField(
-            type = "String",
-            name = propertiesApiKeyName,
-            value = "\"${getPropertyFromPropertiesFile<String>(propertiesApiKeyName)}\""
+                type = "String",
+                name = propertiesApiKeyName,
+                value = "\"${getPropertyFromPropertiesFile<String>(propertiesApiKeyName)}\""
         )
 
         buildConfigField(
-            type = "String",
-            name = propertiesResponseLanguage,
-            value = "\"${getPropertyFromPropertiesFile<String>(propertiesResponseLanguage)}\""
+                type = "String",
+                name = propertiesResponseLanguage,
+                value = "\"${getPropertyFromPropertiesFile<String>(propertiesResponseLanguage)}\""
         )
 
         buildConfigField(
-            type = "String",
-            name = propertiesResponseUnit,
-            value = "\"${getPropertyFromPropertiesFile<String>(propertiesResponseUnit)}\""
+                type = "String",
+                name = propertiesResponseUnit,
+                value = "\"${getPropertyFromPropertiesFile<String>(propertiesResponseUnit)}\""
         )
 
-        printInfoLog("Reading was finished and everything is ready to go!")
+        buildConfigField(
+                type = "String",
+                name = propertiesResponseFormat,
+                value = "\"${getPropertyFromPropertiesFile<String>(propertiesResponseFormat)}\""
+        )
+
+        buildConfigField(
+                type = "boolean",
+                name = propertiesDatabaseExportSchemaEnabled,
+                value = getPropertyFromPropertiesFile<String>(propertiesDatabaseExportSchemaEnabled) ?: propertiesDatabaseExportSchemaEnabledDefaultValue
+        )
+
+        if (propertiesFileExist()) {
+            printInfoLog("Reading was finished and everything is ready to go!")
+        } else {
+            project.logger.error("weatherNotFound.properties didn't exits!! continuing...")
+        }
+
 
         // Export current version database schema
         javaCompileOptions {
@@ -54,8 +77,8 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                    getDefaultProguardFile("proguard-android-optimize.txt"),
+                    "proguard-rules.pro"
             )
         }
     }
@@ -112,28 +135,25 @@ publishing {
     }
 }
 
-fun <T> getPropertyFromPropertiesFile(key: String): T {
-    val result = getPropertiesFile()[key]
-        ?: throw IllegalArgumentException(
-            "WeatherNotFound couldn't find $key in $propertiesConfigurationFileName file.\n" +
-                    "Please read the documentation and make sure that you followed the steps correctly!"
-        )
-    return result as T
+fun <T> getPropertyFromPropertiesFile(key: String): T? {
+    if (!propertiesFileExist()) return null
+    return getPropertiesFile()!![key] as T
 }
 
-fun getPropertiesFile(): Properties {
+fun getPropertiesFile(): Properties? {
     val propertiesFile = File(propertiesConfigurationFileName)
     if (propertiesFile.exists() && propertiesFile.isFile) {
         val file = Properties().apply {
             load(propertiesFile.inputStream())
         }
         return file
-    } else {
-        throw IllegalStateException(
-            "WeatherNotFound couldn't find ($propertiesConfigurationFileName) file!\n" +
-                    "Please read the documentation and make sure that you followed the steps correctly!"
-        )
     }
+    return null
+}
+
+fun propertiesFileExist(): Boolean {
+    val propertiesFile = File(propertiesConfigurationFileName)
+    return propertiesFile.exists() && propertiesFile.isFile
 }
 
 fun printInfoLog(message: String) {

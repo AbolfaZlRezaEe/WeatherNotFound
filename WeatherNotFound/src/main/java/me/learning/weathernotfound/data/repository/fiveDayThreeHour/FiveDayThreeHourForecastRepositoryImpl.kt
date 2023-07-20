@@ -193,10 +193,7 @@ internal class FiveDayThreeHourForecastRepositoryImpl(
                 } catch (jsonSyntaxException: JsonSyntaxException) {
                     responseCallback.invoke(
                         Failure(
-                            WeatherNotFoundError(
-                                exception = jsonSyntaxException,
-                                internalErrorMessage = "Failed to parse response into FiveDayThreeHourForecastModel!"
-                            )
+                            WeatherNotFoundError(exception = jsonSyntaxException)
                         )
                     )
                     return

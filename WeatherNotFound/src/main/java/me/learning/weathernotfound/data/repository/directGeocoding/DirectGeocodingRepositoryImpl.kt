@@ -156,10 +156,7 @@ internal class DirectGeocodingRepositoryImpl constructor(
                 } catch (jsonSyntaxException: JsonSyntaxException) {
                     responseCallback.invoke(
                         Failure(
-                            WeatherNotFoundError(
-                                exception = jsonSyntaxException,
-                                internalErrorMessage = "Failed to parse response into DirectGeocodingResponse!"
-                            )
+                            WeatherNotFoundError(exception = jsonSyntaxException)
                         )
                     )
                     return

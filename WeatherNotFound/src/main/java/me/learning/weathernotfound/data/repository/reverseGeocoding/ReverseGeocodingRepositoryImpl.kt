@@ -163,10 +163,7 @@ internal class ReverseGeocodingRepositoryImpl(
                 } catch (jsonSyntaxException: JsonSyntaxException) {
                     responseCallback.invoke(
                         Failure(
-                            WeatherNotFoundError(
-                                exception = jsonSyntaxException,
-                                internalErrorMessage = "Failed to parse response into LocationInfoModel!"
-                            )
+                            WeatherNotFoundError(exception = jsonSyntaxException)
                         )
                     )
                     return

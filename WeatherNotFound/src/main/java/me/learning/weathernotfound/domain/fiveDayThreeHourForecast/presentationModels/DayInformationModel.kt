@@ -1,7 +1,7 @@
 package me.learning.weathernotfound.domain.fiveDayThreeHourForecast.presentationModels
 
 /**
- * Represent the day status.
+ * Represents the day status.
  * @property dayStatus Can be night(n) or day(d).
  */
 data class DayInformationModel(

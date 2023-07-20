@@ -1,8 +1,12 @@
 package me.learning.weathernotfound.data.network.providers
 
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
+import okhttp3.OkHttpClient
 import okhttp3.Request
 
+/**
+ * Create and provide all requests that **WeatherNotFound** will use.
+ */
 internal object RequestProvider {
 
     // Reverse Geocoding request params
@@ -22,6 +26,17 @@ internal object RequestProvider {
     private const val FIVE_DAY_WEATHER_PARAM_LATITUDE = "lat"
     private const val FIVE_DAY_WEATHER_PARAM_LONGITUDE = "lon"
 
+    /**
+     * Create reverseGeocoding request using query parameters you specified.
+     *
+     * @param url the url which is necessary for serving reverse geocoding request.
+     * @param latitude
+     * @param longitude
+     * @param limit
+     *
+     * @return an object of [Request] which will be used for requesting with [OkHttpClient], null
+     * if anything happen during creation of url!
+     */
     fun provideReverseGeocodingRequest(
         url: String,
         latitude: Double,
@@ -37,6 +52,16 @@ internal object RequestProvider {
         return Request.Builder().url(httpUrl).build()
     }
 
+    /**
+     * Create directGeocoding request using query parameters you specified.
+     *
+     * @param url the url which is necessary for serving directGeocoding request.
+     * @param coordinateName
+     * @param limit
+     *
+     * @return an object of [Request] which will be used for requesting with [OkHttpClient], null
+     * if anything happen during creation of url!
+     */
     fun provideDirectGeocodingRequest(
         url: String,
         coordinateName: String,
@@ -50,6 +75,16 @@ internal object RequestProvider {
         return Request.Builder().url(httpUrl).build()
     }
 
+    /**
+     * Create currentWeather request using query parameters you specified.
+     *
+     * @param url the url which is necessary for serving currentWeather request.
+     * @param latitude
+     * @param longitude
+     *
+     * @return an object of [Request] which will be used for requesting with [OkHttpClient], null
+     * if anything happen during creation of url!
+     */
     fun provideCurrentWeatherRequest(
         url: String,
         latitude: Double,
@@ -63,6 +98,16 @@ internal object RequestProvider {
         return Request.Builder().url(httpUrl).build()
     }
 
+    /**
+     * Create 5 day 3 hour forecast request using query parameters you specified.
+     *
+     * @param url the url which is necessary for serving 5 day 3 hour forecast request.
+     * @param latitude
+     * @param longitude
+     *
+     * @return an object of [Request] which will be used for requesting with [OkHttpClient], null
+     * if anything happen during creation of url!
+     */
     fun provideFiveDayThreeHourForecastRequest(
         url: String,
         latitude: Double,

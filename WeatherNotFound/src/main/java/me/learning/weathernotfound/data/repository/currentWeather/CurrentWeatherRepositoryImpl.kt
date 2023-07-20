@@ -197,10 +197,7 @@ internal class CurrentWeatherRepositoryImpl(
                 } catch (jsonSyntaxException: JsonSyntaxException) {
                     responseCallback.invoke(
                         Failure(
-                            WeatherNotFoundError(
-                                exception = jsonSyntaxException,
-                                internalErrorMessage = "Failed to parse response into CurrentWeatherModel!"
-                            )
+                            WeatherNotFoundError(exception = jsonSyntaxException)
                         )
                     )
                     return

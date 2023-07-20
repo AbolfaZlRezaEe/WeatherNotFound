@@ -16,6 +16,17 @@ import me.learning.weathernotfound.domain.fiveDayThreeHourForecast.databaseModel
 import me.learning.weathernotfound.domain.fiveDayThreeHourForecast.databaseModels.WeatherInformationEntity
 import me.learning.weathernotfound.domain.reverseGeocoding.databaseModels.ReverseGeocodingEntity
 
+/**
+ * Provide all configurations for database of **WeatherNotFound** in the library.
+ * NOTE: **exportSchema** will be read from properties file which developer specified, default value will be false.
+ * 1. **[CurrentWeatherEntity]:** Store all responses of current weather information.
+ * 2. **[WeatherStatusEntity]:** Store the weather information of specific [CurrentWeatherEntity] object.
+ * 3. **[FiveDayThreeHourForecastEntity]:** Store all responses of 5 day 3 hour forecast information.
+ * 4. **[ForecastEntity]:** Store the forecast information of specific [FiveDayThreeHourForecastEntity] object.
+ * 5. **[WeatherInformationEntity]:** Store the weather information of specific [ForecastEntity] object.
+ * 6. **[ReverseGeocodingEntity]:** Store all responses of reverse geocoding information.
+ * 7. **[DirectGeocodingEntity]:** Store all responses of direct geocoding information.
+ */
 @Database(
     entities = [
         CurrentWeatherEntity::class,

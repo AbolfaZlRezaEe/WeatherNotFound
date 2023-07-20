@@ -17,6 +17,9 @@ internal object RepositoryProvider {
     private var currentWeatherRepository: CurrentWeatherRepository? = null
     private var fiveDayThreeHourForecastRepository: FiveDayThreeHourForecastRepository? = null
 
+    /**
+     * Create and provider singleton instance of ReverseGeocodingRepository
+     */
     @Synchronized
     fun getReverseRepository(): ReverseGeocodingRepository {
         if (reverseGeocodingRepository == null) {
@@ -31,6 +34,9 @@ internal object RepositoryProvider {
         return reverseGeocodingRepository!!
     }
 
+    /**
+     * Create and provider singleton instance of DirectGeocodingRepository
+     */
     @Synchronized
     fun getDirectRepository(): DirectGeocodingRepository {
         if (directGeocodingRepository == null) {
@@ -45,6 +51,9 @@ internal object RepositoryProvider {
         return directGeocodingRepository!!
     }
 
+    /**
+     * Create and provider singleton instance of CurrentWeatherRepository
+     */
     @Synchronized
     fun getCurrentWeatherRepository(): CurrentWeatherRepository {
         if (currentWeatherRepository == null) {
@@ -59,6 +68,9 @@ internal object RepositoryProvider {
         return currentWeatherRepository!!
     }
 
+    /**
+     * Create and provider singleton instance of FiveDayThreeHourForecastRepository
+     */
     @Synchronized
     fun getFiveDayThreeHourForecastRepository(): FiveDayThreeHourForecastRepository {
         if (fiveDayThreeHourForecastRepository == null) {
@@ -73,12 +85,40 @@ internal object RepositoryProvider {
         return fiveDayThreeHourForecastRepository!!
     }
 
+    /**
+     * @return the actual value state of [reverseGeocodingRepository]. In case you haven't called [getReverseRepository]
+     * function anywhere, this function will return null as the result. otherwise it can not be null!
+     *
+     * NOTE: you should not use this function in case of requesting or asking data from repository! this
+     * function just created for use case of calling dispose function.
+     */
     fun getActualReverseRepositoryValue(): ReverseGeocodingRepository? = reverseGeocodingRepository
 
+    /**
+     * @return the actual value state of [directGeocodingRepository]. In case you haven't called [getDirectRepository]
+     * function anywhere, this function will return null as the result. otherwise it can not be null!
+     *
+     * NOTE: you should not use this function in case of requesting or asking data from repository! this
+     * function just created for use case of calling dispose function.
+     */
     fun getActualDirectRepository(): DirectGeocodingRepository? = directGeocodingRepository
 
+    /**
+     * @return the actual value state of [currentWeatherRepository]. In case you haven't called [getCurrentWeatherRepository]
+     * function anywhere, this function will return null as the result. otherwise it can not be null!
+     *
+     * NOTE: you should not use this function in case of requesting or asking data from repository! this
+     * function just created for use case of calling dispose function.
+     */
     fun getActualCurrentWeatherRepository(): CurrentWeatherRepository? = currentWeatherRepository
 
+    /**
+     * @return the actual value state of [fiveDayThreeHourForecastRepository]. In case you haven't called [getFiveDayThreeHourForecastRepository]
+     * function anywhere, this function will return null as the result. otherwise it can not be null!
+     *
+     * NOTE: you should not use this function in case of requesting or asking data from repository! this
+     * function just created for use case of calling dispose function.
+     */
     fun getActualFiveDayThreeHourRepository(): FiveDayThreeHourForecastRepository? =
         fiveDayThreeHourForecastRepository
 }

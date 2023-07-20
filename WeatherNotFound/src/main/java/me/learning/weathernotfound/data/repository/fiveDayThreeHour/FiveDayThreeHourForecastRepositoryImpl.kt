@@ -51,7 +51,7 @@ internal class FiveDayThreeHourForecastRepositoryImpl(
                         fiveDayThreeHourDao.getForecastEntitiesListByFiveDayForecastId(
                             fiveDayForecastId = fiveDayCacheResponse.id!!
                         )
-                    if (!forecastCacheResponse.isNullOrEmpty()) {
+                    if (forecastCacheResponse.isNotEmpty()) {
                         if (fiveDayCacheResponse.updatedAt.halfDayPassed()) {
                             // Cache information is no longer valid, should be updated with network request!
                             startNetworkRequest(

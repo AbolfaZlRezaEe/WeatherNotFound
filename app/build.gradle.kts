@@ -37,5 +37,5 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:$constraintLayoutVersion")
 
 
-    implementation(project(":WeatherNotFound"))
+    implementation("com.github.AbolfaZlRezaEe:WeatherNotFound:0.0.1")
 }

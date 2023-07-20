@@ -6,6 +6,9 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.TimeUnit
 
+/**
+ * Provide and manage everything that are related to the network interface in library.
+ */
 internal object NetworkInterfaceProvider {
     private const val OKHTTP_NORMAL_READ_TIMEOUT = 5L // Seconds
     private const val OKHTTP_NORMAL_CONNECT_TIMEOUT = 5L // Seconds
@@ -20,6 +23,12 @@ internal object NetworkInterfaceProvider {
 
     const val GEOCODING_LIMIT_REQUEST_PARAMETER_VALUE = 10
 
+    /**
+     * Instantiate singleton instance of [OkHttpClient] with default configuration that library specified before.
+     *
+     * @param httpLoggingLevel specify the level of logging for requests.
+     * default value will be HttpLoggingInterceptor.Level.NONE
+     */
     @Synchronized
     fun init(
         httpLoggingLevel: HttpLoggingInterceptor.Level = OKHTTP_NORMAL_LOGGING_INTERCEPTOR
@@ -34,6 +43,13 @@ internal object NetworkInterfaceProvider {
         }
     }
 
+    /**
+     * Instantiate singleton instance of [OkHttpClient] with custom configuration that developer specified.
+     *
+     * @param [httpLoggingLevel] specify the level of logging for requests.
+     * @param [readTimeoutInSeconds] specify the read timeout for requests.
+     * @param [connectTimeoutInSeconds] specify the connect timeout for requests.
+     */
     @Synchronized
     fun initManually(
         httpLoggingLevel: HttpLoggingInterceptor.Level?,
@@ -58,6 +74,9 @@ internal object NetworkInterfaceProvider {
             .build()
     }
 
+    /**
+     * Instantiate singleton instance of Gson converter for requests.
+     */
     @Synchronized
     fun initGsonConverter() {
         if (GSON_INSTANCE == null) {
@@ -65,6 +84,9 @@ internal object NetworkInterfaceProvider {
         }
     }
 
+    /**
+     * @return the instance of Gson created before using [initGsonConverter].
+     */
     fun getGsonConverter(): Gson {
         if (GSON_INSTANCE == null) {
             initGsonConverter()
@@ -72,6 +94,10 @@ internal object NetworkInterfaceProvider {
         return GSON_INSTANCE!!
     }
 
+    /**
+     * @return the instance of **Custom OkHttpClient** which created before using [initManually],
+     * otherwise it will return the **Normal OkHttpClient** even if it didn't instantiate before!
+     */
     fun getOkHttpClient(): OkHttpClient {
         return if (OKHTTP_CLIENT_CUSTOM_INSTANCE != null) {
             OKHTTP_CLIENT_CUSTOM_INSTANCE!!
@@ -83,12 +109,20 @@ internal object NetworkInterfaceProvider {
         }
     }
 
+    /**
+     * @param httpLoggingLevel the level you want for logging requests.
+     *
+     * @return create and return a [HttpLoggingInterceptor] with the level you specified.
+     */
     private fun getLoggingInterceptor(
         httpLoggingLevel: HttpLoggingInterceptor.Level
     ): HttpLoggingInterceptor {
         return HttpLoggingInterceptor().setLevel(level = httpLoggingLevel)
     }
 
+    /**
+     * @return an instance of [WeatherNotFoundInterceptor].
+     */
     private fun getWeatherNotFoundInterceptor(): WeatherNotFoundInterceptor =
         WeatherNotFoundInterceptor()
 }

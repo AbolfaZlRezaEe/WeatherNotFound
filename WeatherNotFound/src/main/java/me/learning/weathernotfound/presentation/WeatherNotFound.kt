@@ -14,6 +14,7 @@ import me.learning.weathernotfound.data.repository.ifSuccessful
 import me.learning.weathernotfound.data.repository.provider.RepositoryProvider
 import me.learning.weathernotfound.domain.currentWeather.presentationModels.CurrentWeatherModel
 import me.learning.weathernotfound.domain.fiveDayThreeHourForecast.presentationModels.FiveDayThreeHourForecastModel
+import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 
 class WeatherNotFound private constructor() {
@@ -26,6 +27,9 @@ class WeatherNotFound private constructor() {
         private var INSTANCE: WeatherNotFound? = null
         private var initCalled = false
 
+        /**
+         * @return the singleton instance of WeatherNotFound
+         */
         @Synchronized
         fun getInstance(): WeatherNotFound {
             if (INSTANCE == null) {
@@ -35,6 +39,19 @@ class WeatherNotFound private constructor() {
         }
     }
 
+    /**
+     * Initialize the network and local interface of WeatherNotFound library.
+     *
+     * @param context use for checking Internet permission and creating local interface.
+     * @param httpLoggingLevel use for setting into the WeatherNotFound [OkHttpClient]. if you don't
+     * specify this variable, it will be [HttpLoggingInterceptor.Level.NONE].
+     * @param readTimeoutInSeconds use for setting into the WeatherNotFound [OkHttpClient]. if you don't
+     * specify this variable, it will be **5 Seconds**.
+     * @param connectTimeoutInSeconds use for setting into the WeatherNotFound [OkHttpClient]. if you don't
+     * specify this variable, it will be **5 Seconds**.
+     * @param cacheMechanismEnabled if this variable set to **true**, database will be created, otherwise
+     * caching system will be disabled!
+     */
     fun init(
         context: Context,
         httpLoggingLevel: HttpLoggingInterceptor.Level? = null,
@@ -69,12 +86,23 @@ class WeatherNotFound private constructor() {
         validateOpenWeatherApiKey {}
     }
 
+    /**
+     * By calling this, every request and operation in WeatherNotFound will be stopped!
+     */
     fun destroy() {
         RepositoryProvider.getActualFiveDayThreeHourRepository()?.dispose()
         RepositoryProvider.getActualDirectRepository()?.dispose()
         RepositoryProvider.getActualCurrentWeatherRepository()?.dispose()
     }
 
+    /**
+     * Fetch Current Weather information for given [cityName].
+     *
+     * NOTE: The request will be canceled if your ApiKey is not valid!
+     *
+     * @param cityName
+     * @param weatherNotFoundCallback the result of the request
+     */
     fun getCurrentWeatherInformation(
         cityName: String,
         weatherNotFoundCallback: WeatherNotFoundCallback<WeatherNotFoundResponse<CurrentWeatherModel>, WeatherNotFoundError>,
@@ -109,6 +137,15 @@ class WeatherNotFound private constructor() {
             }
     }
 
+    /**
+     * Fetch Current Weather information for given [latitude] and [longitude].
+     *
+     * NOTE: The request will be canceled if your ApiKey is not valid!
+     *
+     * @param latitude
+     * @param longitude
+     * @param weatherNotFoundCallback the result of the request
+     */
     fun getCurrentWeatherInformation(
         latitude: Double,
         longitude: Double,
@@ -146,6 +183,14 @@ class WeatherNotFound private constructor() {
         }
     }
 
+    /**
+     * Fetch 5 day 3 hour information for given [cityName].
+     *
+     * NOTE: The request will be canceled if your ApiKey is not valid!
+     *
+     * @param cityName
+     * @param weatherNotFoundCallback the result of the request
+     */
     fun getFiveDayThreeHourForecastInformation(
         cityName: String,
         weatherNotFoundCallback: WeatherNotFoundCallback<WeatherNotFoundResponse<FiveDayThreeHourForecastModel>, WeatherNotFoundError>,
@@ -180,6 +225,15 @@ class WeatherNotFound private constructor() {
             }
     }
 
+    /**
+     * Fetch 5 day 3 hour information for given [latitude] and [longitude].
+     *
+     * NOTE: The request will be canceled if your ApiKey is not valid!
+     *
+     * @param latitude
+     * @param longitude
+     * @param weatherNotFoundCallback the result of the request
+     */
     fun getFiveDayThreeHourForecastInformation(
         latitude: Double,
         longitude: Double,
@@ -218,16 +272,30 @@ class WeatherNotFound private constructor() {
             }
     }
 
+    /**
+     * Invalidate and clear all cached information of Current Weather requests. also, it will
+     * invalidate and clear all direct geocoding information as well.
+     */
     fun invalidateCurrentWeatherCache() {
         RepositoryProvider.getCurrentWeatherRepository().invalidateCache()
         RepositoryProvider.getDirectRepository().invalidateCache()
     }
 
+    /**
+     * Invalidate and clear all cached information of 5 day 3 hour requests. also, it will
+     * invalidate and clear all direct geocoding information as well.
+     */
     fun invalidateFiveDayThreeHourForecastCache() {
         RepositoryProvider.getFiveDayThreeHourForecastRepository().invalidateCache()
         RepositoryProvider.getDirectRepository().invalidateCache()
     }
 
+    /**
+     * Validate your Apikey using a sample request to OpenWeatherMap APIs.
+     *
+     * @param validationResult emit the result with true or false. true if api key is valid or request
+     * failed for any reason, false if HttpCode of request was 401.
+     */
     private fun validateOpenWeatherApiKey(validationResult: (isRegistered: Boolean) -> Unit) {
         RepositoryProvider.getCurrentWeatherRepository()
             .validateOpenWeatherApiKeyByPingARequest { result ->

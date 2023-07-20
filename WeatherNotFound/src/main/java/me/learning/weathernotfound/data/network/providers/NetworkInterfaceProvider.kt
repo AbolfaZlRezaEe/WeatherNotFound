@@ -27,7 +27,7 @@ internal object NetworkInterfaceProvider {
      * Instantiate singleton instance of [OkHttpClient] with default configuration that library specified before.
      *
      * @param httpLoggingLevel specify the level of logging for requests.
-     * default value will be HttpLoggingInterceptor.Level.NONE
+     * default value will be [HttpLoggingInterceptor.Level.NONE]
      */
     @Synchronized
     fun init(

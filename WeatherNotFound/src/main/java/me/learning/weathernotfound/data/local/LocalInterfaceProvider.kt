@@ -16,7 +16,7 @@ internal object LocalInterfaceProvider {
     private var cacheMechanism = false
 
     /**
-     * With calling this, [LocalInterfaceProvider] will instantiate WeatherNotFound database.
+     * With calling this, [LocalInterfaceProvider] will instantiate singleton instance of WeatherNotFound database.
      * @param context used for build and access to the database.
      */
     @Synchronized

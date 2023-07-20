@@ -1,5 +1,8 @@
 package me.learning.weathernotfound.data.network.providers
 
+/**
+ * Provide all URLs we use in **WeatherNotFound**.
+ */
 internal object UrlProvider {
     private const val OPEN_WEATHER_BASE_URL = "https://api.openweathermap.org"
 

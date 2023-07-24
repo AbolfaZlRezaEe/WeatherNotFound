@@ -344,7 +344,7 @@ class WeatherNotFound private constructor() {
         if (!isInitCalled()) {
             throw IllegalStateException(
                 "You didn't call init() function of WeatherNotFound! " +
-                        "Make sure you call this function on your Application class!"
+                        "Make sure you call this function before using other methods."
             )
         }
     }

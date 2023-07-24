@@ -10,7 +10,7 @@ Did you ever think about having an Android application that shows Weather inform
 
 **WeatherNotFound** provides everything you need to access the latest status of weather all over the world. also, it will provide you with cache functionalities for a better experience in your application.
 
-## How WeatherNotFound works?
+## Using WeatherNotFound in your project
 
 To use WeatherNotFound library, you should follow the steps below:
 
@@ -40,28 +40,7 @@ dependencies {
 }
 ```
 
-3. Before syncing the project, you should follow one more step! in the root directory of your android project, you should create a file and name it `weatherNotFound.properties`. after creating, open it and add the following parameters to the file:
-
-- `OpenWeatherApiKey`: This is the API key that you receive from [OpenWeatherMap](https://openweathermap.org/). If you don't have any, click [here](https://home.openweathermap.org/users/sign_up) and follow the steps.
-
-> NOTE: When you create your APIKey, it takes time to enable it. if you enter it into the library and faced with an APIKey error log, you should wait some minutes(or hours in some cases) and then try again!
-
-- `OpenWeatherResponseLanguage`: This is an optional parameter you can specify for the library. With this, you tell the library which language you choose for OpenWeatherMap responses. If you don't define this parameter, it will be `en` as the default value!
-- `OpenWeatherResponseUnit`: This is another optional parameter you can specify for the library. With this, you tell the library which unit you want to receive the weather statuses. If you don't define this parameter, it will be `metric` as the default value!
-- `DatabaseSchemaShouldEnable`: Also This is another optional parameter you can specify for the library. With this, you tell the library whether you want to export the schema of the database or not. If you define this and set it to `true`, the schema of the database will be generated into `{projectDir}/schemas` directory. If you don't define this parameter, it will be `false` as the default value!
-
-> For more information about what's going on, you can check [OpenWeatherMap](https://openweathermap.org/)!
-
-After defining all the above parameters, you will end up something like this:
-
-```properties
-OpenWeatherApiKey=your_api_key
-OpenWeatherResponseLanguage=en
-OpenWeatherResponseUnit=metric
-DatabaseSchemaShouldEnable=false
-```
-
-4. After you followed the three steps above, you should sync the project and wait for Gradle to download all dependencies it needs. when syncing is finished, in your `Application` class, you should init the library with the parameters you want. the result will be something like this(for more information you can check the code and see documentation there): 
+3. After you followed the two steps above, you should sync the project and wait for Gradle to download all dependencies it needs. when syncing is finished, in your `Application` class, you should init the library with the parameters you want. the result will be something like this(for more information you can check the code and see documentation there): 
 
 ```kotlin
 class BaseApplication : Application() {
@@ -71,6 +50,9 @@ class BaseApplication : Application() {
 
         WeatherNotFound.getInstance().init(
             context = this,
+            openWeatherApiKey = /* Your value */,
+            openWeatherResponseLanguage = /* Your value */,
+            openWeatherResponseUnit = /* Your value */,
             httpLoggingLevel = HttpLoggingInterceptor.Level.BODY,
             cacheMechanismEnabled = true,
             readTimeoutInSeconds = /* Your value */,
@@ -109,6 +91,8 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
+> For more information you can see [Sample Application](https://github.com/AbolfaZlRezaEe/WeatherNotFound/tree/develop/app)!
+
 ## WeatherNotFound Errors
 
 In some situations, WeatherNotFound will log several errors which tells you what the problem is. for better understanding, we described the reason for each error in following section:
@@ -120,8 +104,6 @@ In some situations, WeatherNotFound will log several errors which tells you what
 - `Validation failed! Your Api key is not working...`: This is a log that you might see in your logcat section of Android Studio. if you saw this, you should check `weatherNotFound.properties` file and make sure you specified the needed parameter for ApiKey section(if you don't know how, check [here](https://github.com/AbolfaZlRezaEe/WeatherNotFound/tree/develop#how-weathernotfound-works)). if you specified and you still have this log, you should check the [OpenWeatherMap](https://openweathermap.org/) website and make sure your ApiKey is enabled.
 
 > Don't forget that if you just created your Apikey, it takes some time to enabling it from [OpenWeatherMap](https://openweathermap.org/). So wait some minutes and then try again.
-
-- `weatherNotFound.properties didn't exits!! continuing...`: This is a compile-time error log which you might see! if you saw this during compile-time in the build tab of Android Studio, make sure you created `weatherNotFound.properties` successfully!
 
 ## Contribution
 Make me happy by contributing to this project! You can help me fix bugs, add features and resolve issues so WeatherNotFound can grow.

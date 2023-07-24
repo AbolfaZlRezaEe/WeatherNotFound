@@ -40,29 +40,14 @@ dependencies {
 }
 ```
 
-3. After you followed the two steps above, you should sync the project and wait for Gradle to download all dependencies it needs. when syncing is finished, in your `Application` class, you should init the library with the parameters you want. the result will be something like this(for more information you can check the code and see documentation there): 
-
-```kotlin
-class BaseApplication : Application() {
-
-    override fun onCreate() {
-        super.onCreate()
-
-        WeatherNotFound.getInstance().init(
-            context = this,
-            openWeatherApiKey = /* Your value */,
-            openWeatherResponseLanguage = /* Your value */,
-            openWeatherResponseUnit = /* Your value */,
-            httpLoggingLevel = HttpLoggingInterceptor.Level.BODY,
-            cacheMechanismEnabled = true,
-            readTimeoutInSeconds = /* Your value */,
-            connectTimeoutInSeconds =  /* Your value */
-        )
-    }
-}
+3. After you followed the two steps above, you should sync the project and wait for Gradle to download all dependencies it needs. when syncing is finished, you should provide OpenWeather api key in `AndroidManifest`:
+```xml
+<meta-data
+    android:name="weather_not_found.open_weather_token"
+    android:value="YOUR_KEY" />
 ```
 
-5. Finally this is the time you can use the library! in your activity, you can use [OpenWeatherMap](https://openweathermap.org/) services like this:
+4. Finally this is the time you can use the library! in your activity, you can use [OpenWeatherMap](https://openweathermap.org/) services like this:
 
 > NOTE: For now, we just have [CurrentWeather Api](https://openweathermap.org/current) and [5 Day 3 Hour Forecast](https://openweathermap.org/forecast5)! Other APIs will be added as soon as possible.
 
@@ -90,6 +75,40 @@ class MainActivity : AppCompatActivity() {
     }
 }
 ```
+
+
+## More Configurations
+
+WeatherNotFound initialized itself by a default configuration in application's startup automatically.
+If you want to override them you should disable `auto_init` by providing it in AndroidManifest:
+
+```xml
+<meta-data
+    android:name="weather_not_found.auto_init"
+    android:value="false" />
+```
+
+And then initialize it with your configurations (Recommended place is in Application class):
+
+```kotlin
+class BaseApplication : Application() {
+
+    override fun onCreate() {
+        super.onCreate()
+
+        WeatherNotFound.getInstance().init(
+            context = this,
+            openWeatherResponseLanguage = /* Your value */,
+            openWeatherResponseUnit = /* Your value */,
+            httpLoggingLevel = HttpLoggingInterceptor.Level.BODY,
+            cacheMechanismEnabled = true,
+            readTimeoutInSeconds = /* Your value */,
+            connectTimeoutInSeconds =  /* Your value */
+        )
+    }
+}
+```
+
 
 > For more information you can see [Sample Application](https://github.com/AbolfaZlRezaEe/WeatherNotFound/tree/develop/app)!
 

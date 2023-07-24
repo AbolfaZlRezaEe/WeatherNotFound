@@ -22,7 +22,16 @@ class WeatherNotFound private constructor() {
     private var openWeatherApiKeyIsRegistered = true
 
     companion object {
+        internal lateinit var OPEN_WEATHER_API_KEY: String
+        internal lateinit var OPEN_WEATHER_RESPONSE_LANGUAGE: String
+        internal lateinit var OPEN_WEATHER_RESPONSE_UNIT: String
+        internal lateinit var OPEN_WEATHER_RESPONSE_FORMAT: String
+
         private const val TAG = "WeatherNotFound"
+
+        private const val HEADER_VALUE_DEFAULT_RESPONSE_FORMAT = "json"
+        private const val HEADER_VALUE_DEFAULT_LANGUAGE = "en"
+        private const val HEADER_VALUE_DEFAULT_RESPONSE_UNIT = "metric"
 
         private var INSTANCE: WeatherNotFound? = null
         private var initCalled = false
@@ -43,6 +52,9 @@ class WeatherNotFound private constructor() {
      * Initialize the network and local interface of WeatherNotFound library.
      *
      * @param context use for checking Internet permission and creating local interface.
+     * @param openWeatherApiKey
+     * @param openWeatherResponseLanguage default value will be **en**
+     * @param openWeatherResponseUnit default value will be **metric**
      * @param httpLoggingLevel use for setting into the WeatherNotFound [OkHttpClient]. if you don't
      * specify this variable, it will be [HttpLoggingInterceptor.Level.NONE].
      * @param readTimeoutInSeconds use for setting into the WeatherNotFound [OkHttpClient]. if you don't
@@ -54,6 +66,9 @@ class WeatherNotFound private constructor() {
      */
     fun init(
         context: Context,
+        openWeatherApiKey: String,
+        openWeatherResponseLanguage: String = HEADER_VALUE_DEFAULT_LANGUAGE,
+        openWeatherResponseUnit: String = HEADER_VALUE_DEFAULT_RESPONSE_UNIT,
         httpLoggingLevel: HttpLoggingInterceptor.Level? = null,
         readTimeoutInSeconds: Long? = null,
         connectTimeoutInSeconds: Long? = null,
@@ -62,6 +77,12 @@ class WeatherNotFound private constructor() {
         checkInternetPermission(context)
 
         setInitCalledState(true)
+
+        OPEN_WEATHER_API_KEY = openWeatherApiKey
+        // Todo: For now, SDK can just support Json responses! Other formats will be added soon.
+        OPEN_WEATHER_RESPONSE_FORMAT = HEADER_VALUE_DEFAULT_RESPONSE_FORMAT
+        OPEN_WEATHER_RESPONSE_LANGUAGE = openWeatherResponseLanguage
+        OPEN_WEATHER_RESPONSE_UNIT = openWeatherResponseUnit
 
         LocalInterfaceProvider.setCacheMechanism(cacheMechanismEnabled)
         if (cacheMechanismEnabled) {

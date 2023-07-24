@@ -11,6 +11,9 @@ class BaseApplication : Application() {
 
         WeatherNotFound.getInstance().init(
             context = this,
+            openWeatherApiKey = BuildConfig.OpenWeatherApiKey,
+            openWeatherResponseLanguage = BuildConfig.OpenWeatherResponseLanguage,
+            openWeatherResponseUnit = BuildConfig.OpenWeatherResponseUnit,
             httpLoggingLevel = HttpLoggingInterceptor.Level.BODY,
             cacheMechanismEnabled = true
         )

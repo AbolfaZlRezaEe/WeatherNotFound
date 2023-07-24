@@ -48,6 +48,7 @@ dependencies {
     val appCompatVersion = "1.6.1"
 
     implementation("androidx.appcompat:appcompat:$appCompatVersion")
+    implementation("androidx.startup:startup-runtime:1.1.1")
 
     // Network Dependencies
     val gsonConverterVersion = "2.10.1"

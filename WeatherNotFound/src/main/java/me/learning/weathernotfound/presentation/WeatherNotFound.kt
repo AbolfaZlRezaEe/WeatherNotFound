@@ -30,6 +30,7 @@ class WeatherNotFound private constructor() {
         private const val TAG = "WeatherNotFound"
 
         private const val OPEN_WEATHER_TOKEN_MANIFEST_KEY = "weather_not_found.open_weather_token"
+        private const val AUT_INIT_MANIFEST_KEY = "weather_not_found.auto_init"
 
         private const val HEADER_VALUE_DEFAULT_RESPONSE_FORMAT = "json"
         private const val HEADER_VALUE_DEFAULT_LANGUAGE = "en"
@@ -112,6 +113,19 @@ class WeatherNotFound private constructor() {
         }
 
         validateOpenWeatherApiKey {}
+
+        Log.i(TAG, "initialized completely")
+    }
+
+    fun tryAutoInit(context: Context) {
+        val canAutoInit = context.packageManager
+            .getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
+            .metaData
+            .getBoolean(AUT_INIT_MANIFEST_KEY, true)
+
+        if (canAutoInit.not()) return
+
+        init(context)
     }
 
     /**
@@ -350,8 +364,8 @@ class WeatherNotFound private constructor() {
     private fun validateInitFunction() {
         if (!isInitCalled()) {
             throw IllegalStateException(
-                "You didn't call init() function of WeatherNotFound! " +
-                        "Make sure you call this function before using other methods."
+                "WeatherNotFound is not initialized." +
+                        " Make sure you call init() function before using other methods when you disabled auto-init."
             )
         }
     }

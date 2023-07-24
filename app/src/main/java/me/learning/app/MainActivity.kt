@@ -1,6 +1,7 @@
 package me.learning.app
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 import me.learning.weathernotfound.domain.currentWeather.presentationModels.CurrentWeatherModel
@@ -65,6 +66,7 @@ class MainActivity : AppCompatActivity() {
                 WeatherNotFoundCallback<WeatherNotFoundResponse<CurrentWeatherModel>, WeatherNotFoundError> {
                 override fun onSuccess(response: WeatherNotFoundResponse<CurrentWeatherModel>) {
                     // Do whatever you want...
+                    Toast.makeText(this@MainActivity, "$response", Toast.LENGTH_SHORT).show()
                 }
 
                 override fun onError(error: WeatherNotFoundError) {
@@ -81,6 +83,7 @@ class MainActivity : AppCompatActivity() {
                 WeatherNotFoundCallback<WeatherNotFoundResponse<CurrentWeatherModel>, WeatherNotFoundError> {
                 override fun onSuccess(response: WeatherNotFoundResponse<CurrentWeatherModel>) {
                     // Do whatever you want...
+                    Toast.makeText(this@MainActivity, "$response", Toast.LENGTH_SHORT).show()
                 }
 
                 override fun onError(error: WeatherNotFoundError) {
@@ -98,6 +101,7 @@ class MainActivity : AppCompatActivity() {
                 WeatherNotFoundCallback<WeatherNotFoundResponse<FiveDayThreeHourForecastModel>, WeatherNotFoundError> {
                 override fun onSuccess(response: WeatherNotFoundResponse<FiveDayThreeHourForecastModel>) {
                     // Do whatever you want...
+                    Toast.makeText(this@MainActivity, "$response", Toast.LENGTH_SHORT).show()
                 }
 
                 override fun onError(error: WeatherNotFoundError) {
@@ -114,6 +118,7 @@ class MainActivity : AppCompatActivity() {
                 WeatherNotFoundCallback<WeatherNotFoundResponse<FiveDayThreeHourForecastModel>, WeatherNotFoundError> {
                 override fun onSuccess(response: WeatherNotFoundResponse<FiveDayThreeHourForecastModel>) {
                     // Do whatever you want...
+                    Toast.makeText(this@MainActivity, "$response", Toast.LENGTH_SHORT).show()
                 }
 
                 override fun onError(error: WeatherNotFoundError) {

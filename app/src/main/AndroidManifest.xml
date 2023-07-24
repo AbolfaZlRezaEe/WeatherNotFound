@@ -21,6 +21,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="weather_not_found.open_weather_token"
+            android:value="${WNF_TOKEN}" />
     </application>
 
 </manifest>

@@ -27,10 +27,8 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        buildConfigField(
-            type = "String",
-            name = propertiesApiKeyName,
-            value = "\"${getPropertyFromPropertiesFile<String>(propertiesApiKeyName)}\""
+        manifestPlaceholders += mapOf(
+            "WNF_TOKEN" to getPropertyFromPropertiesFile<String>(propertiesApiKeyName).orEmpty()
         )
 
         buildConfigField(

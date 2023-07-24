@@ -29,6 +29,8 @@ class WeatherNotFound private constructor() {
 
         private const val TAG = "WeatherNotFound"
 
+        private const val OPEN_WEATHER_TOKEN_MANIFEST_KEY = "weather_not_found.open_weather_token"
+
         private const val HEADER_VALUE_DEFAULT_RESPONSE_FORMAT = "json"
         private const val HEADER_VALUE_DEFAULT_LANGUAGE = "en"
         private const val HEADER_VALUE_DEFAULT_RESPONSE_UNIT = "metric"
@@ -52,7 +54,6 @@ class WeatherNotFound private constructor() {
      * Initialize the network and local interface of WeatherNotFound library.
      *
      * @param context use for checking Internet permission and creating local interface.
-     * @param openWeatherApiKey
      * @param openWeatherResponseLanguage default value will be **en**
      * @param openWeatherResponseUnit default value will be **metric**
      * @param httpLoggingLevel use for setting into the WeatherNotFound [OkHttpClient]. if you don't
@@ -66,7 +67,6 @@ class WeatherNotFound private constructor() {
      */
     fun init(
         context: Context,
-        openWeatherApiKey: String,
         openWeatherResponseLanguage: String = HEADER_VALUE_DEFAULT_LANGUAGE,
         openWeatherResponseUnit: String = HEADER_VALUE_DEFAULT_RESPONSE_UNIT,
         httpLoggingLevel: HttpLoggingInterceptor.Level? = null,
@@ -78,7 +78,14 @@ class WeatherNotFound private constructor() {
 
         setInitCalledState(true)
 
-        OPEN_WEATHER_API_KEY = openWeatherApiKey
+        OPEN_WEATHER_API_KEY = context.packageManager
+            .getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
+            .metaData
+            .getString(OPEN_WEATHER_TOKEN_MANIFEST_KEY)
+            ?: throw IllegalArgumentException(
+                "$OPEN_WEATHER_TOKEN_MANIFEST_KEY doesn't found in manifest. " +
+                        "Please provide it as metadata in your application manifest"
+            )
         // Todo: For now, SDK can just support Json responses! Other formats will be added soon.
         OPEN_WEATHER_RESPONSE_FORMAT = HEADER_VALUE_DEFAULT_RESPONSE_FORMAT
         OPEN_WEATHER_RESPONSE_LANGUAGE = openWeatherResponseLanguage

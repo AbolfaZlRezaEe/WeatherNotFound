@@ -62,7 +62,7 @@ class BaseApplication : Application() {
 }
 ```
 
-5. Finally this is the time you can use the library! in your activity, you can use [OpenWeatherMap](https://openweathermap.org/) services like this:
+4. Finally this is the time you can use the library! in your activity, you can use [OpenWeatherMap](https://openweathermap.org/) services like this:
 
 > NOTE: For now, we just have [CurrentWeather Api](https://openweathermap.org/current) and [5 Day 3 Hour Forecast](https://openweathermap.org/forecast5)! Other APIs will be added as soon as possible.
 

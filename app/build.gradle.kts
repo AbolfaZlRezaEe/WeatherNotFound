@@ -6,8 +6,6 @@ val propertiesConfigurationFilePath = "${projectDir.path}\\$propertiesConfigurat
 val propertiesApiKeyName = "OpenWeatherApiKey"
 val propertiesResponseLanguage = "OpenWeatherResponseLanguage"
 val propertiesResponseUnit = "OpenWeatherResponseUnit"
-val propertiesResponseFormat = "OpenWeatherResponseFormat"
-val propertiesDatabaseExportSchemaEnabled = "DatabaseSchemaShouldEnable"
 
 // BuildConfig Default Values
 val propertiesDatabaseExportSchemaEnabledDefaultValue = "false"
@@ -45,20 +43,6 @@ android {
             name = propertiesResponseUnit,
             value = "\"${getPropertyFromPropertiesFile<String>(propertiesResponseUnit)}\""
         )
-
-        buildConfigField(
-            type = "String",
-            name = propertiesResponseFormat,
-            value = "\"${getPropertyFromPropertiesFile<String>(propertiesResponseFormat)}\""
-        )
-
-        buildConfigField(
-            type = "boolean",
-            name = propertiesDatabaseExportSchemaEnabled,
-            value = getPropertyFromPropertiesFile<String>(propertiesDatabaseExportSchemaEnabled)
-                ?: propertiesDatabaseExportSchemaEnabledDefaultValue
-        )
-
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17

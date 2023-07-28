@@ -101,7 +101,7 @@ In some situations, WeatherNotFound will log several errors which tells you what
 
 - `You didn't call init() function of WeatherNotFound!`: This run-time exception will occur when you don't call the `init()` function of **WeatherNotFound** library in your `Application` class. make sure you call it!
 
-- `Validation failed! Your Api key is not working...`: This is a log that you might see in your logcat section of Android Studio. if you saw this, you should check `weatherNotFound.properties` file and make sure you specified the needed parameter for ApiKey section(if you don't know how, check [here](https://github.com/AbolfaZlRezaEe/WeatherNotFound/tree/develop#how-weathernotfound-works)). if you specified and you still have this log, you should check the [OpenWeatherMap](https://openweathermap.org/) website and make sure your ApiKey is enabled.
+- `Validation failed! Your Api key is not working...`: This is a log that you might see in your logcat section of Android Studio. if you are running [Sample Application](https://github.com/AbolfaZlRezaEe/WeatherNotFound/tree/develop/app) and saw this, you should check `README.md` file of Sample Application module and follow the steps correctly. If you are using the library in your own application, please make sure you followed [these instructions](https://github.com/AbolfaZlRezaEe/WeatherNotFound/tree/sample_app_readme#using-weathernotfound-in-your-project) correctly!
 
 > Don't forget that if you just created your Apikey, it takes some time to enabling it from [OpenWeatherMap](https://openweathermap.org/). So wait some minutes and then try again.
 

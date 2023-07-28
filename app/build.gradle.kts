@@ -2,15 +2,14 @@ import java.util.Properties
 
 // BuildConfig Keys
 val propertiesConfigurationFileName = "weatherNotFound.properties"
+val propertiesConfigurationFilePath = "${projectDir.path}\\$propertiesConfigurationFileName"
 val propertiesApiKeyName = "OpenWeatherApiKey"
 val propertiesResponseLanguage = "OpenWeatherResponseLanguage"
 val propertiesResponseUnit = "OpenWeatherResponseUnit"
-val propertiesResponseFormat = "OpenWeatherResponseFormat"
-val propertiesDatabaseExportSchemaEnabled = "DatabaseSchemaShouldEnable"
 
 // BuildConfig Default Values
-
 val propertiesDatabaseExportSchemaEnabledDefaultValue = "false"
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -44,19 +43,6 @@ android {
             name = propertiesResponseUnit,
             value = "\"${getPropertyFromPropertiesFile<String>(propertiesResponseUnit)}\""
         )
-
-        buildConfigField(
-            type = "String",
-            name = propertiesResponseFormat,
-            value = "\"${getPropertyFromPropertiesFile<String>(propertiesResponseFormat)}\""
-        )
-
-        buildConfigField(
-            type = "boolean",
-            name = propertiesDatabaseExportSchemaEnabled,
-            value = getPropertyFromPropertiesFile<String>(propertiesDatabaseExportSchemaEnabled) ?: propertiesDatabaseExportSchemaEnabledDefaultValue
-        )
-
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -93,7 +79,7 @@ fun <T> getPropertyFromPropertiesFile(key: String): T? {
 }
 
 fun getPropertiesFile(): Properties? {
-    val propertiesFile = File(propertiesConfigurationFileName)
+    val propertiesFile = File(propertiesConfigurationFilePath)
     if (propertiesFile.exists() && propertiesFile.isFile) {
         val file = Properties().apply {
             load(propertiesFile.inputStream())
@@ -104,7 +90,7 @@ fun getPropertiesFile(): Properties? {
 }
 
 fun propertiesFileExist(): Boolean {
-    val propertiesFile = File(propertiesConfigurationFileName)
+    val propertiesFile = File(propertiesConfigurationFilePath)
     return propertiesFile.exists() && propertiesFile.isFile
 }
 

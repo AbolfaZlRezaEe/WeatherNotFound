@@ -34,7 +34,8 @@ class WeatherNotFound private constructor() {
         private const val HEADER_VALUE_DEFAULT_RESPONSE_UNIT = "metric"
 
         private var INSTANCE: WeatherNotFound? = null
-        private var initCalled = false
+        private var manualInitCalled = false
+        private var autoInitCalled = false
 
         /**
          * @return the singleton instance of WeatherNotFound
@@ -74,9 +75,11 @@ class WeatherNotFound private constructor() {
         connectTimeoutInSeconds: Long? = null,
         cacheMechanismEnabled: Boolean = false,
     ) {
+        checkAutoInitCalledOrNot()
+
         checkInternetPermission(context)
 
-        setInitCalledState(true)
+        setInitCalledState()
 
         OPEN_WEATHER_API_KEY = openWeatherApiKey
         // Todo: For now, SDK can just support Json responses! Other formats will be added soon.
@@ -105,6 +108,20 @@ class WeatherNotFound private constructor() {
         }
 
         validateOpenWeatherApiKey {}
+    }
+
+    /**
+     * Initialize library by [AutoInitializer] if user enable it in [Manifest] file.
+     *
+     * @param context
+     * @param openWeatherApiKey which provided in the [Manifest] file.
+     */
+    internal fun autoInit(
+        context: Context,
+        openWeatherApiKey: String
+    ) {
+        init(context = context, openWeatherApiKey = openWeatherApiKey)
+        setAutoInitCalled()
     }
 
     /**
@@ -332,19 +349,37 @@ class WeatherNotFound private constructor() {
     }
 
     @Synchronized
-    private fun setInitCalledState(isCalled: Boolean) {
-        initCalled = isCalled
+    private fun setInitCalledState() {
+        manualInitCalled = true
     }
 
     private fun isInitCalled(): Boolean {
-        return initCalled
+        return manualInitCalled
     }
 
     private fun validateInitFunction() {
         if (!isInitCalled()) {
             throw IllegalStateException(
-                "You didn't call init() function of WeatherNotFound! " +
-                        "Make sure you call this function on your Application class!"
+                "I think you forgot to initialize WeatherNotFound... Please make sure you followed" +
+                        "the initialization instructions correctly!"
+            )
+        }
+    }
+
+    @Synchronized
+    private fun setAutoInitCalled() {
+        autoInitCalled = true
+    }
+
+    private fun isAutoInitCalled():Boolean{
+        return autoInitCalled
+    }
+
+    private fun checkAutoInitCalledOrNot() {
+        if (isAutoInitCalled()) {
+            throw IllegalStateException(
+                "You are not allowed to call init() function if auto-init mechanism enabled! " +
+                        "Please make sure you followed the initialization instructions correctly!"
             )
         }
     }

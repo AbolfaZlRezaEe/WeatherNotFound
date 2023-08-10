@@ -40,7 +40,37 @@ dependencies {
 }
 ```
 
-3. After you followed the two steps above, you should sync the project and wait for Gradle to download all dependencies it needs. when syncing is finished, in your `Application` class, you should init the library with the parameters you want. the result will be something like this(for more information you can check the code and see documentation there): 
+3. After you followed the two steps above, you should sync the project and wait for Gradle to download all dependencies it needs. when syncing is finished, you have two options for initializing the library:
+
+- You can initialize the library within the `Manifest` file. The only thing you need is your `OpenWeatherMap` ApiKey which you recieved from the website. After that in your `Manifest` file, you must add these two metadatas like bellow:
+
+```xml
+<application>
+
+        <meta-data
+            android:name="weather_not_found.auto_init_enabled"
+            android:value="true"/>
+
+        <meta-data
+            android:name="weather_not_found.open_weather_api_key"
+            android:value="Your Open Weather ApiKey"/>
+
+</application>
+```
+
+- Or maybe you want to initialize the library with a lot more configurations. For that, first make sure you disabled auto init mechanism in `Manifest` file like bellow:
+
+```xml
+<application>
+
+        <meta-data
+            android:name="weather_not_found.auto_init_enabled"
+            android:value="false"/>
+
+</application>
+```
+
+And then, initialize the library using `init` function like bellow:
 
 ```kotlin
 class BaseApplication : Application() {
@@ -102,6 +132,8 @@ In some situations, WeatherNotFound will log several errors which tells you what
 - `You didn't call init() function of WeatherNotFound!`: This run-time exception will occur when you don't call the `init()` function of **WeatherNotFound** library in your `Application` class. make sure you call it!
 
 - `Validation failed! Your Api key is not working...`: This is a log that you might see in your logcat section of Android Studio. if you are running [Sample Application](https://github.com/AbolfaZlRezaEe/WeatherNotFound/tree/develop/app) and saw this, you should check `README.md` file of Sample Application module and follow the steps correctly. If you are using the library in your own application, please make sure you followed [these instructions](https://github.com/AbolfaZlRezaEe/WeatherNotFound/tree/sample_app_readme#using-weathernotfound-in-your-project) correctly!
+
+- `You are not allowed to call init() function if auto-init mechanism enabled!`: This run-time exception will occur when you don't disable auto-init mechanism and also call `init` function of library in code! Please either disable the auto-init with `meta-data` tag in `Manifest` file, or remove `init` function from the code!
 
 > Don't forget that if you just created your Apikey, it takes some time to enabling it from [OpenWeatherMap](https://openweathermap.org/). So wait some minutes and then try again.
 

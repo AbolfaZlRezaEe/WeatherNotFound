@@ -46,7 +46,6 @@ android {
 dependencies {
     // Core Dependencies
     val appCompatVersion = "1.6.1"
-
     implementation("androidx.appcompat:appcompat:$appCompatVersion")
 
     // Network Dependencies
@@ -67,6 +66,10 @@ dependencies {
     // Kotlin Coroutines Dependencies
     val coroutinesVersion = "1.6.4"
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
+
+    // Auto-init Dependency
+    val autoInitVersion = "1.1.1"
+    implementation("androidx.startup:startup-runtime:$autoInitVersion")
 }
 
 publishing {
@@ -74,7 +77,6 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "com.personal"
             artifactId = "WeatherNotFound"
-            version = "1.0.0"
 
             afterEvaluate {
                 from(components["release"])
